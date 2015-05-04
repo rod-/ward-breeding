@@ -13,9 +13,12 @@ shinyUI(fluidPage(
   titlePanel("Dynamic UI"),
 fluidRow(
     column(3, wellPanel(
-        selectInput("input_type","Color",c("Red","Purple","Blue","Orange","Green")))),
+        checkboxGroupInput("fullgroups","Full Colors",c("Red","Purple","Blue","Orange","Green")))),
+    column(3, wellPanel(
+        selectInput("input_type","PartialColor",c("Red","Purple","Blue","Orange","Green")))),
     column(3, wellPanel(uiOutput("ui"))),
-    column(3, tags$p("Best_Option:")),
+    column(3, wellPanel(uiOutput("ui2"))),
+    #column(3, tags$p("Best_Option:")),
     tableOutput("resulttable")
     )
   #want a switch between colors and the various names to pop up
