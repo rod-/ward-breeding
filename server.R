@@ -5,7 +5,7 @@
 # http://www.rstudio.com/shiny/
 #
 functiongoeshere<-function(fnin=c(redvec,purvec,bluevec,orangevec,greenvec)){dothefunction()}
-dothefunction<-function(fnin=c(redvec,purvec,bluevec,orangevec,greenvec)){sum(fnin)}
+dothefunction<-function(files){return(c(files$redvec,files$purvec,files$bluevec,files$orangevec,files$greenvec))}
 library(shiny)
 
 shinyServer(function(input, output) {
@@ -22,7 +22,7 @@ shinyServer(function(input, output) {
     })
 
 
-    output$resulttable<-renderDataTable({dothefunction(c(redvec,purvec,bluevec,orangevec,greenvec))})
+    output$resulttable<-renderText({(dothefunction(input))})
 
 }
 

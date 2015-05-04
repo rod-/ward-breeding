@@ -16,7 +16,7 @@ fluidRow(
         selectInput("input_type","Color",c("Red","Purple","Blue","Orange","Green")))),
     column(3, wellPanel(uiOutput("ui"))),
     column(3, tags$p("Best_Option:")),
-    tableOutput(outputId = "functionresult")
+    tableOutput("resulttable")
     )
   #want a switch between colors and the various names to pop up
 
