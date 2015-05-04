@@ -44,7 +44,20 @@ shinyServer(function(input, output) {
     })
 
     output$resulttable<-renderText({(concatlists(input))}) #for text-only output
- #   output$resulttable<-renderDataTable(functiongoeshere)
+
+output$testimage<-renderImage({
+    # When input$n is 3, filename is ./images/image3.jpeg
+    filename <- normalizePath(file.path('./imagetest',
+                                        paste('testimage', input$n, '.jpeg', sep='')))
+
+    # Return a list containing the filename and alt text
+    list(src = filename,
+         alt = paste("Image number", input$n))
+
+}, deleteFile = FALSE)
+#some example code to use when i want to include pre-rendered images in the output.
+# remember that i really only want to use 2 images in the final output, so it's not important to do arbitrary numbers of images (or perhaps something like 2*numoutput)
+#   output$resulttable<-renderDataTable(functiongoeshere)
 }
 
   )

@@ -16,8 +16,11 @@ fluidRow(
         checkboxGroupInput("fullgroups","Full Colors",c("Red","Purple","Blue","Orange","Green")))),
     column(3, wellPanel(
         selectInput("input_type","PartialColor",c("Red","Purple","Blue","Orange","Green")))),
+    column(3, wellPanel(
+            selectInput("n",label = "Picture",c(1:5)))),
     column(3, wellPanel(uiOutput("ui"))),
     column(3, wellPanel(sliderInput(inputId = "numoutput",label = "How Many Results",min = 1,max=15,value = 5,round = TRUE))),
+    column(3, wellPanel(imageOutput("testimage"))),
     #column(3, tags$p("Best_Option:")),
     tableOutput("resulttable")
     )
