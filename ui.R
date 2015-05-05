@@ -17,9 +17,9 @@ shinyUI(fluidPage(
       column(3, wellPanel(uiOutput("ui"))),
       column(3, wellPanel(uiOutput("ui2"))),
 fluidRow(    column(3, wellPanel(
-    selectInput("input_type","Choose a Partial Color",c("Blue","Red","Purple","Orange","Green")))),
+    selectInput("input_type","Choose a Partial Color",c("Purple","Blue","Red","Orange","Green")))),
     column(3,wellPanel(
-        selectInput("input_type2","Second Partial Color?",c("Purple","Blue","Orange","Green","Red"))))
+        selectInput("input_type2","Second Partial Color?",c("Blue","Purple","Orange","Green","Red"))))
 ),
 fluidRow(column(12,wellPanel(dataTableOutput("resulttable")))
 )

@@ -86,7 +86,7 @@ concatlists<-function(files){
     orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")
     greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")
     listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist)
-    currentlist<-files$incomplete
+    currentlist<-c(files$incomplete,files$incompleteB)
 
         if("Red"%in%files$fullgroups){currentlist<-c(redlist,currentlist)}
         if("Purple"%in%files$fullgroups){currentlist<-c(purplelist,currentlist)}
@@ -119,15 +119,15 @@ output$ui2<-renderUI({
         return()
     switch(input$input_type2,
 
-           "Purple" = checkboxGroupInput("incomplete","ListOfPurps",choices=c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Aliorn","Daemun","Garuda","Klax","Arborius","Dominus")),
+           "Purple" = checkboxGroupInput("incompleteB","ListOfPurps",choices=c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Aliorn","Daemun","Garuda","Klax","Arborius","Dominus")),
 
-           "Blue" = checkboxGroupInput("incomplete","ListOfBlues",choices=c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus","Numen")),
+           "Blue" = checkboxGroupInput("incompleteB","ListOfBlues",choices=c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus","Numen")),
 
-           "Orange" = checkboxGroupInput("incomplete","ListOfOranges",choices=c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")),
+           "Orange" = checkboxGroupInput("incompleteB","ListOfOranges",choices=c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")),
 
-           "Green" = checkboxGroupInput("incomplete","ListOfGreens",choices=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")),
+           "Green" = checkboxGroupInput("incompleteB","ListOfGreens",choices=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")),
 
-           "Red" = checkboxGroupInput("incomplete","AllReds",choices=c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir"))
+           "Red" = checkboxGroupInput("incompleteB","AllReds",choices=c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir"))
 
 
     )
