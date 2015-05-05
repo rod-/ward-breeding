@@ -1,5 +1,5 @@
 #Currently missing: * Add more UI elements - threshold for utility, * Replace text with pictures
-
+# * Clearer Column names *Slider for value of a duplicate * Data for num of fragments to make dupeutility more poweful.
 whattobreed<-function(usefullist,dupeutility=0.0,assumebreedable=1){
   #need to have both DragonID and merger in the current location.  Will change eventually
   load("ShinyBreeddata.Rdata") #for whatever reason, this doesn't seem to be working out ; i'll just manually...
@@ -40,37 +40,47 @@ if(length(usefullist)!=68){return(0)}
   possmerger$FifthUseful[lDragonID$owned[match(possmerger$Fifth,lDragonID$displayName)]>=1]<-0
   possmerger$SixthUseful<-1
   possmerger$SixthUseful[lDragonID$owned[match(possmerger$Sixth,lDragonID$displayName)]>=1]<-0
-  lDragonID$fragments<-1
-  lDragonID$fragments[lDragonID$displayName%in%c("Gog","Jura","Daemun","Garuda","Sahran","Klax","Kromon","Kobahl","Baldr")]<-5
-  lDragonID$fragments[lDragonID$displayName%in%c("Grypp","Viscus","Vazir","Bolt","Viscus")]<-8
-  lDragonID$fragments[lDragonID$displayName%in%c("Volos","Kinnara","Arborius")]<-12
-  lDragonID$fragments[lDragonID$displayName%in%c("Kelsis","Drude")]<-16
-  lDragonID$fragments[lDragonID$displayName%in%c("Ankor")]<-20
-  lDragonID$fragments[lDragonID$displayName%in%c("Noss","Hydron")]<-48
+  possmerger$ChanceofNewEgg<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
+                                           possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful)+0,
+                                           possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful)+0,
+                                           possmerger$FourthChance/possmerger$totalchance*(possmerger$FourthUseful)+0,
+                                           possmerger$FifthChance/possmerger$totalchance*(possmerger$FifthUseful)+0,
+                                           possmerger$SixthChance/possmerger$totalchance*(possmerger$SixthUseful)+0),na.rm=TRUE)
 
-  #second have to give a value for a 'dupe' egg for research purposes vs a new egg for breeding purposes
-  possmerger$FirstFrags<-lDragonID$fragments[match(possmerger$First,lDragonID$displayName)]
-  possmerger$SecondFrags<-lDragonID$fragments[match(possmerger$Second,lDragonID$displayName)]
-  possmerger$ThirdFrags<-lDragonID$fragments[match(possmerger$Third,lDragonID$displayName)]
-  possmerger$FourthFrags<-lDragonID$fragments[match(possmerger$Fourth,lDragonID$displayName)]
-  possmerger$FifthFrags<-lDragonID$fragments[match(possmerger$Fifth,lDragonID$displayName)]
-  possmerger$SixthFrags<-lDragonID$fragments[match(possmerger$Sixth,lDragonID$displayName)]
-  possmerger$OverallUtility<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful+(dupeutility/possmerger$FirstFrags)),
-                                           possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful+(dupeutility/possmerger$SecondFrags)),
-                                           possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful+(dupeutility/possmerger$ThirdFrags)),
-                                           possmerger$FourthChance/possmerger$totalchance*(possmerger$FourthUseful+(dupeutility/possmerger$FourthFrags)),
-                                           possmerger$FifthChance/possmerger$totalchance*(possmerger$FifthUseful+(dupeutility/possmerger$FifthFrags)),
-                                           possmerger$SixthChance/possmerger$totalchance*(possmerger$SixthUseful+(dupeutility/possmerger$SixthFrags))),na.rm=TRUE)
-  #the above was doublecounting the utility of fragments that i don't already have.
+
+
+#   lDragonID$fragments<-1
+#   lDragonID$fragments[lDragonID$displayName%in%c("Gog","Jura","Daemun","Garuda","Sahran","Klax","Kromon","Kobahl","Baldr")]<-5
+#   lDragonID$fragments[lDragonID$displayName%in%c("Grypp","Viscus","Vazir","Bolt","Viscus")]<-8
+#   lDragonID$fragments[lDragonID$displayName%in%c("Volos","Kinnara","Arborius")]<-12
+#   lDragonID$fragments[lDragonID$displayName%in%c("Kelsis","Drude")]<-16
+#   lDragonID$fragments[lDragonID$displayName%in%c("Ankor")]<-20
+#   lDragonID$fragments[lDragonID$displayName%in%c("Noss","Hydron")]<-48
+####The above data regarding fragments is very incomplete and in need of assistance before i allow the dupeutility measurements to go online###
+#   #second have to give a value for a 'dupe' egg for research purposes vs a new egg for breeding purposes
+#   possmerger$FirstFrags<-lDragonID$fragments[match(possmerger$Egg1,lDragonID$displayName)]
+#   possmerger$SecondFrags<-lDragonID$fragments[match(possmerger$Second,lDragonID$displayName)]
+#   possmerger$ThirdFrags<-lDragonID$fragments[match(possmerger$Third,lDragonID$displayName)]
+#   possmerger$FourthFrags<-lDragonID$fragments[match(possmerger$Fourth,lDragonID$displayName)]
+#   possmerger$FifthFrags<-lDragonID$fragments[match(possmerger$Fifth,lDragonID$displayName)]
+#   possmerger$SixthFrags<-lDragonID$fragments[match(possmerger$Sixth,lDragonID$displayName)]
   #possmerger$OverallUtility<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful),
   #                                         possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful),
   #                                         possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful),
   #                                         possmerger$FourthChance/possmerger$totalchance*(possmerger$FourthUseful),
   #                                         possmerger$FifthChance/possmerger$totalchance*(possmerger$FifthUseful),
-  #                                         possmerger$SixthChance/possmerger$totalchance*(possmerger$SixthUseful)),na.rm=TRUE)
-  #possmerger$OverallUtility<-possmerger$OverallUtility + ((possmerger[,c(16,17,18,19,20)]==TRUE)*c((possmerger$FirstChance,possmerger$SecondChance,possmerger$ThirdChance,possmerger$FourthChance,possmerger$FifthChance,possmerger$SixthChance)/possmerger$totalchance*dupeutility))
-  #  possmerger$OverallUtility<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*possmerger$FirstUseful,possmerger$SecondChance/possmerger$totalchance*possmerger$SecondUseful,possmerger$ThirdChance/possmerger$totalchance*possmerger$ThirdUseful,possmerger$FourthChance/possmerger$totalchance*possmerger$FourthUseful,possmerger$FifthChance/possmerger$totalchance*possmerger$FifthUseful,possmerger$SixthChance/possmerger$totalchance*possmerger$SixthUseful),na.rm=TRUE)
-  return(as.data.frame(possmerger[order(possmerger$OverallUtility,decreasing=TRUE)[1:4],c(1,2,3,5,7,9,11,13,28)]))
+  #                                         possmerger$SixthChance/possmerger$totalchance*(possmerger$SixthUseful)),na.rm=TRUE) #first collect the odds of a new egg. (Useful being binary)
+  # valuetoadd<-0
+  # valuetoadd<-valuetoadd+(possmerger$FirstChance*(!possmerger$FirstUseful)*dupeutility)/(possmerger$totalchance*possmerger$FirstFrags)
+#valuetoadd<-valuetoadd+(possmerger$SecondChance*(!possmerger$SecondUseful)*dupeutility)/(possmerger$totalchance*possmerger$SecondFrags)
+#valuetoadd<-valuetoadd+(possmerger$ThirdChance*(!possmerger$ThirdUseful)*dupeutility)/(possmerger$totalchance*possmerger$ThirdFrags)
+#valuetoadd<-valuetoadd+(possmerger$FourthChance*(!possmerger$FourthUseful)*dupeutility)/(possmerger$totalchance*possmerger$FourthFrags)
+#valuetoadd<-valuetoadd+(possmerger$FifthChance*(!possmerger$FifthUseful)*dupeutility)/(possmerger$totalchance*possmerger$FifthFrags)
+#valuetoadd<-valuetoadd+(possmerger$SixthChance*(!possmerger$SixthUseful)*dupeutility)/(possmerger$totalchance*possmerger$SixthFrags) #collect the chance that your 20 token roll will get you a 'complete' duplicate egg.
+#possmerger$OverallUtility<-possmerger$OverallUtility+valuetoadd #add the odds of new egg to the odds of a 'research-worthy' egg.
+
+#  return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,28)])) #28 is if i do include fragment data.
+return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
 }
 concatlists<-function(files){
     redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")
