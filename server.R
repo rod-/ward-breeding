@@ -9,23 +9,24 @@
 whattobreed<-function(usefullist,dupeutility=0.0,assumebreedable=1){
   #need to have both DragonID and merger in the current location.  Will change eventually
   load("ShinyBreeddata.Rdata") #for whatever reason, this doesn't seem to be working out ; i'll just manually...
-  merger<-read.csv("merger.csv")
-  DragonID<-data.frame(identifier=c("T1C1WFdragon",       "T1C1SEdragon", "T1C1HIdragon",          "T1C2WIdragon",          "T1C2HEdragon",          "T1C2SFdragon",          "T1C3WEdragon",          "T1C3HFdragon",          "T1C3SIdragon",          "T1GGWFdragon",          "T2C1HIdragon",         
-                                    "T2C1WEdragon",          "T2C1SFdragon",          "T2C1HUdragon",          "T2C2WIdragon",          "T2C2SUdragon",          "T2C2HEdragon",          "T2C3WUdragon",          "T2C3SEdragon",          "T2C3HFdragon",         
-                                    "T2C3SFdragon",          "T2C3HIdragon",          "T2C3WEdragon",          "T2GGSIdragon",          "T3C1WEdragon",          "T3C1SFdragon",          "T3C1HIdragon",          "T3C1WUdragon",          "T3C1SIdragon",         
-                                    "T3C1HEdragon",          "T3C2SEdragon",          "T3C2HUdragon",          "T3C2WFdragon",          "T3C3SUdragon",          "T3C3HFdragon",          "T3C3WIdragon",          "T3C3HIdragon",          "T3GGHEdragon",         
-                                    "T4C1SFdragon",          "T4C1HIdragon",          "T4C1WUdragon",          "T4C1SDdragon",          "T4C1HEdragon",          "T4C1HFdragon",          "T4C2WIdragon",          "T4C2SEdragon",          "T4C2HUdragon",         
-                                    "T4C2WDdragon",          "T4C3SIdragon",          "T4C3WFdragon",          "T4C3HDdragon",          "T4C3SUdragon",          "T4C3WEdragon",          "T4GGSDdragon",          "T5C1WUdragon",          "T5C1HEdragon",         
-                                    "T5C1WDdragon",          "T5C1SFdragon",          "T5C1HIdragon",          "T5C2SEdragon",          "T5C2HDdragon",          "T5C2WIdragon",          "T5C2SUdragon",          "T5C3HFdragon",          "T5C3WFdragon",         
+     #  merger<-read.csv("merger.csv")
+  DragonID<-data.frame(identifier=c("T1C1WFdragon",       "T1C1SEdragon", "T1C1HIdragon",          "T1C2WIdragon",          "T1C2HEdragon",          "T1C2SFdragon",          "T1C3WEdragon",          "T1C3HFdragon",          "T1C3SIdragon",          "T1GGWFdragon",          "T2C1HIdragon",
+                                    "T2C1WEdragon",          "T2C1SFdragon",          "T2C1HUdragon",          "T2C2WIdragon",          "T2C2SUdragon",          "T2C2HEdragon",          "T2C3WUdragon",          "T2C3SEdragon",          "T2C3HFdragon",
+                                    "T2C3SFdragon",          "T2C3HIdragon",          "T2C3WEdragon",          "T2GGSIdragon",          "T3C1WEdragon",          "T3C1SFdragon",          "T3C1HIdragon",          "T3C1WUdragon",          "T3C1SIdragon",
+                                    "T3C1HEdragon",          "T3C2SEdragon",          "T3C2HUdragon",          "T3C2WFdragon",          "T3C3SUdragon",          "T3C3HFdragon",          "T3C3WIdragon",          "T3C3HIdragon",          "T3GGHEdragon",
+                                    "T4C1SFdragon",          "T4C1HIdragon",          "T4C1WUdragon",          "T4C1SDdragon",          "T4C1HEdragon",          "T4C1HFdragon",          "T4C2WIdragon",          "T4C2SEdragon",          "T4C2HUdragon",
+                                    "T4C2WDdragon",          "T4C3SIdragon",          "T4C3WFdragon",          "T4C3HDdragon",          "T4C3SUdragon",          "T4C3WEdragon",          "T4GGSDdragon",          "T5C1WUdragon",          "T5C1HEdragon",
+                                    "T5C1WDdragon",          "T5C1SFdragon",          "T5C1HIdragon",          "T5C2SEdragon",          "T5C2HDdragon",          "T5C2WIdragon",          "T5C2SUdragon",          "T5C3HFdragon",          "T5C3WFdragon",
                                     "T5C3SDdragon",          "T5C3HUdragon",          "T5GGWUdragon"),
-                       displayName=c( "Draco",          "Leviathan",      "Frigg",          "Zin",            "Hext",          
-                                      "Aetrix",         "Hantu",          "Kastor",         "Kinnara",        "Fenrir",         "Trollis",        "Laekrian",       "Merk",           "Dactyl",         "Gog",            "Huli",           "Borg",          
-                                      "Vladimir",       "Alikorn",        "Daemun",         "Garuda",         "Klax",           "Arborius",       "Dominus",        "Grypp",          "Jura",           "Kromon",         "Yanari",         "Vazir",         
-                                      "Drude",          "Sahran",         "Bolt",          "Kelsis",         "Etzel",          "Kobahl",         "Baldr",          "Viscus",         "Numen",          "Ankor",          "Noss",           "Hydron",        
-                                      "Slynx",          "Habrok",         "Volos",          "Amarok",         "Luminark",       "Lucius",         "Bronze",         "Septys",         "Ruma",           "Enki",           "Durga",          "Kolo",         
-                                      "Darja",          "Gaspar",         "Karna",          "Naga",           "Nassus",         "Garzev",         "Serabis",        "Urd",            "Ith",            "Elixis",         "Pandi",          "Danzig",        
+                       displayName=c( "Draco",          "Leviathan",      "Frigg",          "Zin",            "Hext",
+                                      "Aetrix",         "Hantu",          "Kastor",         "Kinnara",        "Fenrir",         "Trollis",        "Laekrian",       "Merk",           "Dactyl",         "Gog",            "Huli",           "Borg",
+                                      "Vladimir",       "Alikorn",        "Daemun",         "Garuda",         "Klax",           "Arborius",       "Dominus",        "Grypp",          "Jura",           "Kromon",         "Yanari",         "Vazir",
+                                      "Drude",          "Sahran",         "Bolt",          "Kelsis",         "Etzel",          "Kobahl",         "Baldr",          "Viscus",         "Numen",          "Ankor",          "Noss",           "Hydron",
+                                      "Slynx",          "Habrok",         "Volos",          "Amarok",         "Luminark",       "Lucius",         "Bronze",         "Septys",         "Ruma",           "Enki",           "Durga",          "Kolo",
+                                      "Darja",          "Gaspar",         "Karna",          "Naga",           "Nassus",         "Garzev",         "Serabis",        "Urd",            "Ith",            "Elixis",         "Pandi",          "Danzig",
                                       "Nix",            "Ettin",          "Carsis"       ))
-  #WANT to have a way to value full eggs over fractional eggs but i don't even know how to get that data in the first place yet.
+#   #WANT to have a way to value full eggs over fractional eggs but i don't even know how to get that data in the first place yet.
+# WANT to be able to store more than 1 incomplete set of eggs.
 if(length(usefullist)!=68){return(0)}
   lDragonID<-DragonID
   lDragonID$owned<-usefullist
@@ -52,7 +53,7 @@ if(length(usefullist)!=68){return(0)}
   lDragonID$fragments[lDragonID$displayName%in%c("Kelsis","Drude")]<-16
   lDragonID$fragments[lDragonID$displayName%in%c("Ankor")]<-20
   lDragonID$fragments[lDragonID$displayName%in%c("Noss","Hydron")]<-48
-  
+
   #second have to give a value for a 'dupe' egg for research purposes vs a new egg for breeding purposes
   possmerger$FirstFrags<-lDragonID$fragments[match(possmerger$First,lDragonID$displayName)]
   possmerger$SecondFrags<-lDragonID$fragments[match(possmerger$Second,lDragonID$displayName)]
@@ -102,7 +103,7 @@ shinyServer(function(input, output) {
         if(is.null(input$input_type))
             return()
         switch(input$input_type,
-        "Red" = checkboxGroupInput("incomplete","AllReds",choices=c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")), #this doesn't work as intended
+        "Red" = checkboxGroupInput("incomplete","AllReds",choices=c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")),
 
         "Purple" = checkboxGroupInput("incomplete","ListOfPurps",choices=c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Aliorn","Daemun","Garuda","Klax","Arborius","Dominus")),
 
@@ -113,21 +114,38 @@ shinyServer(function(input, output) {
         "Green" = checkboxGroupInput("incomplete","ListOfGreens",choices=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis"))
 )
     })
+output$ui2<-renderUI({
+    if(is.null(input$input_type))
+        return()
+    switch(input$input_type2,
 
+           "Purple" = checkboxGroupInput("incomplete","ListOfPurps",choices=c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Aliorn","Daemun","Garuda","Klax","Arborius","Dominus")),
+
+           "Blue" = checkboxGroupInput("incomplete","ListOfBlues",choices=c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus","Numen")),
+
+           "Orange" = checkboxGroupInput("incomplete","ListOfOranges",choices=c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")),
+
+           "Green" = checkboxGroupInput("incomplete","ListOfGreens",choices=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")),
+
+           "Red" = checkboxGroupInput("incomplete","AllReds",choices=c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir"))
+
+
+    )
+})
  #   output$resulttable<-renderText({(as.integer(concatlists(input)))}) #for text-only output
 #    output$resulttable<-renderText({(DragonID$displayName)}) #for text-only output
 #output$resulttable<-renderPrint({whattobreed(usefullist=as.integer(concatlists(input)))})
     output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)))})
-  
+
 # output$testimage<-renderImage({
 #     # When input$n is 3, filename is ./images/image3.jpeg
 #     filename <- normalizePath(file.path('./imagetest',
 #                                         paste('testimage', input$n, '.jpeg', sep='')))
-# 
+#
 #     # Return a list containing the filename and alt text
 #     list(src = filename,
 #          alt = paste("Image number", input$n))
-# 
+#
 # }, deleteFile = FALSE)
 #some example code to use when i want to include pre-rendered images in the output.
 # remember that i really only want to use 2 images in the final output, so it's not important to do arbitrary numbers of images (or perhaps something like 2*numoutput)
