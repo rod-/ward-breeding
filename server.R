@@ -1,10 +1,4 @@
-
-# This is the server logic for a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://www.rstudio.com/shiny/
-#
-#Currently missing: 0) Convert the generic names to the real names 1) Convert the true/false string into a binary string & feed it into whattobreed 2) Add more UI elements - threshold for utility, 3) Replace text with pictures
+#Currently missing: * Add more UI elements - threshold for utility, * Replace text with pictures
 
 whattobreed<-function(usefullist,dupeutility=0.0,assumebreedable=1){
   #need to have both DragonID and merger in the current location.  Will change eventually
@@ -78,7 +72,6 @@ if(length(usefullist)!=68){return(0)}
   #  possmerger$OverallUtility<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*possmerger$FirstUseful,possmerger$SecondChance/possmerger$totalchance*possmerger$SecondUseful,possmerger$ThirdChance/possmerger$totalchance*possmerger$ThirdUseful,possmerger$FourthChance/possmerger$totalchance*possmerger$FourthUseful,possmerger$FifthChance/possmerger$totalchance*possmerger$FifthUseful,possmerger$SixthChance/possmerger$totalchance*possmerger$SixthUseful),na.rm=TRUE)
   return(as.data.frame(possmerger[order(possmerger$OverallUtility,decreasing=TRUE)[1:4],c(1,2,3,5,7,9,11,13,28)]))
 }
-
 concatlists<-function(files){
     redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")
     purplelist<-c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Aliorn","Daemun","Garuda","Klax","Arborius","Dominus")
@@ -99,6 +92,7 @@ concatlists<-function(files){
 library(shiny)
 
 shinyServer(function(input, output) {
+
     output$ui<-renderUI({
         if(is.null(input$input_type))
             return()
@@ -113,7 +107,7 @@ shinyServer(function(input, output) {
 
         "Green" = checkboxGroupInput("incomplete","ListOfGreens",choices=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis"))
 )
-    })
+    })#builds the list of each color from incomplete1
 output$ui2<-renderUI({
     if(is.null(input$input_type))
         return()
@@ -131,11 +125,8 @@ output$ui2<-renderUI({
 
 
     )
-})
- #   output$resulttable<-renderText({(as.integer(concatlists(input)))}) #for text-only output
-#    output$resulttable<-renderText({(DragonID$displayName)}) #for text-only output
-#output$resulttable<-renderPrint({whattobreed(usefullist=as.integer(concatlists(input)))})
-    output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)))})
+}) #second copy of this.
+    output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)))}) #makes a table output.
 
 # output$testimage<-renderImage({
 #     # When input$n is 3, filename is ./images/image3.jpeg
@@ -149,9 +140,11 @@ output$ui2<-renderUI({
 # }, deleteFile = FALSE)
 #some example code to use when i want to include pre-rendered images in the output.
 # remember that i really only want to use 2 images in the final output, so it's not important to do arbitrary numbers of images (or perhaps something like 2*numoutput)
-#   output$resulttable<-renderDataTable(functiongoeshere)
 }
 
   )
 
 
+#would like to do cooler things with this:
+#Take the first guy, take the second guy, just their images, then between them put the 6 possible outcomes' pictures, transparancy equal to their utility (0/1) and size equal to likelihood.
+#Set a slider that allows you to skip a few outcomes if you aren't interested in the first one.

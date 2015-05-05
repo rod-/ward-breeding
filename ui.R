@@ -1,15 +1,7 @@
-
-# This is the user-interface definition of a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://www.rstudio.com/shiny/
-#
-
 library(shiny)
 
 shinyUI(fluidPage(
 
-  # Application title
   titlePanel("War Dragons Best Breeding Options"),
 
   fluidRow(column(3,wellPanel(
@@ -23,14 +15,10 @@ fluidRow(    column(3, wellPanel(
 ),
 fluidRow(column(12,wellPanel(dataTableOutput("resulttable")))
 )
-  #want a switch between colors and the various names to pop up
 
 
 )
 )
 )
-#    column(3, wellPanel(
-#            selectInput("n",label = "Picture",c(1:5)))),
-#column(3, wellPanel(sliderInput(inputId = "numoutput",label = "How Many Results",min = 1,max=15,value = 5,round = TRUE))),
-#column(3, wellPanel(imageOutput("testimage"))),
-#column(3, tags$p("Best_Option:")),
+#            selectInput("n",label = "Picture",c(1:5))))
+#imageOutput("testimage"))),
