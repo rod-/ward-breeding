@@ -10,19 +10,19 @@ library(shiny)
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel("Dynamic UI"),
+  titlePanel("War Dragons Best Breeding Options"),
 fluidRow(
     column(3, wellPanel(
-        checkboxGroupInput("fullgroups","Full Colors",c("Red","Purple","Blue","Orange","Green")))),
+        checkboxGroupInput("fullgroups","Check your completed colors",c("Red","Purple","Blue","Orange","Green")))),
     column(3, wellPanel(
-        selectInput("input_type","PartialColor",c("Red","Purple","Blue","Orange","Green")))),
-    column(3, wellPanel(
-            selectInput("n",label = "Picture",c(1:5)))),
+        selectInput("input_type","Choose a Partial Color",c("Red","Purple","Blue","Orange","Green")))),
+#    column(3, wellPanel(
+#            selectInput("n",label = "Picture",c(1:5)))),
     column(3, wellPanel(uiOutput("ui"))),
-    column(3, wellPanel(sliderInput(inputId = "numoutput",label = "How Many Results",min = 1,max=15,value = 5,round = TRUE))),
-    column(3, wellPanel(imageOutput("testimage"))),
+    #column(3, wellPanel(sliderInput(inputId = "numoutput",label = "How Many Results",min = 1,max=15,value = 5,round = TRUE))),
+    #column(3, wellPanel(imageOutput("testimage"))),
     #column(3, tags$p("Best_Option:")),
-    tableOutput("resulttable")
+    dataTableOutput("resulttable")
     )
   #want a switch between colors and the various names to pop up
 
