@@ -113,7 +113,7 @@ shinyServer(function(input, output) {
         if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")}
         if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")}
         selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)})
-    output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)))}) #makes a table output.
+    output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)))},options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
 
 # output$testimage<-renderImage({
 #     # When input$n is 3, filename is ./images/image3.jpeg
