@@ -2,7 +2,7 @@ library(shiny)
 
 shinyUI(fluidPage(
 
-  titlePanel("War Dragons Best Breeding Options"),
+  titlePanel("[Unofficial] War Dragons Best Breeding Options"),
     helpText("Created by Rod-"),
   fluidRow(column(3,wellPanel(
       checkboxGroupInput("fullgroups","Check your completed colors",c("Red","Purple","Blue","Orange","Green")))),
@@ -13,7 +13,7 @@ fluidRow(    column(3, wellPanel(
 ),
 helpText("The best pairing with the currently-selected set of dragons is the top line in the table below"),
 fluidRow(column(12,wellPanel(dataTableOutput("resulttable")))),
-         helpText("Disclaimer")
+         helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems")
 
 
 
