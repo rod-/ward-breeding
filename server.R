@@ -82,6 +82,8 @@ if(length(usefullist)!=68){return(0)}
 #  return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,28)])) #28 is if i do include fragment data.
 return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
 }
+load("ShinyBreeddata.Rdata")
+DragonStatDF<-DragonID
 concatlists<-function(files){
     redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")
     purplelist<-c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Aliorn","Daemun","Garuda","Klax","Arborius","Dominus")
@@ -114,7 +116,10 @@ shinyServer(function(input, output) {
         if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")}
         selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)})
     output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)))},options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
+        output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
 
+
+    })
 # output$testimage<-renderImage({
 #     # When input$n is 3, filename is ./images/image3.jpeg
 #     filename <- normalizePath(file.path('./imagetest',
@@ -127,9 +132,9 @@ shinyServer(function(input, output) {
 # }, deleteFile = FALSE)
 #some example code to use when i want to include pre-rendered images in the output.
 # remember that i really only want to use 2 images in the final output, so it's not important to do arbitrary numbers of images (or perhaps something like 2*numoutput)
-}
+#}
 
-  )
+ # )
 
 
 #would like to do cooler things with this:
