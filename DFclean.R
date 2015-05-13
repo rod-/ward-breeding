@@ -1,0 +1,1 @@
+DSDF$value[DSDF$variable=="upgradeCost"]<-as.integer(as.character(substr(DSDF$value[DSDF$variable=="upgradeCost"],6,11)))
