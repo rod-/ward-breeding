@@ -1,9 +1,13 @@
-#Currently missing: * Add more UI elements - threshold for utility, * Replace text with pictures
-# * Clearer Column names *Slider for value of a duplicate * Data for num of fragments to make dupeutility more poweful.
+#Currently missing:
+# Add more UI elements - threshold for utility,
+# Replace text with pictures
+# Clearer Column names
+# Slider for value of a duplicate
+# Fragment Data for num of fragments to make dupeutility practical/useful.
+# Color information (light cell background corresponding to the dragon color?)
 whattobreed<-function(usefullist,dupeutility=0.0,assumebreedable=1){
-  #need to have both DragonID and merger in the current location.  Will change eventually
-  load("ShinyBreeddata.Rdata") #for whatever reason, this doesn't seem to be working out ; i'll just manually...
-     #  merger<-read.csv("merger.csv")
+  load("ShinyBreeddata.Rdata")
+
   DragonID<-data.frame(identifier=c("T1C1WFdragon",       "T1C1SEdragon", "T1C1HIdragon",          "T1C2WIdragon",          "T1C2HEdragon",          "T1C2SFdragon",          "T1C3WEdragon",          "T1C3HFdragon",          "T1C3SIdragon",          "T1GGWFdragon",          "T2C1HIdragon",
                                     "T2C1WEdragon",          "T2C1SFdragon",          "T2C1HUdragon",          "T2C2WIdragon",          "T2C2SUdragon",          "T2C2HEdragon",          "T2C3WUdragon",          "T2C3SEdragon",          "T2C3HFdragon",
                                     "T2C3SFdragon",          "T2C3HIdragon",          "T2C3WEdragon",          "T2GGSIdragon",          "T3C1WEdragon",          "T3C1SFdragon",          "T3C1HIdragon",          "T3C1WUdragon",          "T3C1SIdragon",
@@ -19,27 +23,26 @@ whattobreed<-function(usefullist,dupeutility=0.0,assumebreedable=1){
                                       "Slynx",          "Habrok",         "Volos",          "Amarok",         "Luminark",       "Lucius",         "Bronze",         "Septys",         "Ruma",           "Enki",           "Durga",          "Kolo",
                                       "Darja",          "Gaspar",         "Karna",          "Naga",           "Nassus",         "Garzev",         "Serabis",        "Urd",            "Ith",            "Elixis",         "Pandi",          "Danzig",
                                       "Nix",            "Ettin",          "Carsis"       ))
-#   #WANT to have a way to value full eggs over fractional eggs but i don't even know how to get that data in the first place yet.
-# WANT to be able to store more than 1 incomplete set of eggs.
+# Wouldn't mind just cleaning the actual DragonID table up rather than taking the manual one, but whatever.
+# WANT to have a way to value full eggs over fractional eggs but i don't even know how to get that data in the first place yet.
 if(length(usefullist)!=68){return(0)}
-  lDragonID<-DragonID
-  lDragonID$owned<-usefullist
-  if(assumebreedable==1){lDragonID$owned[lDragonID$owned==2]<-1}
-  possmerger<-merger[lDragonID$owned[match(merger$FirstDragon,lDragonID$displayName)]==1,]#do i own the first dragon
-  possmerger<-possmerger[lDragonID$owned[match(possmerger$SecondDragon,lDragonID$displayName)]==1,] #do i own the second
+  DragonID$owned<-usefullist
+  if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
+  possmerger<-merger[DragonID$owned[match(merger$FirstDragon,DragonID$displayName)]==1,]#do i own the first dragon
+  possmerger<-possmerger[DragonID$owned[match(possmerger$SecondDragon,DragonID$displayName)]==1,] #do i own the second
   if(length(possmerger$FirstDragon)<=1){return(data.frame(NULL))}
   possmerger$FirstUseful<-1 #do i want the outputs? (assume yes)
-  possmerger$FirstUseful[lDragonID$owned[match(possmerger$First,lDragonID$displayName)]>=1]<-0 #if i already own it, i don't!
+  possmerger$FirstUseful[DragonID$owned[match(possmerger$First,DragonID$displayName)]>=1]<-0 #if i already own it, i don't!
   possmerger$SecondUseful<-1 #repeat
-  possmerger$SecondUseful[lDragonID$owned[match(possmerger$Second,lDragonID$displayName)]>=1]<-0
+  possmerger$SecondUseful[DragonID$owned[match(possmerger$Second,DragonID$displayName)]>=1]<-0
   possmerger$ThirdUseful<-1
-  possmerger$ThirdUseful[lDragonID$owned[match(possmerger$Third,lDragonID$displayName)]>=1]<-0
+  possmerger$ThirdUseful[DragonID$owned[match(possmerger$Third,DragonID$displayName)]>=1]<-0
   possmerger$FourthUseful<-1
-  possmerger$FourthUseful[lDragonID$owned[match(possmerger$Fourth,lDragonID$displayName)]>=1]<-0
+  possmerger$FourthUseful[DragonID$owned[match(possmerger$Fourth,DragonID$displayName)]>=1]<-0
   possmerger$FifthUseful<-1
-  possmerger$FifthUseful[lDragonID$owned[match(possmerger$Fifth,lDragonID$displayName)]>=1]<-0
+  possmerger$FifthUseful[DragonID$owned[match(possmerger$Fifth,DragonID$displayName)]>=1]<-0
   possmerger$SixthUseful<-1
-  possmerger$SixthUseful[lDragonID$owned[match(possmerger$Sixth,lDragonID$displayName)]>=1]<-0
+  possmerger$SixthUseful[DragonID$owned[match(possmerger$Sixth,DragonID$displayName)]>=1]<-0
   possmerger$ChanceofNewEgg<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
                                            possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful)+0,
                                            possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful)+0,
@@ -49,21 +52,21 @@ if(length(usefullist)!=68){return(0)}
 
 
 
-#   lDragonID$fragments<-1
-#   lDragonID$fragments[lDragonID$displayName%in%c("Gog","Jura","Daemun","Garuda","Sahran","Klax","Kromon","Kobahl","Baldr")]<-5
-#   lDragonID$fragments[lDragonID$displayName%in%c("Grypp","Viscus","Vazir","Bolt","Viscus")]<-8
-#   lDragonID$fragments[lDragonID$displayName%in%c("Volos","Kinnara","Arborius")]<-12
-#   lDragonID$fragments[lDragonID$displayName%in%c("Kelsis","Drude")]<-16
-#   lDragonID$fragments[lDragonID$displayName%in%c("Ankor")]<-20
-#   lDragonID$fragments[lDragonID$displayName%in%c("Noss","Hydron")]<-48
+#   DragonID$fragments<-1
+#   DragonID$fragments[DragonID$displayName%in%c("Gog","Jura","Daemun","Garuda","Sahran","Klax","Kromon","Kobahl","Baldr")]<-5
+#   DragonID$fragments[DragonID$displayName%in%c("Grypp","Viscus","Vazir","Bolt","Viscus")]<-8
+#   DragonID$fragments[DragonID$displayName%in%c("Volos","Kinnara","Arborius")]<-12
+#   DragonID$fragments[DragonID$displayName%in%c("Kelsis","Drude")]<-16
+#   DragonID$fragments[DragonID$displayName%in%c("Ankor")]<-20
+#   DragonID$fragments[DragonID$displayName%in%c("Noss","Hydron")]<-48
 ####The above data regarding fragments is very incomplete and in need of assistance before i allow the dupeutility measurements to go online###
 #   #second have to give a value for a 'dupe' egg for research purposes vs a new egg for breeding purposes
-#   possmerger$FirstFrags<-lDragonID$fragments[match(possmerger$Egg1,lDragonID$displayName)]
-#   possmerger$SecondFrags<-lDragonID$fragments[match(possmerger$Second,lDragonID$displayName)]
-#   possmerger$ThirdFrags<-lDragonID$fragments[match(possmerger$Third,lDragonID$displayName)]
-#   possmerger$FourthFrags<-lDragonID$fragments[match(possmerger$Fourth,lDragonID$displayName)]
-#   possmerger$FifthFrags<-lDragonID$fragments[match(possmerger$Fifth,lDragonID$displayName)]
-#   possmerger$SixthFrags<-lDragonID$fragments[match(possmerger$Sixth,lDragonID$displayName)]
+#   possmerger$FirstFrags<-DragonID$fragments[match(possmerger$Egg1,DragonID$displayName)]
+#   possmerger$SecondFrags<-DragonID$fragments[match(possmerger$Second,DragonID$displayName)]
+#   possmerger$ThirdFrags<-DragonID$fragments[match(possmerger$Third,DragonID$displayName)]
+#   possmerger$FourthFrags<-DragonID$fragments[match(possmerger$Fourth,DragonID$displayName)]
+#   possmerger$FifthFrags<-DragonID$fragments[match(possmerger$Fifth,DragonID$displayName)]
+#   possmerger$SixthFrags<-DragonID$fragments[match(possmerger$Sixth,DragonID$displayName)]
   #possmerger$OverallUtility<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful),
   #                                         possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful),
   #                                         possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful),
@@ -133,8 +136,7 @@ shinyServer(function(input, output) {
 #some example code to use when i want to include pre-rendered images in the output.
 # remember that i really only want to use 2 images in the final output, so it's not important to do arbitrary numbers of images (or perhaps something like 2*numoutput)
 #}
-
- # )
+# )
 
 
 #would like to do cooler things with this:
