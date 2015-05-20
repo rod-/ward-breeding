@@ -3,7 +3,7 @@ what breeding combinations produce which output dragons at what odds.  There are
 
 ---
   FirstDragon SecondDragon     First Second Third Fourth Fifth Sixth
-1       Draco    Leviathan Leviathan  Draco  <NA>   <NA>  <NA>  <NA>
+  Draco    Leviathan Leviathan  Draco  <NA>   <NA>  <NA>  <NA>
 ---
 
 This is an example output row from the mating data frame.  FirstDragon and SecondDragon are the two dragons you pair, while First through Sixth are the Six possible outcomes (NA if there are fewer than six outcomes).
