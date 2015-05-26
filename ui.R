@@ -5,10 +5,11 @@ shinyUI(fluidPage(
     helpText("Created by Rod-"),
   fluidRow(column(3,wellPanel(
       checkboxGroupInput("fullgroups","Check your completed colors",c("Red","Purple","Blue","Orange","Green"),selected = c("Red","Purple")))),
-      column(3, wellPanel(uiOutput("ui"))),
+
         fluidRow(    column(3, wellPanel(
-            selectInput('input_types', 'Choose Partial Colors', choices=c("Purple","Blue","Red","Orange","Green"), multiple=TRUE,selected = c("Blue"), selectize=TRUE)))#,
-#            column(3,wellPanel(checkboxGroupInput('show_vars', 'Columns to show:', names(DragonID), selected = '')))
+            selectInput('input_types', 'Choose Partial Colors', choices=c("Purple","Blue","Red","Orange","Green"), multiple=TRUE,selected = c("Blue"), selectize=TRUE))),
+            column(3, wellPanel(uiOutput("ui")))
+            #            column(3,wellPanel(checkboxGroupInput('show_vars', 'Columns to show:', names(DragonID), selected = '')))
 ),
 helpText("The best pairing with the currently-selected set of dragons is the top line in the table below"),
 fluidRow(column(12,wellPanel(dataTableOutput("resulttable")))),
