@@ -1,19 +1,39 @@
 ---
-title: "BreedingDocumentation"
-author: "rod-"
-date: "May 12, 2015"
+title: "How to use this page"
 output: html_document
 ---
 
-WarDragons (an iOS game developed by PocketGames) has at least 71 breedable dragons which interact with one another in many different ways.  By analysis of the csv files located within the app, I have discovered the logic used to determine 
-what breeding combinations produce which output dragons at what odds.  There are 1944 valid pairings of these dragons - too many to easily interpret.  This shiny application enables you to make practical decisions based on your available options without spending time sifting through all 1944 pairings.
-```{r, echo=FALSE}
-load("./ShinyBreeddata.Rdata")
-colnames(merger)[15]<-"ChanceofNewEgg"
-head(merger[,c(1,2,3,5,7,9,11,13)],1)
-```
-This is an example output row from the mating data frame.  FirstDragon and SecondDragon are the two dragons you pair, while First through Sixth are the Six possible outcomes (NA if there are fewer than six outcomes).
-The individual odds of rolling each are available, but hidden in this view.  The sum of those odds that are beneficial to the player (containing a new egg) are calculated, and results sorted for that purpose.
+## * Check your completed colors:
 
-The UI allows you to input your available dragons.  You can choose your completed colors with checkboxes and type individual names, with drop-down boxes verifying your choices.  The list of names in the incomplete list is populated using a third text box, telling you to input any incomplete colors.  As you finish your input, the algorithm reactively runs and calculates the best combination of the dragons you have input - with the eventual aim of producing new dragons efficiently.
+This is telling you to tick the dragon colors that you have full sets of - so if you own all the red and purple dragons, then tick "red" and "purple".
+Note that purchased dragons (Fenrir, dominus, numen, etc) do not breed, so they do not count towards the full set.
 
+## * Choose partial colors:
+
+Click this box and choose the colors you don't currently own a complete set of - but have one or more dragons in
+
+## * Dragons in Partial Colors
+
+Click this box for a drop list of dragons - add into the field all dragons you own in incomplete colors.  
+Dragons which are not currently breedable should still be added into the list.
+
+## * Search
+
+Take a look at the result table.  By default, the best 5 options are displayed.  You can change this number if you wish to look at different choices.
+
+### *   FirstDragon x SecondDragon
+These are the two dragons that you would choose to breed.
+
+### *   First/Second/Third/Fourth/Fifth/Sixth
+These are the egg fragments that the breeding pair can give, in decreasing order of likelihood.  First is the most likely outcome.
+
+### *   ChanceofNewEgg
+This is the likelihood of rolling a fragment that you do not currently own*.
+
+## * Example:
+If i own all red, purple, and blue dragons, the first breeding pair listed is
+Etzel x Kobahl
+This breeding pair produces volos, ankor, and lucius, three orange dragons.  25.64%* of the time, one of these three will come up - a new fragment.  
+
+
+  *These odds are based on slightly-outdated game data and may not be 100% accurate.
