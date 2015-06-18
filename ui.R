@@ -22,24 +22,18 @@ shinyUI(
                 tabPanel("Beta",
                          fluidRow(column(3,wellPanel(
                            checkboxGroupInput("fullgroupsBeta","Check your completed colors",c("Red","Purple","Blue","Orange","Green"),selected = c("Red","Purple","Blue")))),
-                           fluidRow(    column(3, wellPanel(selectInput('input_typesBeta', 'Choose Partial Colors', 
-                                                                        choices=c("Purple","Blue","Red","Orange","Green"), multiple=TRUE,selected = c("Orange"), selectize=TRUE))),
+                           fluidRow(    column(3, wellPanel(selectInput('input_typesBeta', 'What color is the dragon you want?',
+                                                                        choices=c("Purple","Blue","Red","Orange","Green"), multiple=TRUE,selected = c("Orange","Green"), selectize=TRUE))),
                              fluidRow(column(3, wellPanel(uiOutput("uibeta"))))),
-                           fluidRow(column(3,wellPanel(checkboxInput('skipgreen','Ignore Green Dragons?',value=TRUE)))),
+                           fluidRow(column(3,wellPanel(selectInput('skipgreen','Which dragons do you want to ignore?',choices=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin",
+                                                                                                                                "Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo",
+                                                                                                                                "Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus",
+                                                                                                                                "Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius"),
+                                                                                                                                selectize =TRUE,multiple=TRUE,selected=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin"))))),
                            fluidRow(column(12,wellPanel(dataTableOutput("resbeta"))))),
-               #                            fluidRow(column(2, wellPanel( sliderInput("rval", "RedResearchValue:", 
-               #                                                                         min = 0, max = 1, value = 0.1, step= 0.1))),
-               #                                            column(2,wellPanel( sliderInput("pval", "PurpResearchValue:" ,
-               #                                                                               min = 0, max = 1, value = 0.1, step= 0.1))),
-               #                                               column(2,wellPanel( sliderInput("bval", "BlueResearchValue:", 
-               #                                                                               min = 0, max = 1, value = 0.1, step= 0.1))),
-               #                                               column(2,wellPanel( sliderInput("oval", "OrangeResearchValue:", 
-               #                                                                               min = 0, max = 1, value = 0.1, step= 0.1))),
-               #                                               column(2,wellPanel( sliderInput("gval", "GreenResearchValue:", 
-               #                                                                               min = 0, max = 1, value = 0.1, step= 0.1))
-               #                                                                                                    )),
+            #                                                                                                    )),
                                            helpText("Note: Fields that say 'draco' are actually no dragon - this is still a beta version"),
-    
+
                                            tags$div(HTML("<form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\">
                               <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">
                               <input type=\"hidden\" name=\"hosted_button_id\" value=\"2U6KK7ZRCUZV2\">

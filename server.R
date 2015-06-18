@@ -8,7 +8,7 @@
 # Color information (light cell background corresponding to the dragon color?)
 whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
   load("ShinyBreeddata.Rdata")
-  
+
   DragonID<-data.frame(identifier=c("T1C1WFdragon",       "T1C1SEdragon", "T1C1HIdragon",          "T1C2WIdragon",          "T1C2HEdragon",          "T1C2SFdragon",          "T1C3WEdragon",          "T1C3HFdragon",          "T1C3SIdragon",          "T1GGWFdragon",          "T2C1HIdragon",
                                     "T2C1WEdragon",          "T2C1SFdragon",          "T2C1HUdragon",          "T2C2WIdragon",          "T2C2SUdragon",          "T2C2HEdragon",          "T2C3WUdragon",          "T2C3SEdragon",          "T2C3HFdragon",
                                     "T2C3SFdragon",          "T2C3HIdragon",          "T2C3WEdragon",          "T2GGSIdragon",          "T3C1WEdragon",          "T3C1SFdragon",          "T3C1HIdragon",          "T3C1WUdragon",          "T3C1SIdragon",
@@ -64,7 +64,7 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
 }
 whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
   load("ShinyBreeddata.Rdata")
-  
+
   DragonID<-data.frame(identifier=c("T1C1WFdragon",       "T1C1SEdragon", "T1C1HIdragon",          "T1C2WIdragon",          "T1C2HEdragon",          "T1C2SFdragon",          "T1C3WEdragon",          "T1C3HFdragon",          "T1C3SIdragon",          "T1GGWFdragon",          "T2C1HIdragon",
                                     "T2C1WEdragon",          "T2C1SFdragon",          "T2C1HUdragon",          "T2C2WIdragon",          "T2C2SUdragon",          "T2C2HEdragon",          "T2C3WUdragon",          "T2C3SEdragon",          "T2C3HFdragon",
                                     "T2C3SFdragon",          "T2C3HIdragon",          "T2C3WEdragon",          "T2GGSIdragon",          "T3C1WEdragon",          "T3C1SFdragon",          "T3C1HIdragon",          "T3C1WUdragon",          "T3C1SIdragon",
@@ -122,7 +122,7 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
   #                                            possmerger$FourthChance/possmerger$totalchance*(possmerger$FourthUseful),
   #                                            possmerger$FifthChance/possmerger$totalchance*(possmerger$FifthUseful),
   #                                            possmerger$SixthChance/possmerger$totalchance*(possmerger$SixthUseful)),na.rm=TRUE) #first collect the odds of a new egg. (Useful being binary)
-  #determine the color of the various unwanted eggs 
+  #determine the color of the various unwanted eggs
   rvaluetoadd<-0
   rvaluetoadd<-rvaluetoadd+(possmerger$FirstChance*(!possmerger$FirstUseful)*isred(possmerger$First)*dupeutility[1])/(possmerger$totalchance*possmerger$FirstFrags)
   rvaluetoadd<-rvaluetoadd+(possmerger$SecondChance*(!possmerger$SecondUseful)*isred(possmerger$Second)*dupeutility[1])/(possmerger$totalchance*possmerger$SecondFrags)
@@ -130,7 +130,7 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
   rvaluetoadd<-rvaluetoadd+(possmerger$FourthChance*(!possmerger$FourthUseful)*isred(possmerger$Fourth)*dupeutility[1])/(possmerger$totalchance*possmerger$FourthFrags)
   rvaluetoadd<-rvaluetoadd+(possmerger$FifthChance*(!possmerger$FifthUseful)*isred(possmerger$Fifth)*dupeutility[1])/(possmerger$totalchance*possmerger$FifthFrags)
   rvaluetoadd<-rvaluetoadd+(possmerger$SixthChance*(!possmerger$SixthUseful)*isred(possmerger$Sixth)*dupeutility[1])/(possmerger$totalchance*possmerger$SixthFrags) #collect the chance that your 20 token roll will get you a 'complete' duplicate egg.
-  
+
   pvaluetoadd<-0
   pvaluetoadd<-pvaluetoadd+(possmerger$FirstChance*(!possmerger$FirstUseful)*ispurp(possmerger$First)*dupeutility[2])/(possmerger$totalchance*possmerger$FirstFrags)
   pvaluetoadd<-pvaluetoadd+(possmerger$SecondChance*(!possmerger$SecondUseful)*ispurp(possmerger$Second)*dupeutility[2])/(possmerger$totalchance*possmerger$SecondFrags)
@@ -138,7 +138,7 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
   pvaluetoadd<-pvaluetoadd+(possmerger$FourthChance*(!possmerger$FourthUseful)*ispurp(possmerger$Fourth)*dupeutility[2])/(possmerger$totalchance*possmerger$FourthFrags)
   pvaluetoadd<-pvaluetoadd+(possmerger$FifthChance*(!possmerger$FifthUseful)*ispurp(possmerger$Fifth)*dupeutility[2])/(possmerger$totalchance*possmerger$FifthFrags)
   pvaluetoadd<-pvaluetoadd+(possmerger$SixthChance*(!possmerger$SixthUseful)*ispurp(possmerger$Sixth)*dupeutility[2])/(possmerger$totalchance*possmerger$SixthFrags) #collect the chance that your 20 token roll will get you a 'complete' duplicate egg.
-  
+
   bvaluetoadd<-0
   bvaluetoadd<-bvaluetoadd+(possmerger$FirstChance*(!possmerger$FirstUseful)*isblue(possmerger$First)*dupeutility[3])/(possmerger$totalchance*possmerger$FirstFrags)
   bvaluetoadd<-bvaluetoadd+(possmerger$SecondChance*(!possmerger$SecondUseful)*isblue(possmerger$Second)*dupeutility[3])/(possmerger$totalchance*possmerger$SecondFrags)
@@ -146,7 +146,7 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
   bvaluetoadd<-bvaluetoadd+(possmerger$FourthChance*(!possmerger$FourthUseful)*isblue(possmerger$Fourth)*dupeutility[3])/(possmerger$totalchance*possmerger$FourthFrags)
   bvaluetoadd<-bvaluetoadd+(possmerger$FifthChance*(!possmerger$FifthUseful)*isblue(possmerger$Fifth)*dupeutility[3])/(possmerger$totalchance*possmerger$FifthFrags)
   bvaluetoadd<-bvaluetoadd+(possmerger$SixthChance*(!possmerger$SixthUseful)*isblue(possmerger$Sixth)*dupeutility[3])/(possmerger$totalchance*possmerger$SixthFrags) #collect the chance that your 20 token roll will get you a 'complete' duplicate egg.
-  
+
   ovaluetoadd<-0
   ovaluetoadd<-ovaluetoadd+(possmerger$FirstChance*(!possmerger$FirstUseful)*isorange(possmerger$First)*dupeutility[4])/(possmerger$totalchance*possmerger$FirstFrags)
   ovaluetoadd<-ovaluetoadd+(possmerger$SecondChance*(!possmerger$SecondUseful)*isorange(possmerger$Second)*dupeutility[4])/(possmerger$totalchance*possmerger$SecondFrags)
@@ -154,7 +154,7 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
   ovaluetoadd<-ovaluetoadd+(possmerger$FourthChance*(!possmerger$FourthUseful)*isorange(possmerger$Fourth)*dupeutility[4])/(possmerger$totalchance*possmerger$FourthFrags)
   ovaluetoadd<-ovaluetoadd+(possmerger$FifthChance*(!possmerger$FifthUseful)*isorange(possmerger$Fifth)*dupeutility[4])/(possmerger$totalchance*possmerger$FifthFrags)
   ovaluetoadd<-ovaluetoadd+(possmerger$SixthChance*(!possmerger$SixthUseful)*isorange(possmerger$Sixth)*dupeutility[4])/(possmerger$totalchance*possmerger$SixthFrags) #collect the chance that your 20 token roll will get you a 'complete' duplicate egg.
-  
+
   gvaluetoadd<-0
   gvaluetoadd<-gvaluetoadd+(possmerger$FirstChance*(!possmerger$FirstUseful)*isgreen(possmerger$First)*dupeutility[5])/(possmerger$totalchance*possmerger$FirstFrags)
   gvaluetoadd<-gvaluetoadd+(possmerger$SecondChance*(!possmerger$SecondUseful)*isgreen(possmerger$Second)*dupeutility[5])/(possmerger$totalchance*possmerger$SecondFrags)
@@ -164,11 +164,11 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
   gvaluetoadd<-gvaluetoadd+(possmerger$SixthChance*(!possmerger$SixthUseful)*isgreen(possmerger$Sixth)*dupeutility[5])/(possmerger$totalchance*possmerger$SixthFrags) #collect the chance that your 20 token roll will get you a 'complete' duplicate egg.
   valuetoadd<-gvaluetoadd+ovaluetoadd+bvaluetoadd+pvaluetoadd+rvaluetoadd
   possmerger$ResearchValue<-valuetoadd #add the odds of new egg to the odds of a 'research-worthy' egg.
-  
+
   #  return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22,29)])) #29 is if i do include fragment data.
   return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
 }
-whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skipgreen=TRUE){
+whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   if(is.null(dragonx)){return(0)}
   if(is.null(ownedlist)){return(0)}
     load("ShinyBreeddata.Rdata")
@@ -182,22 +182,19 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skipgreen=TRUE){
   wlist<-wlist[wlist$SecondDragon!=dragonx,]
   wlist<-subset(wlist,First==dragonx|Second==dragonx|Third==dragonx|Fourth==dragonx|Fifth==dragonx|Sixth==dragonx)
   if(length(wlist)==0){return(0)}
-  if(skipgreen==TRUE){
-    isgreen<-function(list){
-      greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")
-      return(list%in%greenlist)}
-    wlist<-wlist[!isgreen(wlist$FirstDragon),]
-    wlist<-wlist[!isgreen(wlist$SecondDragon),]
+  if(!is.null(skiplist)){
+    wlist<-wlist[!(wlist$FirstDragon%in%skiplist),]
+    wlist<-wlist[!(wlist$SecondDragon%in%skiplist),]
   }
   #do a quick calculation of the odds of getting dragonx
   #deal with NAs
-  
+
   suppressWarnings(wlist[is.na(wlist)]<-0) #fixes the numerics
   wlist[is.na(wlist)]<-"Draco" #fixes the factors.  Makes it weird with draco but whatever
   wlist$DesiredOdds<-(wlist$FirstChance/wlist$totalchance*(wlist$First==dragonx))+(wlist$SecondChance/wlist$totalchance*(wlist$Second==dragonx))+(wlist$ThirdChance/wlist$totalchance*(wlist$Third==dragonx))+
     (wlist$FourthChance/wlist$totalchance*(wlist$Fourth==dragonx))+(wlist$FifthChance/wlist$totalchance*(wlist$Fifth==dragonx))+(wlist$SixthChance/wlist$totalchance*(wlist$Sixth==dragonx))
   #return pair and odds
-  return(wlist[order(wlist$DesiredOdds,decreasing=TRUE),c(1,2,3,5,7,9,11,13,16)])  
+  return(wlist[order(wlist$DesiredOdds,decreasing=TRUE),c(1,2,3,5,7,9,11,13,16)])
 }
 
 load("ShinyBreeddata.Rdata")
@@ -210,13 +207,13 @@ concatlists<-function(files){
   greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")
   listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist)
   currentlist<-c(files$incomplete,files$incompleteB)
-  
+
   if("Red"%in%files$fullgroups){currentlist<-c(redlist,currentlist)}
   if("Purple"%in%files$fullgroups){currentlist<-c(purplelist,currentlist)}
   if("Blue"%in%files$fullgroups){currentlist<-c(bluelist,currentlist)}
   if("Orange"%in%files$fullgroups){currentlist<-c(orangelist,currentlist)}
   if("Green"%in%files$fullgroups){currentlist<-c(greenlist,currentlist)}
-  
+
   return(listofeverything%in%currentlist) #reduces list down to a binary vector
 }
 isgreen<-function(list){
@@ -242,7 +239,7 @@ isred<-function(list){
 library(shiny)
 
 shinyServer(function(input, output) {
-  
+
   output$ui<-renderUI({
     if(is.null(input$input_types))
     {return()}
@@ -258,26 +255,26 @@ shinyServer(function(input, output) {
                                       #             dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval))},
                                       options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
   #output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
-  
-  
+
+
   #})
    output$uibeta<-renderUI({
      if(is.null(input$input_types))  {return()}
      incompletelist<-NULL
-     if("Red"%in%input$input_types){incompletelist<-c(incompletelist,"Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")}
-     if("Purple"%in%input$input_types){incompletelist<-c(incompletelist,"Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius","Dominus")}
-     if("Blue"%in%input$input_types){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus","Numen")}
-     if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")}
-     if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")}
+     if("Red"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")}
+     if("Purple"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius","Dominus")}
+     if("Blue"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus","Numen")}
+     if("Orange"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")}
+     if("Green"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")}
 #     selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
      selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
 #
    })
-   #   
+   #
   output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)),
                                                    dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval))},
                                       options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
-  output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skipgreen = input$skipgreen)},
+  output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skiplist = input$skipgreen)},
                                  options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))
   })
 #output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
