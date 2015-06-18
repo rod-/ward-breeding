@@ -50,16 +50,16 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
                                            possmerger$FourthChance/possmerger$totalchance*(possmerger$FourthUseful)+0,
                                            possmerger$FifthChance/possmerger$totalchance*(possmerger$FifthUseful)+0,
                                            possmerger$SixthChance/possmerger$totalchance*(possmerger$SixthUseful)+0),na.rm=TRUE)
-  DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,0,1,1,1,1,5,1,5,5,1,1,5,5,12,0,8,5,5,5,8,16,5,8,16,16,5,5,8,0,20,48,48,1,20,12,60,48,20,20,NA,NA,48,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA)
-  DragonID$fragments[is.na(DragonID$fragments)]<-0 #dont want NA math going weird, but i do prefer NAs to 0s for unknown values.
+  #DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,0,1,1,1,1,5,1,5,5,1,1,5,5,12,0,8,5,5,5,8,16,5,8,16,16,5,5,8,0,20,48,48,1,20,12,60,48,20,20,NA,NA,48,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA)
+  #DragonID$fragments[is.na(DragonID$fragments)]<-0 #dont want NA math going weird, but i do prefer NAs to 0s for unknown values.
   ####The above data regarding fragments is very incomplete and in need of assistance before i allow the dupeutility measurements to go online###
   #second have to give a value for a 'dupe' egg for research purposes vs a new egg for breeding purposes
-  possmerger$FirstFrags<-DragonID$fragments[match(possmerger$First,DragonID$displayName)]
-  possmerger$SecondFrags<-DragonID$fragments[match(possmerger$Second,DragonID$displayName)]
-  possmerger$ThirdFrags<-DragonID$fragments[match(possmerger$Third,DragonID$displayName)]
-  possmerger$FourthFrags<-DragonID$fragments[match(possmerger$Fourth,DragonID$displayName)]
-  possmerger$FifthFrags<-DragonID$fragments[match(possmerger$Fifth,DragonID$displayName)]
-  possmerger$SixthFrags<-DragonID$fragments[match(possmerger$Sixth,DragonID$displayName)]
+#   possmerger$FirstFrags<-DragonID$fragments[match(possmerger$First,DragonID$displayName)]
+#   possmerger$SecondFrags<-DragonID$fragments[match(possmerger$Second,DragonID$displayName)]
+#   possmerger$ThirdFrags<-DragonID$fragments[match(possmerger$Third,DragonID$displayName)]
+#   possmerger$FourthFrags<-DragonID$fragments[match(possmerger$Fourth,DragonID$displayName)]
+#   possmerger$FifthFrags<-DragonID$fragments[match(possmerger$Fifth,DragonID$displayName)]
+#   possmerger$SixthFrags<-DragonID$fragments[match(possmerger$Sixth,DragonID$displayName)]
   return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
 }
 whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
@@ -169,7 +169,9 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
   return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
 }
 whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skipgreen=TRUE){
-  load("ShinyBreeddata.Rdata")
+  if(is.null(dragonx)){return(0)}
+  if(is.null(ownedlist)){return(0)}
+    load("ShinyBreeddata.Rdata")
   wlist<-merger
   if(owned==TRUE){
     wlist<-wlist[ownedlist%in%merger$FirstDragon] #make sure you have both of the breedingpair
@@ -179,6 +181,7 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skipgreen=TRUE){
   wlist<-wlist[wlist$FirstDragon!=dragonx,]
   wlist<-wlist[wlist$SecondDragon!=dragonx,]
   wlist<-subset(wlist,First==dragonx|Second==dragonx|Third==dragonx|Fourth==dragonx|Fifth==dragonx|Sixth==dragonx)
+  if(length(wlist)==0){return(0)}
   if(skipgreen==TRUE){
     isgreen<-function(list){
       greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")
@@ -266,12 +269,15 @@ shinyServer(function(input, output) {
      if("Blue"%in%input$input_types){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus","Numen")}
      if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")}
      if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")}
-     selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)})
-  #   
+#     selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
+     selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
+#
+   })
+   #   
   output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)),
                                                    dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval))},
                                       options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
-  output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skipgreen = input$greenskip)},
+  output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skipgreen = input$skipgreen)},
                                  options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))
   })
 #output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))

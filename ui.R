@@ -25,6 +25,7 @@ shinyUI(
                            fluidRow(    column(3, wellPanel(selectInput('input_typesBeta', 'Choose Partial Colors', 
                                                                         choices=c("Purple","Blue","Red","Orange","Green"), multiple=TRUE,selected = c("Orange"), selectize=TRUE))),
                              fluidRow(column(3, wellPanel(uiOutput("uibeta"))))),
+                           fluidRow(column(3,wellPanel(checkboxInput('skipgreen','Ignore Green Dragons?',value=TRUE)))),
                            fluidRow(column(12,wellPanel(dataTableOutput("resbeta")))))),
                #                            fluidRow(column(2, wellPanel( sliderInput("rval", "RedResearchValue:", 
                #                                                                         min = 0, max = 1, value = 0.1, step= 0.1))),
