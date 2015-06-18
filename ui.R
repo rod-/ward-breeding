@@ -19,15 +19,16 @@ shinyUI(
                                       <img alt=\"\" border=\"0\" src=\"https://www.paypalobjects.com/en_US/i/scr/pixel.gif\" width=\"1\" height=\"1\">
                                       </form>"))
                         ),
-               # tabPanel("Beta",
-               #          fluidRow(column(3,wellPanel(
-               #            checkboxGroupInput("fullgroups","Check your completed colors",c("Red","Purple","Blue","Orange","Green"),selected = c("Red","Purple","Blue")))),
-               #            fluidRow(    column(3, wellPanel(selectInput('input_types', 'Choose Partial Colors', 
-               #                                                         choices=c("Purple","Blue","Red","Orange","Green"), multiple=TRUE,selected = c("Orange"), selectize=TRUE))),
-               #              fluidRow(column(3, wellPanel(uiOutput("uibeta"))))),
+                tabPanel("Beta",
+                         fluidRow(column(3,wellPanel(
+                           checkboxGroupInput("fullgroupsBeta","Check your completed colors",c("Red","Purple","Blue","Orange","Green"),selected = c("Red","Purple","Blue")))),
+                           fluidRow(    column(3, wellPanel(selectInput('input_typesBeta', 'Choose Partial Colors', 
+                                                                        choices=c("Purple","Blue","Red","Orange","Green"), multiple=TRUE,selected = c("Orange"), selectize=TRUE))),
+                             fluidRow(column(3, wellPanel(uiOutput("uibeta"))))),
+                           fluidRow(column(12,wellPanel(dataTableOutput("resbeta")))))),
                #                            fluidRow(column(2, wellPanel( sliderInput("rval", "RedResearchValue:", 
-               #                                                                           min = 0, max = 1, value = 0.1, step= 0.1))),
-               #                                              column(2,wellPanel( sliderInput("pval", "PurpResearchValue:" ,
+               #                                                                         min = 0, max = 1, value = 0.1, step= 0.1))),
+               #                                            column(2,wellPanel( sliderInput("pval", "PurpResearchValue:" ,
                #                                                                               min = 0, max = 1, value = 0.1, step= 0.1))),
                #                                               column(2,wellPanel( sliderInput("bval", "BlueResearchValue:", 
                #                                                                               min = 0, max = 1, value = 0.1, step= 0.1))),

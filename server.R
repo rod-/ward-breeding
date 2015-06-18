@@ -168,6 +168,34 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
   #  return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22,29)])) #29 is if i do include fragment data.
   return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
 }
+whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skipgreen=TRUE){
+  load("ShinyBreeddata.Rdata")
+  wlist<-merger
+  if(owned==TRUE){
+    wlist<-wlist[ownedlist%in%merger$FirstDragon] #make sure you have both of the breedingpair
+    wlist<-wlist[ownedlist%in%wlist$SecondDragon]
+  }
+  #dont use self
+  wlist<-wlist[wlist$FirstDragon!=dragonx,]
+  wlist<-wlist[wlist$SecondDragon!=dragonx,]
+  wlist<-subset(wlist,First==dragonx|Second==dragonx|Third==dragonx|Fourth==dragonx|Fifth==dragonx|Sixth==dragonx)
+  if(skipgreen==TRUE){
+    isgreen<-function(list){
+      greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")
+      return(list%in%greenlist)}
+    wlist<-wlist[!isgreen(wlist$FirstDragon),]
+    wlist<-wlist[!isgreen(wlist$SecondDragon),]
+  }
+  #do a quick calculation of the odds of getting dragonx
+  #deal with NAs
+  
+  suppressWarnings(wlist[is.na(wlist)]<-0) #fixes the numerics
+  wlist[is.na(wlist)]<-"Draco" #fixes the factors.  Makes it weird with draco but whatever
+  wlist$DesiredOdds<-(wlist$FirstChance/wlist$totalchance*(wlist$First==dragonx))+(wlist$SecondChance/wlist$totalchance*(wlist$Second==dragonx))+(wlist$ThirdChance/wlist$totalchance*(wlist$Third==dragonx))+
+    (wlist$FourthChance/wlist$totalchance*(wlist$Fourth==dragonx))+(wlist$FifthChance/wlist$totalchance*(wlist$Fifth==dragonx))+(wlist$SixthChance/wlist$totalchance*(wlist$Sixth==dragonx))
+  #return pair and odds
+  return(wlist)  
+}
 
 load("ShinyBreeddata.Rdata")
 DragonStatDF<-DragonID
@@ -226,24 +254,26 @@ shinyServer(function(input, output) {
                                                    dupeutility=c(0.1,0.1,0.1,0.1,0.1))},
                                       #             dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval))},
                                       options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
-  output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
+  #output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
   
   
   #})
-  # output$uibeta<-renderUI({
-  #   if(is.null(input$input_types))  {return()}
-  #   incompletelist<-NULL
-  #   if("Red"%in%input$input_types){incompletelist<-c(incompletelist,"Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")}
-  #   if("Purple"%in%input$input_types){incompletelist<-c(incompletelist,"Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius","Dominus")}
-  #   if("Blue"%in%input$input_types){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus","Numen")}
-  #   if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")}
-  #   if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")}
-  #   selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)})
+   output$uibeta<-renderUI({
+     if(is.null(input$input_types))  {return()}
+     incompletelist<-NULL
+     if("Red"%in%input$input_types){incompletelist<-c(incompletelist,"Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")}
+     if("Purple"%in%input$input_types){incompletelist<-c(incompletelist,"Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius","Dominus")}
+     if("Blue"%in%input$input_types){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus","Numen")}
+     if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")}
+     if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")}
+     selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)})
   #   
   output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)),
                                                    dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval))},
                                       options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
-})
+  output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skipgreen = input$greenskip)},
+                                 options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))
+  })
 #output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
 
 # output$testimage<-renderImage({
