@@ -50,7 +50,7 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
                                            possmerger$FourthChance/possmerger$totalchance*(possmerger$FourthUseful)+0,
                                            possmerger$FifthChance/possmerger$totalchance*(possmerger$FifthUseful)+0,
                                            possmerger$SixthChance/possmerger$totalchance*(possmerger$SixthUseful)+0),na.rm=TRUE)
-  #DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,0,1,1,1,1,5,1,5,5,1,1,5,5,12,0,8,5,5,5,8,16,5,8,16,16,5,5,8,0,20,48,48,1,20,12,60,48,20,20,NA,NA,48,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA)
+  #DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,0,1,1,1,1,5,1,5,5,1,1,5,5,12,0,8,5,5,5,8,16,5,8,16,16,5,5,8,0,20,48,48,1,20,12,60,48,20,20,48,20,48,48,20,0,40,40,40,40,96,96,96,96,96,96,96,96,96,96)
   #DragonID$fragments[is.na(DragonID$fragments)]<-0 #dont want NA math going weird, but i do prefer NAs to 0s for unknown values.
   ####The above data regarding fragments is very incomplete and in need of assistance before i allow the dupeutility measurements to go online###
   #second have to give a value for a 'dupe' egg for research purposes vs a new egg for breeding purposes
@@ -190,8 +190,15 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   #deal with NAs
 
   suppressWarnings(wlist[is.na(wlist)]<-0) #fixes the numerics
+
   wlist[is.na(wlist)]<-"Draco" #fixes the factors.  Makes it weird with draco but whatever
-  wlist$DesiredOdds<-(wlist$FirstChance/wlist$totalchance*(wlist$First==dragonx))+(wlist$SecondChance/wlist$totalchance*(wlist$Second==dragonx))+(wlist$ThirdChance/wlist$totalchance*(wlist$Third==dragonx))+
+    levels(wlist$First)[levels(wlist$First)=="Draco"]<-""
+    levels(wlist$Second)[levels(wlist$Second)=="Draco"]<-""
+    levels(wlist$Third)[levels(wlist$Third)=="Draco"]<-""
+    levels(wlist$Fourth)[levels(wlist$Fourth)=="Draco"]<-""
+    levels(wlist$Fifth)[levels(wlist$Fifth)=="Draco"]<-""
+    levels(wlist$Sixth)[levels(wlist$Sixth)=="Draco"]<-""
+          wlist$DesiredOdds<-(wlist$FirstChance/wlist$totalchance*(wlist$First==dragonx))+(wlist$SecondChance/wlist$totalchance*(wlist$Second==dragonx))+(wlist$ThirdChance/wlist$totalchance*(wlist$Third==dragonx))+
     (wlist$FourthChance/wlist$totalchance*(wlist$Fourth==dragonx))+(wlist$FifthChance/wlist$totalchance*(wlist$Fifth==dragonx))+(wlist$SixthChance/wlist$totalchance*(wlist$Sixth==dragonx))
   #return pair and odds
   return(wlist[order(wlist$DesiredOdds,decreasing=TRUE),c(1,2,3,5,7,9,11,13,16)])
