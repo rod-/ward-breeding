@@ -12,6 +12,7 @@ shinyUI(
                         helpText("The best pairing with the currently-selected set of dragons is the top line in the table below"),
                         fluidRow(column(12,wellPanel(dataTableOutput("resulttable")))),
                         helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems"),
+                        helpText("Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com"),
                         tags$div(HTML("<form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\">
                                       <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">
                                       <input type=\"hidden\" name=\"hosted_button_id\" value=\"2U6KK7ZRCUZV2\">
@@ -20,8 +21,7 @@ shinyUI(
                                       </form>"))
                         ),
                 tabPanel("Beta",
-                         fluidRow(column(3,wellPanel(
-                           checkboxGroupInput("fullgroupsBeta","Check your completed colors",c("Red","Purple","Blue","Orange","Green"),selected = c("Red","Purple","Blue")))),
+
                            fluidRow(    column(3, wellPanel(selectInput('input_typesBeta', 'What color is the dragon you want?',
                                                                         choices=c("Purple","Blue","Red","Orange","Green"), multiple=TRUE,selected = c("Orange","Green"), selectize=TRUE))),
                              fluidRow(column(3, wellPanel(uiOutput("uibeta"))))),
@@ -30,9 +30,9 @@ shinyUI(
                                                                                                                                 "Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus",
                                                                                                                                 "Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius"),
                                                                                                                                 selectize =TRUE,multiple=TRUE,selected=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin"))))),
-                           fluidRow(column(12,wellPanel(dataTableOutput("resbeta"))))),
+                           fluidRow(column(12,wellPanel(dataTableOutput("resbeta")))),
             #                                                                                                    )),
-                                           helpText("Note: Fields that say 'draco' are actually no dragon - this is still a beta version"),
+                                           helpText("Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com"),
 
                                            tags$div(HTML("<form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\">
                               <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">
