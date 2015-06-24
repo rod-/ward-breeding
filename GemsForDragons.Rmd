@@ -21,6 +21,10 @@ The cost to speed up these missions appears to be linear and vary across mission
 Therefore, the 20-token 1hour missions are probably the most bang/buck (assuming you don't mind actually doing them).  
 You get 
 The direct purchase of egg tokens is 34/200 apparently.
+
+...math about the cost of a darja, math about the cost of a bred dragon.
+
+How does this compare to buying a carsis/darja?
 ```{r, echo=FALSE}
 plot(cars)
 ```
