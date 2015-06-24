@@ -1,0 +1,27 @@
+---
+title: "CashCosts"
+author: "rod-"
+date: "June 24, 2015"
+output: html_document
+---
+
+An analysis of gem spending in WD.
+Assume your goal is to get powerful dragons, because come on that's the point of the game, right?
+
+Speeding up egg missions:
+```{r}
+timedata<-c(900,840,3000,2940,20280,20220,2760,1320,2700,1200,19980,1050,19860,2520,1020,2448,2330,840,19620,760,19500,730,2190,19440,2080,600,480,1940,280,1800,19080,240,19020,1670,180,105,58,1550,18780,1450,1310,18600,18480,1160,18180,850,6000) 
+costdata<-c(15,14,25,24,143,142,23,13,22,12,141,11,140,21,10,20,19,9,139,8,138,7,18,137,17,6,5,16,4,15,136,3,135,14,2,1,0,13,134,12,11,133,132,10,130,7,56)
+#baseline for fresh: 
+#1h=30 4h=92
+#4h is worth 80 while 1h is worth 20
+
+```
+The cost to speed up these missions appears to be linear and vary across mission type in a way that makes it more expensive to speed up higher missions:  
+Therefore, the 20-token 1hour missions are probably the most bang/buck (assuming you don't mind actually doing them).  
+You get 
+The direct purchase of egg tokens is 34/200 apparently.
+```{r, echo=FALSE}
+plot(cars)
+```
+
