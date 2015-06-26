@@ -16,21 +16,21 @@ basictime<-c(3600)
 basiccost<-c(30)
 midcost<-c(92,65)
 midtime<-c(14400,9240)
-expcost<-c(7,6)
-exptime<-c(600,480)
-#4h is worth 80 while 1h is worth 20
+expcost<-c(7,6,457)
+exptime<-c(600,480,72000)
+#4h is worth 80 while 1h is worth 20 and 20h is worth 160.
 
 ```
 The cost to speed up these missions appears to be semi-linear and varies across mission type in a way that makes it more expensive to speed up higher missions:  
 Therefore, the 20-token 1hour missions are probably the most bang/buck (assuming you don't mind actually doing them).  
-You get 40 tokens for 30 gems.
+You get 40 tokens for 30 gems.  
 
-The direct purchase of egg tokens is 34/200 apparently, so don't do that!
+The direct purchase of egg tokens is 34/200gems , so don't do that!
 
-...math about the cost of a darja, math about the cost of a bred dragon.
+Darja costs 17950 gems, which could be ~24000 tokens.  Given that generally there is a .15 chance of getting a 'new' fragment through the orange range, and that chance is currently reduced to .1 by 
+the devs, it costs 133 tokens for a new fragment.  You could earn 180 new fragments for the cost of a darja, pushing you forward by 3 or 4 dragons, well into other epics and legendaries..
 
-How does this compare to buying a carsis/darja?
 ```{r, echo=FALSE}
-plot(cars)
+plot(everything)
 ```
 
