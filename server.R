@@ -6,7 +6,7 @@
 # Slider for value of a duplicate
 # Fragment Data for num of fragments to make dupeutility practical/useful.
 # Color information (light cell background corresponding to the dragon color?)
-whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
+whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE){
   load("ShinyBreeddata.Rdata")
 
   DragonID<-data.frame(identifier=c("T1C1WFdragon",       "T1C1SEdragon", "T1C1HIdragon",          "T1C2WIdragon",          "T1C2HEdragon",          "T1C2SFdragon",          "T1C3WEdragon",          "T1C3HFdragon",          "T1C3SIdragon",          "T1GGWFdragon",          "T2C1HIdragon",
@@ -44,7 +44,29 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
   possmerger$FifthUseful[DragonID$owned[match(possmerger$Fifth,DragonID$displayName)]>=1]<-0
   possmerger$SixthUseful<-1
   possmerger$SixthUseful[DragonID$owned[match(possmerger$Sixth,DragonID$displayName)]>=1]<-0
-  possmerger$ChanceofNewEgg<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
+  if(empirical==TRUE){
+    isnerfed<-function(list){
+      orangelist<-c("Noss","Hydron","Amarok","Luminark","Septys","Enki","Durga")
+      return(list%in%orangelist)
+    }
+  possmerger$FirstChance[isnerfed(possmerger$First)]<-possmerger$FirstChance[isnerfed(possmerger$First)]*2/3  
+  possmerger$SecondChance[isnerfed(possmerger$Second)]<-possmerger$SecondChance[isnerfed(possmerger$Second)]*2/3
+  possmerger$ThirdChance[isnerfed(possmerger$Third)]<-possmerger$ThirdChance[isnerfed(possmerger$Third)]*2/3
+  possmerger$FourthChance[isnerfed(possmerger$Fourth)]<-possmerger$FourthChance[isnerfed(possmerger$Fourth)]*2/3
+  possmerger$FifthChance[isnerfed(possmerger$Fifth)]<-possmerger$FifthChance[isnerfed(possmerger$Fifth)]*2/3
+  possmerger$SixthChance[isnerfed(possmerger$Sixth)]<-possmerger$SixthChance[isnerfed(possmerger$Sixth)]*2/3
+  isnerfedhard<-function(list){
+    orangelist<-c("Amarok","Durga")
+    return(list%in%orangelist)
+  }
+  possmerger$FirstChance[isnerfedhard(possmerger$First)]<-possmerger$FirstChance[isnerfedhard(possmerger$First)]*3/4  
+  possmerger$SecondChance[isnerfedhard(possmerger$Second)]<-possmerger$SecondChance[isnerfedhard(possmerger$Second)]*3/4
+  possmerger$ThirdChance[isnerfedhard(possmerger$Third)]<-possmerger$ThirdChance[isnerfedhard(possmerger$Third)]*3/4
+  possmerger$FourthChance[isnerfedhard(possmerger$Fourth)]<-possmerger$FourthChance[isnerfedhard(possmerger$Fourth)]*3/4
+  possmerger$FifthChance[isnerfedhard(possmerger$Fifth)]<-possmerger$FifthChance[isnerfedhard(possmerger$Fifth)]*3/4
+  possmerger$SixthChance[isnerfedhard(possmerger$Sixth)]<-possmerger$SixthChance[isnerfedhard(possmerger$Sixth)]*3/4}
+  
+    possmerger$ChanceofNewEgg<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
                                            possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful)+0,
                                            possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful)+0,
                                            possmerger$FourthChance/possmerger$totalchance*(possmerger$FourthUseful)+0,
@@ -60,7 +82,7 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
 #   possmerger$FourthFrags<-DragonID$fragments[match(possmerger$Fourth,DragonID$displayName)]
 #   possmerger$FifthFrags<-DragonID$fragments[match(possmerger$Fifth,DragonID$displayName)]
 #   possmerger$SixthFrags<-DragonID$fragments[match(possmerger$Sixth,DragonID$displayName)]
-  return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
+   return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
 }
 whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
   load("ShinyBreeddata.Rdata")
@@ -279,7 +301,7 @@ shinyServer(function(input, output) {
    })
    #
   output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)),
-                                                   dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval))},
+                                                   dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical)},
                                       options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
   output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skiplist = input$skipgreen)},
                                  options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))

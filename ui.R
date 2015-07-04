@@ -5,7 +5,7 @@ shinyUI(
     navbarPage("WarDragons Best Breeding Options",
                tabPanel("Main",
                         fluidRow(column(3,wellPanel(checkboxGroupInput("fullgroups","Check your completed colors",c("Red","Purple","Blue","Orange","Green"),
-                                                                       selected = c("Red","Purple","Blue")))),
+                                                                       selected = c("Red","Purple","Blue")),checkboxInput('empirical','Use empirical drop rates',FALSE))),
                                  fluidRow(    column(3, wellPanel(selectInput('input_types', 'Choose Partial Colors',
                                                                               choices=c("Purple","Blue","Red","Orange","Green"), multiple=TRUE,selected = c("Orange"), selectize=TRUE))),
                                               fluidRow(column(3, wellPanel(uiOutput("ui")))))),
