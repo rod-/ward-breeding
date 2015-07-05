@@ -64,8 +64,9 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
   possmerger$ThirdChance[isnerfedhard(possmerger$Third)]<-possmerger$ThirdChance[isnerfedhard(possmerger$Third)]*3/4
   possmerger$FourthChance[isnerfedhard(possmerger$Fourth)]<-possmerger$FourthChance[isnerfedhard(possmerger$Fourth)]*3/4
   possmerger$FifthChance[isnerfedhard(possmerger$Fifth)]<-possmerger$FifthChance[isnerfedhard(possmerger$Fifth)]*3/4
-  possmerger$SixthChance[isnerfedhard(possmerger$Sixth)]<-possmerger$SixthChance[isnerfedhard(possmerger$Sixth)]*3/4}
-  
+  possmerger$SixthChance[isnerfedhard(possmerger$Sixth)]<-possmerger$SixthChance[isnerfedhard(possmerger$Sixth)]*3/4
+  #recalculate totalchance
+  possmerger$totalchance<-rowSums(cbind(possmerger$FirstChance,possmerger$SecondChance,possmerger$ThirdChance,possmerger$FourthChance,possmerger$FifthChance,possmerger$SixthChance),na.rm=TRUE)}
     possmerger$ChanceofNewEgg<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
                                            possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful)+0,
                                            possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful)+0,
