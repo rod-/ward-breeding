@@ -9,7 +9,9 @@ rosterb[rosterb=="rogermartin"]<-"alfalfa"
 rosterb[rosterb=="queenapps"]<-"avatarroku"
 rosterb<-c("ynci","rodminus","primaites","zyphon","moonspawn","acesoh","chungi82","fatboo","ironduke","igrimreaper","thewash","nevyn","drizztray","amarok","zhenx","egonzo","strwberrypizza","alfalfa","rodplus","icehyunkel","bigkeeper","drizztlee","lastat","avatarroku","fival","poipoi","nickademus","insatiable","snoopchic","aragornblaze","dracaryx","brewdoctor","princessjulie","traceyv2","arodriguez","lati","wingslayer","meningi","thegudge","tellerin","unlimitless","juanmaster","bigreddog","tasha","dogecoin","sparklefishh","smokeyou","xsilverstormx","xxweathersxx")
 #keeps the roster up to date.
-
+rosterb[rosterb=="drizztray"]<-"fckthisupdate"
+rosterb[rosterb=="brewdoctor"]<-"littlemoonwash"
+rosterb[rosterb==""]
 #checks individual wars for nonperformers.
 warcheck<-function(war,roster=rosterb){return(c(roster[!roster%in%war],war[!war%in%roster]))}
 
