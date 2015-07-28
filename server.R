@@ -249,7 +249,7 @@ concatlists<-function(files){
   if("Blue"%in%files$fullgroups){currentlist<-c(bluelist,currentlist)}
   if("Orange"%in%files$fullgroups){currentlist<-c(orangelist,currentlist)}
   if("Green"%in%files$fullgroups){currentlist<-c(greenlist,currentlist)}
-print(length(listofeverything%in%currentlist))
+#print(length(listofeverything%in%currentlist))
   return(listofeverything%in%currentlist) #reduces list down to a binary vector
 }
 isgreen<-function(list){
