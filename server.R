@@ -200,7 +200,7 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
 whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   if(is.null(dragonx)){return(0)}
   if(is.null(ownedlist)){return(0)}
-    load("ShinyBreeddata.Rdata")
+    load("ShinyBreeddata2.Rdata")
   wlist<-merger
   if(owned==TRUE){
     wlist<-wlist[ownedlist%in%merger$FirstDragon] #make sure you have both of the breedingpair
