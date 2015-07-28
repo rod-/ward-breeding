@@ -310,9 +310,12 @@ shinyServer(function(input, output) {
   output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)),
                                                    dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical)},
                                       options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
-  output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skiplist = input$skipgreen)},
-                                 options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))
-  })
+#  output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skiplist = input$skipgreen)},
+#                                 options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))
+  output$resbeta<-renderDataTable({whobreedsx(ownedlist =0,dragonx = input$chosendragon,skiplist = input$skipgreen)},
+                                  options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))
+  
+    })
 # output$testimage<-renderImage({
 #     # When input$n is 3, filename is ./images/image3.jpeg
 #     filename <- normalizePath(file.path('./imagetest',
