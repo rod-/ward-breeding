@@ -1,5 +1,5 @@
 library(shiny)
-load("ShinyBreeddata.Rdata")
+load("ShinyBreeddata2.Rdata")
 shinyUI(
   fluidPage(
     navbarPage("WarDragons Best Breeding Options",

@@ -1,4 +1,3 @@
-
 #Currently missing:
 # Add more UI elements - threshold for utility,
 # Replace text with pictures
@@ -201,7 +200,8 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   if(is.null(dragonx)){return(0)}
   if(is.null(ownedlist)){return(0)}
     load("ShinyBreeddata2.Rdata")
-  wlist<-merger
+  merger<-merger2
+      wlist<-merger
   if(owned==TRUE){
     wlist<-wlist[ownedlist%in%merger$FirstDragon] #make sure you have both of the breedingpair
     wlist<-wlist[ownedlist%in%wlist$SecondDragon]
@@ -233,7 +233,7 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   return(wlist[order(wlist$DesiredOdds,decreasing=TRUE),c(1,2,3,5,7,9,11,13,16)])
 }
 
-load("ShinyBreeddata.Rdata")
+load("ShinyBreeddata2.Rdata")
 DragonStatDF<-DragonID
 concatlists<-function(files){
   redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")
@@ -313,8 +313,6 @@ shinyServer(function(input, output) {
   output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skiplist = input$skipgreen)},
                                  options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))
   })
-#output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
-
 # output$testimage<-renderImage({
 #     # When input$n is 3, filename is ./images/image3.jpeg
 #     filename <- normalizePath(file.path('./imagetest',
@@ -329,7 +327,6 @@ shinyServer(function(input, output) {
 # remember that i really only want to use 2 images in the final output, so it's not important to do arbitrary numbers of images (or perhaps something like 2*numoutput)
 #}
 # )
-
 
 #would like to do cooler things with this:
 #Take the first guy, take the second guy, just their images, then between them put the 6 possible outcomes' pictures, transparancy equal to their utility (0/1) and size equal to likelihood.
