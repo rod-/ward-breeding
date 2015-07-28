@@ -7,26 +7,31 @@
 # Fragment Data for num of fragments to make dupeutility practical/useful.
 # Color information (light cell background corresponding to the dragon color?)
 whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE){
-  load("ShinyBreeddata.Rdata")
+#  load("ShinyBreeddata.Rdata")
+  load("ShinyBreeddata2.Rdata")
+  merger<-merger2
+  DragonID<-DragonID2[DragonID2$displayName%in%(levels(factor(c(as.character(merger$FirstDragon),as.character(merger$SecondDragon))))),]#dont want useless junk
+  DragonID<-DragonID[-c(1:5),]#the first 5 entries fuck everything up being redundant and legacy
 
-  DragonID<-data.frame(identifier=c("T1C1WFdragon",       "T1C1SEdragon", "T1C1HIdragon",          "T1C2WIdragon",          "T1C2HEdragon",          "T1C2SFdragon",          "T1C3WEdragon",          "T1C3HFdragon",          "T1C3SIdragon",          "T1GGWFdragon",          "T2C1HIdragon",
-                                    "T2C1WEdragon",          "T2C1SFdragon",          "T2C1HUdragon",          "T2C2WIdragon",          "T2C2SUdragon",          "T2C2HEdragon",          "T2C3WUdragon",          "T2C3SEdragon",          "T2C3HFdragon",
-                                    "T2C3SFdragon",          "T2C3HIdragon",          "T2C3WEdragon",          "T2GGSIdragon",          "T3C1WEdragon",          "T3C1SFdragon",          "T3C1HIdragon",          "T3C1WUdragon",          "T3C1SIdragon",
-                                    "T3C1HEdragon",          "T3C2SEdragon",          "T3C2HUdragon",          "T3C2WFdragon",          "T3C3SUdragon",          "T3C3HFdragon",          "T3C3WIdragon",          "T3C3HIdragon",          "T3GGHEdragon",
-                                    "T4C1SFdragon",          "T4C1HIdragon",          "T4C1WUdragon",          "T4C1SDdragon",          "T4C1HEdragon",          "T4C1HFdragon",          "T4C2WIdragon",          "T4C2SEdragon",          "T4C2HUdragon",
-                                    "T4C2WDdragon",          "T4C3SIdragon",          "T4C3WFdragon",          "T4C3HDdragon",          "T4C3SUdragon",          "T4C3WEdragon",          "T4GGSDdragon",          "T5C1WUdragon",          "T5C1HEdragon",
-                                    "T5C1WDdragon",          "T5C1SFdragon",          "T5C1HIdragon",          "T5C2SEdragon",          "T5C2HDdragon",          "T5C2WIdragon",          "T5C2SUdragon",          "T5C3HFdragon",          "T5C3WFdragon",
-                                    "T5C3SDdragon",          "T5C3HUdragon",          "T5GGWUdragon"),
-                       displayName=c( "Draco",          "Leviathan",      "Frigg",          "Zin",            "Hext",
-                                      "Aetrix",         "Hantu",          "Kastor",         "Kinnara",        "Fenrir",         "Trollis",        "Laekrian",       "Merk",           "Dactyl",         "Gog",            "Huli",           "Borg",
-                                      "Vladimir",       "Alikorn",        "Daemun",         "Garuda",         "Klax",           "Arborius",       "Dominus",        "Grypp",          "Jura",           "Kromon",         "Yanari",         "Vazir",
-                                      "Drude",          "Sahran",         "Bolt",          "Kelsis",         "Etzel",          "Kobahl",         "Baldr",          "Viscus",         "Numen",          "Ankor",          "Noss",           "Hydron",
-                                      "Slynx",          "Habrok",         "Volos",          "Amarok",         "Luminark",       "Lucius",         "Bronze",         "Septys",         "Ruma",           "Enki",           "Durga",          "Kolo",
-                                      "Darja",          "Gaspar",         "Karna",          "Naga",           "Nassus",         "Garzev",         "Serabis",        "Urd",            "Ith",            "Elixis",         "Pandi",          "Danzig",
-                                      "Nix",            "Ettin",          "Carsis"       ))
+  #   DragonID<-data.frame(identifier=c("T1C1WFdragon",       "T1C1SEdragon", "T1C1HIdragon",          "T1C2WIdragon",          "T1C2HEdragon",          "T1C2SFdragon",          "T1C3WEdragon",          "T1C3HFdragon",          "T1C3SIdragon",          "T1GGWFdragon",          "T2C1HIdragon",
+#                                     "T2C1WEdragon",          "T2C1SFdragon",          "T2C1HUdragon",          "T2C2WIdragon",          "T2C2SUdragon",          "T2C2HEdragon",          "T2C3WUdragon",          "T2C3SEdragon",          "T2C3HFdragon",
+#                                     "T2C3SFdragon",          "T2C3HIdragon",          "T2C3WEdragon",          "T2GGSIdragon",          "T3C1WEdragon",          "T3C1SFdragon",          "T3C1HIdragon",          "T3C1WUdragon",          "T3C1SIdragon",
+#                                     "T3C1HEdragon",          "T3C2SEdragon",          "T3C2HUdragon",          "T3C2WFdragon",          "T3C3SUdragon",          "T3C3HFdragon",          "T3C3WIdragon",          "T3C3HIdragon",          "T3GGHEdragon",
+#                                     "T4C1SFdragon",          "T4C1HIdragon",          "T4C1WUdragon",          "T4C1SDdragon",          "T4C1HEdragon",          "T4C1HFdragon",          "T4C2WIdragon",          "T4C2SEdragon",          "T4C2HUdragon",
+#                                     "T4C2WDdragon",          "T4C3SIdragon",          "T4C3WFdragon",          "T4C3HDdragon",          "T4C3SUdragon",          "T4C3WEdragon",          "T4GGSDdragon",          "T5C1WUdragon",          "T5C1HEdragon",
+#                                     "T5C1WDdragon",          "T5C1SFdragon",          "T5C1HIdragon",          "T5C2SEdragon",          "T5C2HDdragon",          "T5C2WIdragon",          "T5C2SUdragon",          "T5C3HFdragon",          "T5C3WFdragon",
+#                                     "T5C3SDdragon",          "T5C3HUdragon",          "T5GGWUdragon"),
+#                        displayName=c( "Draco",          "Leviathan",      "Frigg",          "Zin",            "Hext",
+#                                       "Aetrix",         "Hantu",          "Kastor",         "Kinnara",        "Fenrir",         "Trollis",        "Laekrian",       "Merk",           "Dactyl",         "Gog",            "Huli",           "Borg",
+#                                       "Vladimir",       "Alikorn",        "Daemun",         "Garuda",         "Klax",           "Arborius",       "Dominus",        "Grypp",          "Jura",           "Kromon",         "Yanari",         "Vazir",
+#                                       "Drude",          "Sahran",         "Bolt",          "Kelsis",         "Etzel",          "Kobahl",         "Baldr",          "Viscus",         "Numen",          "Ankor",          "Noss",           "Hydron",
+#                                       "Slynx",          "Habrok",         "Volos",          "Amarok",         "Luminark",       "Lucius",         "Bronze",         "Septys",         "Ruma",           "Enki",           "Durga",          "Kolo",
+#                                       "Darja",          "Gaspar",         "Karna",          "Naga",           "Nassus",         "Garzev",         "Serabis",        "Urd",            "Ith",            "Elixis",         "Pandi",          "Danzig",
+#                                       "Nix",            "Ettin",          "Carsis"       ))
   # Wouldn't mind just cleaning the actual DragonID table up rather than taking the manual one, but whatever.
   # WANT to have a way to value full eggs over fractional eggs but i don't even know how to get that data in the first place yet.
-  if(length(usefullist)!=68){return(0)}
+  #if(length(usefullist)!=68){return(0)}
+  if(length(usefullist)!=length(DragonID$identifier)){return(0)}#the number of dragons now..
   DragonID$owned<-usefullist
   if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
   possmerger<-merger[DragonID$owned[match(merger$FirstDragon,DragonID$displayName)]==1,]#do i own the first dragon
@@ -86,27 +91,28 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
    return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
 }
 whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
-  load("ShinyBreeddata.Rdata")
-
-  DragonID<-data.frame(identifier=c("T1C1WFdragon",       "T1C1SEdragon", "T1C1HIdragon",          "T1C2WIdragon",          "T1C2HEdragon",          "T1C2SFdragon",          "T1C3WEdragon",          "T1C3HFdragon",          "T1C3SIdragon",          "T1GGWFdragon",          "T2C1HIdragon",
-                                    "T2C1WEdragon",          "T2C1SFdragon",          "T2C1HUdragon",          "T2C2WIdragon",          "T2C2SUdragon",          "T2C2HEdragon",          "T2C3WUdragon",          "T2C3SEdragon",          "T2C3HFdragon",
-                                    "T2C3SFdragon",          "T2C3HIdragon",          "T2C3WEdragon",          "T2GGSIdragon",          "T3C1WEdragon",          "T3C1SFdragon",          "T3C1HIdragon",          "T3C1WUdragon",          "T3C1SIdragon",
-                                    "T3C1HEdragon",          "T3C2SEdragon",          "T3C2HUdragon",          "T3C2WFdragon",          "T3C3SUdragon",          "T3C3HFdragon",          "T3C3WIdragon",          "T3C3HIdragon",          "T3GGHEdragon",
-                                    "T4C1SFdragon",          "T4C1HIdragon",          "T4C1WUdragon",          "T4C1SDdragon",          "T4C1HEdragon",          "T4C1HFdragon",          "T4C2WIdragon",          "T4C2SEdragon",          "T4C2HUdragon",
-                                    "T4C2WDdragon",          "T4C3SIdragon",          "T4C3WFdragon",          "T4C3HDdragon",          "T4C3SUdragon",          "T4C3WEdragon",          "T4GGSDdragon",          "T5C1WUdragon",          "T5C1HEdragon",
-                                    "T5C1WDdragon",          "T5C1SFdragon",          "T5C1HIdragon",          "T5C2SEdragon",          "T5C2HDdragon",          "T5C2WIdragon",          "T5C2SUdragon",          "T5C3HFdragon",          "T5C3WFdragon",
-                                    "T5C3SDdragon",          "T5C3HUdragon",          "T5GGWUdragon"),
-                       displayName=c( "Draco",          "Leviathan",      "Frigg",          "Zin",            "Hext",
-                                      "Aetrix",         "Hantu",          "Kastor",         "Kinnara",        "Fenrir",         "Trollis",        "Laekrian",       "Merk",           "Dactyl",         "Gog",            "Huli",           "Borg",
-                                      "Vladimir",       "Alikorn",        "Daemun",         "Garuda",         "Klax",           "Arborius",       "Dominus",        "Grypp",          "Jura",           "Kromon",         "Yanari",         "Vazir",
-                                      "Drude",          "Sahran",         "Bolt",          "Kelsis",         "Etzel",          "Kobahl",         "Baldr",          "Viscus",         "Numen",          "Ankor",          "Noss",           "Hydron",
-                                      "Slynx",          "Habrok",         "Volos",          "Amarok",         "Luminark",       "Lucius",         "Bronze",         "Septys",         "Ruma",           "Enki",           "Durga",          "Kolo",
-                                      "Darja",          "Gaspar",         "Karna",          "Naga",           "Nassus",         "Garzev",         "Serabis",        "Urd",            "Ith",            "Elixis",         "Pandi",          "Danzig",
-                                      "Nix",            "Ettin",          "Carsis"       ))
+#  load("ShinyBreeddata.Rdata")
+  load("ShinyBreeddata2.Rdata")
+#   DragonID<-data.frame(identifier=c("T1C1WFdragon",       "T1C1SEdragon", "T1C1HIdragon",          "T1C2WIdragon",          "T1C2HEdragon",          "T1C2SFdragon",          "T1C3WEdragon",          "T1C3HFdragon",          "T1C3SIdragon",          "T1GGWFdragon",          "T2C1HIdragon",
+#                                     "T2C1WEdragon",          "T2C1SFdragon",          "T2C1HUdragon",          "T2C2WIdragon",          "T2C2SUdragon",          "T2C2HEdragon",          "T2C3WUdragon",          "T2C3SEdragon",          "T2C3HFdragon",
+#                                     "T2C3SFdragon",          "T2C3HIdragon",          "T2C3WEdragon",          "T2GGSIdragon",          "T3C1WEdragon",          "T3C1SFdragon",          "T3C1HIdragon",          "T3C1WUdragon",          "T3C1SIdragon",
+#                                     "T3C1HEdragon",          "T3C2SEdragon",          "T3C2HUdragon",          "T3C2WFdragon",          "T3C3SUdragon",          "T3C3HFdragon",          "T3C3WIdragon",          "T3C3HIdragon",          "T3GGHEdragon",
+#                                     "T4C1SFdragon",          "T4C1HIdragon",          "T4C1WUdragon",          "T4C1SDdragon",          "T4C1HEdragon",          "T4C1HFdragon",          "T4C2WIdragon",          "T4C2SEdragon",          "T4C2HUdragon",
+#                                     "T4C2WDdragon",          "T4C3SIdragon",          "T4C3WFdragon",          "T4C3HDdragon",          "T4C3SUdragon",          "T4C3WEdragon",          "T4GGSDdragon",          "T5C1WUdragon",          "T5C1HEdragon",
+#                                     "T5C1WDdragon",          "T5C1SFdragon",          "T5C1HIdragon",          "T5C2SEdragon",          "T5C2HDdragon",          "T5C2WIdragon",          "T5C2SUdragon",          "T5C3HFdragon",          "T5C3WFdragon",
+#                                     "T5C3SDdragon",          "T5C3HUdragon",          "T5GGWUdragon"),
+#                        displayName=c( "Draco",          "Leviathan",      "Frigg",          "Zin",            "Hext",
+#                                       "Aetrix",         "Hantu",          "Kastor",         "Kinnara",        "Fenrir",         "Trollis",        "Laekrian",       "Merk",           "Dactyl",         "Gog",            "Huli",           "Borg",
+#                                       "Vladimir",       "Alikorn",        "Daemun",         "Garuda",         "Klax",           "Arborius",       "Dominus",        "Grypp",          "Jura",           "Kromon",         "Yanari",         "Vazir",
+#                                       "Drude",          "Sahran",         "Bolt",          "Kelsis",         "Etzel",          "Kobahl",         "Baldr",          "Viscus",         "Numen",          "Ankor",          "Noss",           "Hydron",
+#                                       "Slynx",          "Habrok",         "Volos",          "Amarok",         "Luminark",       "Lucius",         "Bronze",         "Septys",         "Ruma",           "Enki",           "Durga",          "Kolo",
+#                                       "Darja",          "Gaspar",         "Karna",          "Naga",           "Nassus",         "Garzev",         "Serabis",        "Urd",            "Ith",            "Elixis",         "Pandi",          "Danzig",
+#                                       "Nix",            "Ettin",          "Carsis"       ))
   # Wouldn't mind just cleaning the actual DragonID table up rather than taking the manual one, but whatever.
   # WANT to have a way to value full eggs over fractional eggs but i don't even know how to get that data in the first place yet.
-  if(length(usefullist)!=68){return(0)}
-  DragonID$owned<-usefullist
+  #  if(length(usefullist)!=68){return(0)}
+  if(length(usefullist)!=74){return(0)}
+    DragonID$owned<-usefullist
   if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
   possmerger<-merger[DragonID$owned[match(merger$FirstDragon,DragonID$displayName)]==1,]#do i own the first dragon
   possmerger<-possmerger[DragonID$owned[match(possmerger$SecondDragon,DragonID$displayName)]==1,] #do i own the second
@@ -230,11 +236,11 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
 load("ShinyBreeddata.Rdata")
 DragonStatDF<-DragonID
 concatlists<-function(files){
-  redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")
-  purplelist<-c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius","Dominus")
-  bluelist<-c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus","Numen")
-  orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")
-  greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")
+  redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")
+  purplelist<-c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius")
+  bluelist<-c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")
+  orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")
+  greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")
   listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist)
   currentlist<-c(files$incomplete,files$incompleteB)
 
@@ -243,11 +249,11 @@ concatlists<-function(files){
   if("Blue"%in%files$fullgroups){currentlist<-c(bluelist,currentlist)}
   if("Orange"%in%files$fullgroups){currentlist<-c(orangelist,currentlist)}
   if("Green"%in%files$fullgroups){currentlist<-c(greenlist,currentlist)}
-
+print(length(listofeverything%in%currentlist))
   return(listofeverything%in%currentlist) #reduces list down to a binary vector
 }
 isgreen<-function(list){
-  greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")
+  greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis","Hugin","Munin")
   return(list%in%greenlist)
 }
 isblue<-function(list){
@@ -274,11 +280,11 @@ shinyServer(function(input, output) {
     if(is.null(input$input_types))
     {return()}
     incompletelist<-NULL
-    if("Red"%in%input$input_types){incompletelist<-c(incompletelist,"Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")}
-    if("Purple"%in%input$input_types){incompletelist<-c(incompletelist,"Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius","Dominus")}
-    if("Blue"%in%input$input_types){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus","Numen")}
-    if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")}
-    if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis")}
+    if("Red"%in%input$input_types){incompletelist<-c(incompletelist,"Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")}
+    if("Purple"%in%input$input_types){incompletelist<-c(incompletelist,"Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius")}
+    if("Blue"%in%input$input_types){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")}
+    if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
+    if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
     selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)})
   output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)),
                                                    dupeutility=c(0.1,0.1,0.1,0.1,0.1))},
