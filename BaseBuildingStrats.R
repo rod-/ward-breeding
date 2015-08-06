@@ -3,7 +3,7 @@
 
 #Step 1: Load all the tower txt files (make this a function of a directory so i can just wash/repeat w/version updates)
 loadtowertext<-function(directory){
-    a<-read.csv("Arrow...")
+  a<-read.csv("Arrow...")
     s<-read.csv("Storm...")
     l<-read.csv("Lightning...")
     c<-read.csv("Cannon...")
@@ -11,7 +11,7 @@ loadtowertext<-function(directory){
     r<-read.csv("MageTower...")
     b<-read.csv("BlueMage...")
     p<-read.csv("Ballista")
-}
+}#initial dir is ward5
 #Step2:  melt all this data together into a single molten glob
 
 #Step3: recast it Type ~ hp+time+cost+etc

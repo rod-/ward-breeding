@@ -57,3 +57,12 @@ wardevils3<-c("rodplus","zyphon","ynci","moonspawn","drizztray","smokeyou","fiva
 warnd2<-c("thewash","arodriguez","princessjulie","fival","wingslayer","smokeyou","brewdoctor","zyphon","aragornblaze","strwberrypizza","avatarroku","juanmaster","drizztlee","dracaryx","bigreddog","dogecoin","ironduke","meningi","alfalfa","drizztray","egonzo","insatiable","nevyn","igrimreaper","ynci","fatboo","lastat","bigkeeper","chungi82","moonspawn","amarok","rodminus","rodplus","acesoh","nickademus")
 warvprime<-c("rodminus","zyphon","fckthisupdate","moonspawn","amarok","nickademus","arodriguez","littlemoonwash","ironduke","smokeyou","drizztlee","princessjulie","xxweathersxx","wingslayer","unlimitless","xsilverstormx","dogecoin","juanmaster","galaga","tasha","poipoi","lati","chungi82","snoopchic","tellerin","avatarroku","rodplus","bigreddog","sparklefishh","meningi","strwberrypizza","traceyv2","thegudge","egonzo","fatboo","ynci","zhenx","aragornblaze","primaites","icehyunkel","lastat","insatiable","alfalfa","nevyn","bigkeeper","igrimreaper","acesoh","thewash")
 warberserk<-c("ynci","bigreddog","zyphon","zhenx","nickademus","thewash","arodriguez","smokeyou","juanmaster","ironduke","snoopchic","dogecoin","xsilverstormx","princessjulie","tellerin","xxweathersxx","littlemoonwash","wingslayer","unlimitless","rodplus","tasha","rodminus","thegudge","poipoi","primaites","lati","chungi82","egonzo","dracaryx","aragornblaze","strwberrypizza","fckthisupdate","amarok","avatarroku","meningi","lastat","insatiable","sparklefishh","drizztlee","acesoh","alfalfa","traceyv2","fatboo","nevyn","bigkeeper","moonspawn")
+wardevils6<-rosterb
+warberserk4<-
+  warancients<-250
+warberserk5<-250
+warberserk6<-250
+warad3<-250
+warvprime2<-250
+wartheorig<-250
+warbears8<-c("bigreddog","xsilverstormx","zhenx","thenexten","ynci","bigbossman","littlemoonwash","juanmaster","smokeyou","drizztlee","arodriguez","strwberrypizza","unlimitless","princessjulie","xxweathersxx","nickademus","wingslayer","badkiki","brewdoctor","dogecoin","snoopchic","aragornblaze","tasha","lati","colonelxchilli","thegudge","zyphon","poipoi","chungi82","lastat","moonspawn","galaga","avatarroku","primaites","sparklefishh","drizztray","insatiable","mythlar","bigkeeper","igrimreaper","egonzo","alfalfa","rodplus","nevyn","rodminus","fatboo","acesoh","amarok")
