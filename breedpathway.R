@@ -20,11 +20,11 @@ pretendspending<-function(deck,fragsowned,DragonID){
 #see which ones are new
 newdragons<-deck[c(3,5,7,9,11,13)][!is.na(deck[c(3,5,7,9,11,13)])][deck[c(16:21)][!is.na(deck[c(3,5,7,9,11,13)])]==1]
 newodds<-deck[c(4,6,8,10,12,14)][!is.na(deck[c(3,5,7,9,11,13)])][deck[c(16:21)][!is.na(deck[c(3,5,7,9,11,13)])]==1]/deck$totalchance
-fragsneeded<-DragonID$fragments[DragonID$displayName%in%newdragons]
+fragsneeded<-DragonID$fragments[DragonID$displayName%in%newdragons]-fragsowned[DragonID$displayName%in%newdragons]
 tokenspent<-min(fragsneeded/newodds)*20
 fragsearned<-newodds*tokenspent/20
 fragsowned[match(newdragons,DragonID[,2])]<-fragsowned[match(newdragons,DragonID[,2])]+(fragsearned/DragonID$fragments[match(newdragons,DragonID[,2])])
-print(c(as.vector(deck$FirstDragon),as.vector(deck$SecondDragon),newdragons,tokenspent))
+print(tokenspent)
 return(fragsowned)
 }
 
@@ -91,11 +91,13 @@ bestdeck<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empiri
 BreedTree<-function(awesomeness){
     initialowned<-c(1,0,1,0,1,rep(0,60)) #or whatever you initially start with...
     ownedlist<-initialowned
-    newolist<-ownedlist
     nextd<-bestdeck(ownedlist)
     fragsowned<-initialowned
     while(length(nextd)>0){
-        nextd<-bestdeck(newolist)
-        newolist<-pretendspending(nextd,fragsowned=newolist,DragonID=DragonID)
-    }
+        newolist<-pretendspending(nextd,fragsowned=fragsowned,DragonID=DragonID)
+        print(c(as.vector(nextd$FirstDragon),as.vector(nextd$SecondDragon)))
+        fragsowned<-newolist
+        nextd<-bestdeck(fragsowned)
+#fordebuggingpurposes
+            }
 }
