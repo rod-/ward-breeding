@@ -180,7 +180,7 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
 }
 
 load("ShinyBreeddata3.Rdata")
-DragonStatDF<-DragonID
+#DragonStatDF<-DragonID
 concatlists<-function(files){
   redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")
   purplelist<-c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius")
