@@ -64,6 +64,7 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
 whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
   load("ShinyBreeddata3.Rdata")
   DragonID<-DragonID2
+  merger<-merger2
   if(length(usefullist)!=length(DragonID$identifier)){return(0)}
   DragonID$owned<-usefullist
   if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
@@ -147,6 +148,7 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   if(is.null(dragonx)){return(0)}
   if(is.null(ownedlist)){return(0)}
   load("ShinyBreeddata3.Rdata")
+  merger<-merger2
   wlist<-merger
   if(owned==TRUE){
     wlist<-wlist[ownedlist%in%merger$FirstDragon] #make sure you have both of the breedingpair
