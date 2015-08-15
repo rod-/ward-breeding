@@ -7,7 +7,7 @@
 # Fragment Data for num of fragments to make dupeutility practical/useful.
 # Color information (light cell background corresponding to the dragon color?)
 whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE){
-  load("ShinyBreeddata2.Rdata")
+  load("ShinyBreeddata3.Rdata")
   merger<-merger2
   DragonID<-DragonID2[DragonID2$displayName%in%(levels(factor(c(as.character(merger$FirstDragon),as.character(merger$SecondDragon))))),]#dont want useless junk
   DragonID<-DragonID[-c(1:5),]#the first 5 entries fuck everything up being redundant and legacy
@@ -62,7 +62,7 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
   return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
 }
 whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
-  load("ShinyBreeddata2.Rdata")
+  load("ShinyBreeddata3.Rdata")
   if(length(usefullist)!=length(DragonID$identifier)){return(0)}
   DragonID$owned<-usefullist
   if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
@@ -145,7 +145,7 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
 whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   if(is.null(dragonx)){return(0)}
   if(is.null(ownedlist)){return(0)}
-  load("ShinyBreeddata2.Rdata")
+  load("ShinyBreeddata3.Rdata")
   wlist<-merger
   if(owned==TRUE){
     wlist<-wlist[ownedlist%in%merger$FirstDragon] #make sure you have both of the breedingpair
@@ -178,7 +178,7 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   return(wlist[order(wlist$DesiredOdds,decreasing=TRUE),c(1,2,3,5,7,9,11,13,16)])
 }
 
-load("ShinyBreeddata.Rdata")
+load("ShinyBreeddata3.Rdata")
 DragonStatDF<-DragonID
 concatlists<-function(files){
   redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")
