@@ -67,7 +67,7 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
   if(length(usefullist)!=length(DragonID$identifier)){return(0)}
   DragonID$owned<-usefullist
   if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
-  possmerger<-merger[DragonID$owned[match(merger$FirstDragon,DragonID$displayName)]==1,]#do i own the first dragon
+  possmerger<-merger2[DragonID$owned[match(merger2$FirstDragon,DragonID$displayName)]==1,]#do i own the first dragon
   possmerger<-possmerger[DragonID$owned[match(possmerger$SecondDragon,DragonID$displayName)]==1,] #do i own the second
   if(length(possmerger$FirstDragon)<=1){return(data.frame(NULL))}
   possmerger$FirstUseful<-1 #do i want the outputs? (assume yes)
