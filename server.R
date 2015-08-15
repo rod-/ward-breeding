@@ -63,6 +63,7 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
 }
 whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
   load("ShinyBreeddata3.Rdata")
+  DragonID<-DragonID2
   if(length(usefullist)!=length(DragonID$identifier)){return(0)}
   DragonID$owned<-usefullist
   if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
