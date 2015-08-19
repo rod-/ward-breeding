@@ -26,6 +26,7 @@ fragsearned<-newodds*tokenspent/20
 fragsowned[match(newdragons,DragonID[,2])]<-fragsowned[match(newdragons,DragonID[,2])]+(fragsearned/DragonID$fragments[match(newdragons,DragonID[,2])])
 #print(c(tokenspent))#,fragsearned,newdragons))
 fragsowned<-round(fragsowned,digits=3)
+print(tokenspent)
 return(fragsowned)
 }
 
@@ -106,3 +107,9 @@ BreedTree<-function(initialowned=c(1,1,1,0,0,rep(0,60))){
 #How do i implement goal-seeking into this?  I basically want to say that XYZA are the only important dragons and to ignore anything that's weaker.
 #but i'd also like to say that getting X+Y is better than X alone.
 #step 1: Allow whobreedsx to take multiple inputs. (Check!)
+
+        print(c(as.vector(nextd$FirstDragon),as.vector(nextd$SecondDragon)))
+        fragsowned<-newolist
+        nextd<-bestdeck(fragsowned)
+#fordebuggingpurposes            }
+}
