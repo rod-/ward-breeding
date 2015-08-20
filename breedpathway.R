@@ -8,7 +8,7 @@ DragonID<-DragonID[-c(1:5),]#the first 5 entries fuck everything up being redund
 DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,1,1,1,1,5,1,5,5,1,1,5,5,12,8,5,5,5,8,16,5,8,16,16,5,5,8,20,48,48,1,20,12,60,48,20,20,48,20,48,60,20,40,96,72,40,40,40,96,72,72,96,96,96,96,96,96)
 
 #start with some dragons:
-initialowned<-c(1,0,1,0,1,rep(0,60)) #or whatever you initially start with...
+initialowned<-c(1,1,1,0,0,rep(0,60)) #or whatever you initially start with...
 ownedlist<-initialowned
 nextd<-bestdeck(ownedlist)
 #nextd<-whattobreed(ownedlist)[1,] #that's what's next
@@ -24,6 +24,8 @@ fragsneeded<-DragonID$fragments[DragonID$displayName%in%newdragons]-fragsowned[D
 tokenspent<-min(fragsneeded/newodds)*20
 fragsearned<-newodds*tokenspent/20
 fragsowned[match(newdragons,DragonID[,2])]<-fragsowned[match(newdragons,DragonID[,2])]+(fragsearned/DragonID$fragments[match(newdragons,DragonID[,2])])
+#print(c(tokenspent))#,fragsearned,newdragons))
+fragsowned<-round(fragsowned,digits=3)
 print(tokenspent)
 return(fragsowned)
 }
@@ -87,17 +89,27 @@ bestdeck<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empiri
     if(max(possmerger$ChanceofNewEgg)==0){return(0)}
     return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),])[1,]) #22 is if i don't include fragment data
 }
-
-BreedTree<-function(awesomeness){
-    initialowned<-c(1,0,1,0,1,rep(0,60)) #or whatever you initially start with...
+BreedTree<-function(initialowned=c(1,1,1,0,0,rep(0,60))){
+#    initialowned<-c(1,1,1,0,0,rep(0,60)) #or whatever you initially start with...
     ownedlist<-initialowned
     nextd<-bestdeck(ownedlist)
     fragsowned<-initialowned
     while(length(nextd)>0){
         newolist<-pretendspending(nextd,fragsowned=fragsowned,DragonID=DragonID)
+        #print(c(as.vector(nextd$FirstDragon),as.vector(nextd$SecondDragon)))
+        fragsowned<-newolist
+        nextd<-bestdeck(fragsowned)
+        #fordebuggingpurposes
+    }
+}
+
+
+#How do i implement goal-seeking into this?  I basically want to say that XYZA are the only important dragons and to ignore anything that's weaker.
+#but i'd also like to say that getting X+Y is better than X alone.
+#step 1: Allow whobreedsx to take multiple inputs. (Check!)
+
         print(c(as.vector(nextd$FirstDragon),as.vector(nextd$SecondDragon)))
         fragsowned<-newolist
         nextd<-bestdeck(fragsowned)
-#fordebuggingpurposes
-            }
+#fordebuggingpurposes            }
 }
