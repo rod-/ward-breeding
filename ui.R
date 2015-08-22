@@ -51,3 +51,14 @@ shinyUI(
                )
                )
   ))
+
+###example callback function to change text color
+#"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+#    /* numbers less than or equal to 0 should be in red text */
+#        if ( parseFloat(aData[4]) <= 0 ) {
+#            jQuery('td:eq(4)', nRow).addClass('redText');
+#        }
+#    return nRow;
+#},
+#now my problem is that i want to write and apply a function (isgreen)
+#check out https://github.com/trestletech/shinyTable
