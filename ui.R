@@ -1,5 +1,5 @@
 library(shiny)
-load("ShinyBreeddata3.Rdata")
+load("ShinyBreeddata160.Rdata")
 shinyUI(
   fluidPage(
     navbarPage("WarDragons Best Breeding Options",
@@ -7,9 +7,10 @@ shinyUI(
                         fluidRow(column(3,wellPanel(checkboxGroupInput("fullgroups","Check your completed colors",c("Red","Purple","Blue","Orange","Green"),
                                                                        selected = c("Red","Purple","Blue")),checkboxInput('empirical','Use empirical drop rates',FALSE))),
                                  fluidRow(    column(3, wellPanel(selectInput('input_types', 'Choose Partial Colors',
-                                                                              choices=c("Purple","Blue","Red","Orange","Green"), multiple=TRUE,selected = c("Orange"), selectize=TRUE))),
+                                                                              choices=c("Purple","Blue","Red","Orange","Green","Gold"), multiple=TRUE,selected = c("Orange"), selectize=TRUE))),
                                               fluidRow(column(3, wellPanel(uiOutput("ui")))))),
                         helpText("The best pairing with the currently-selected set of dragons is the top line in the table below"),
+                        helpText("Note that gold dragons are currently misnamed:  Bander = Bander, Zephyr=Caladbolg, Zerka = Firactus"),
                         fluidRow(column(12,wellPanel(dataTableOutput("resulttable")))),
                         helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems"),
                         helpText("Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com"),
@@ -23,7 +24,7 @@ shinyUI(
                 tabPanel("Beta",
 
                            fluidRow(    column(3, wellPanel(selectInput('input_typesBeta', 'What color is the dragon you want?',
-                                                                        choices=c("Purple","Blue","Red","Orange","Green"), multiple=TRUE,selected = c("Orange","Green"), selectize=TRUE))),
+                                                                        choices=c("Purple","Blue","Red","Orange","Green","Gold"), multiple=TRUE,selected = c("Orange","Green"), selectize=TRUE))),
                              fluidRow(column(3, wellPanel(uiOutput("uibeta"))))),
                            fluidRow(column(3,wellPanel(selectInput('skipgreen','Which dragons do you want to ignore?',choices=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin",
                                                                                                                                 "Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo",

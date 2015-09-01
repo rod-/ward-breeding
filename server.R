@@ -7,7 +7,7 @@
 # Fragment Data for num of fragments to make dupeutility practical/useful.
 # Color information (light cell background corresponding to the dragon color?)
 whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE){
-  load("ShinyBreeddata3.Rdata")
+  load("ShinyBreeddata160.Rdata")
   merger<-merger2
   DragonID<-DragonID2[DragonID2$displayName%in%(levels(factor(c(as.character(merger$FirstDragon),as.character(merger$SecondDragon))))),]#dont want useless junk
   DragonID<-DragonID[-c(1:5),]#the first 5 entries fuck everything up being redundant and legacy
@@ -62,7 +62,7 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
   return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
 }
 whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
-  load("ShinyBreeddata3.Rdata")
+  load("ShinyBreeddata160.Rdata")
   DragonID<-DragonID2
   merger<-merger2
   if(length(usefullist)!=length(DragonID$identifier)){return(0)}
@@ -147,7 +147,7 @@ whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1
 whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   if(is.null(dragonx)){return(0)}
   if(is.null(ownedlist)){return(0)}
-  load("ShinyBreeddata3.Rdata")
+  load("ShinyBreeddata160.Rdata")
   merger<-merger2
   wlist<-merger
   if(owned==TRUE){
@@ -181,7 +181,7 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   return(wlist[order(wlist$DesiredOdds,decreasing=TRUE),c(1,2,3,5,7,9,11,13,16)])
 }
 
-load("ShinyBreeddata3.Rdata")
+load("ShinyBreeddata160.Rdata")
 #DragonStatDF<-DragonID
 concatlists<-function(files){
   redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")
@@ -189,7 +189,8 @@ concatlists<-function(files){
   bluelist<-c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")
   orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")
   greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")
-  listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist)
+  goldlist<-c("Zephyr","Zerka","Bander")
+    listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist,goldlist)
   currentlist<-c(files$incomplete,files$incompleteB)
   
   if("Red"%in%files$fullgroups){currentlist<-c(redlist,currentlist)}
@@ -197,8 +198,13 @@ concatlists<-function(files){
   if("Blue"%in%files$fullgroups){currentlist<-c(bluelist,currentlist)}
   if("Orange"%in%files$fullgroups){currentlist<-c(orangelist,currentlist)}
   if("Green"%in%files$fullgroups){currentlist<-c(greenlist,currentlist)}
-
+  if("Gold"%in%files$fullgroups){currentlist<-c(goldlist,currentlist)}
+  
   return(listofeverything%in%currentlist) #reduces list down to a binary vector
+}
+isgold<-function(list){
+  goldlist<-c("Zephyr","Zerka","Bander")
+  return(list%in%goldlist)
 }
 isgreen<-function(list){
   greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis","Hugin","Munin")
@@ -233,7 +239,8 @@ shinyServer(function(input, output) {
     if("Blue"%in%input$input_types){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")}
     if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
-    selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)})
+    if("Gold"%in%input$input_types){incompletelist<-c(incompletelist,"Zephyr","Zerka","Bander")}
+        selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)})
   output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)),
                                                    dupeutility=c(0.1,0.1,0.1,0.1,0.1))},
                                       #             dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval))},
@@ -250,7 +257,8 @@ shinyServer(function(input, output) {
     if("Blue"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")}
     if("Orange"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
-    #     selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
+    if("Gold"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Zephyr","Zerka","Bander")}
+        #     selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
     selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
     #
   })
