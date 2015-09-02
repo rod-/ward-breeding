@@ -24,13 +24,14 @@ shinyUI(
                 tabPanel("Beta",
 
                            fluidRow(    column(3, wellPanel(selectInput('input_typesBeta', 'What color is the dragon you want?',
-                                                                        choices=c("Purple","Blue","Red","Orange","Green","Gold"), multiple=TRUE,selected = c("Orange","Green"), selectize=TRUE))),
+                                                                        choices=c("Purple","Blue","Red","Orange","Green","Gold"), multiple=TRUE,selected = c("Green"), selectize=TRUE))),
+
                              fluidRow(column(3, wellPanel(uiOutput("uibeta"))))),
-                           fluidRow(column(3,wellPanel(selectInput('skipgreen','Which dragons do you want to ignore?',choices=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin",
+                           fluidRow(column(3,wellPanel(selectInput('skipgreen','Which dragons do you want to ignore?',choices=c("Zephyr","Zerka","Bander","Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin",
                                                                                                                                 "Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo",
                                                                                                                                 "Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus",
                                                                                                                                 "Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius"),
-                                                                                                                                selectize =TRUE,multiple=TRUE,selected=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin"))))),
+                                                                                                                                selectize =TRUE,multiple=TRUE,selected=c("Zephyr","Zerka","Bander","Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin"))))),
                            fluidRow(column(12,wellPanel(dataTableOutput("resbeta")))),
             #                                                                                                    )),
                                            helpText("Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com"),
