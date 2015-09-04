@@ -1,4 +1,4 @@
-
+#helpText("Note that gold dragons are currently misnamed:  Bander = Bander, Zephyr=Caladbolg, Zerka = Firactus"),
 #Currently missing:
 # Add more UI elements - threshold for utility,
 # Replace text with pictures
@@ -189,7 +189,7 @@ concatlists<-function(files){
   bluelist<-c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")
   orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")
   greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")
-  goldlist<-c("Zephyr","Zerka","Bander")
+  goldlist<-c("Caladbolg","Firactus","Bander")
     listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist,goldlist)
   currentlist<-c(files$incomplete,files$incompleteB)
 
@@ -203,7 +203,7 @@ concatlists<-function(files){
   return(listofeverything%in%currentlist) #reduces list down to a binary vector
 }
 isgold<-function(list){
-  goldlist<-c("Zephyr","Zerka","Bander")
+  goldlist<-c("Caladbolg","Firactus","Bander")
   return(list%in%goldlist)
 }
 isgreen<-function(list){
@@ -239,7 +239,7 @@ shinyServer(function(input, output) {
     if("Blue"%in%input$input_types){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")}
     if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
-    if("Gold"%in%input$input_types){incompletelist<-c(incompletelist,"Zephyr","Zerka","Bander")}
+    if("Gold"%in%input$input_types){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander")}
         selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)})
   output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)),
                                                    dupeutility=c(0.1,0.1,0.1,0.1,0.1))},
@@ -254,16 +254,15 @@ shinyServer(function(input, output) {
     if("Blue"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")}
     if("Orange"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
-    if("Gold"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Zephyr","Zerka","Bander")}
+    if("Gold"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander")}
         #     selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
     selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
 
   })
 
   output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)),
-                                                   dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical)},
-                                      options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
-  output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skiplist = input$skipgreen)},
+                                                   dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical)},options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
+    output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skiplist = input$skipgreen)},
                                   options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))
 })
 #output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
