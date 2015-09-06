@@ -22,6 +22,7 @@ rosterb[rosterb=="tellerin"]<-"colonelxchilli"
 rosterb[rosterb=="dracaryx"]<-"badkiki"
 rosterb[rosterb=="traceyv2"]<-"LTU"
 rosterb<-c(rosterb,"galaga")
+rosterb<-c("ynci","rodminus","primaites","zyphon","alfalfa","thewash","fatboo","stephength","chungi82","acesoh","egonzo","ironduke","savior","igrimreaper","rodplus","revell","princessjulie","aragornblaze","wingslayer","drizztray","morque","moonspawn","poipoi","bigkeeper","drizztlee","alduinsbane","lati","zhenx","lastat","amarok","aussiegypsygem","wjm11c","myth","azndelinquent","arodriguez","cmdrbob","insatiable","brewdoctor","snoopchic","thegudge","dracaryx","traceyv2","nickademus","greatfullbon","juanmaster","sparklefishh","dogecoin","pull","primite","corinnelim")
 
 # checks individual wars for nonperformers.
 warcheck <- function(war, roster = rosterb) {
