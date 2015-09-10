@@ -1,0 +1,25 @@
+---
+title: "Untitled"
+author: "rod-"
+date: "September 10, 2015"
+output: html_document
+---
+```{r,echo=FALSE}
+load("TowerStats.rData")
+```
+
+
+Let's be methodical about how long it takes to build a max-level base.
+Step 1: How long does it really take?  There are 36 spots to build towers.  
+We will not include the time it takes to build storage, builders, mills, and farms, because i don't have that data on hand.  It is significant, but on the order of 10%.
+Maxing out one tower takes you the sum of the time it takes to build the level 1 tower, raise it to 2, etc...up to 25.  In War Dragons 1.61, that value is `r sum(others$upgradeTimeInSeconds[others$identifier=="Storm"])` seconds per tower, or `r sum(others$upgradeTimeInSeconds[others$identifier=="Storm"])/86400` days per tower.  They are conveniently all the same duration regardless of type.  That means that it will take 36 times that long (`r sum(others$upgradeTimeInSeconds[others$identifier=="Storm"])/86400*36`) days or `r sum(others$upgradeTimeInSeconds[others$identifier=="Storm"])/86400*36/365` years.
+
+Thankfully, there are a great many ways to reduce these timers.  First and foremost is research.  There are 4 available upgrades which each provide a 5% bonus to build speed.  While they aren't all available right away, let's go ahead and assume that they are.  We're down to `r sum(others$upgradeTimeInSeconds[others$identifier=="Storm"])/86400*36/365*0.8` years.  Additionally, almost everyone in the know will find a way to get an elite account and double their building queues, which brings us down to `r sum(others$upgradeTimeInSeconds[others$identifier=="Storm"])/86400*36/365*0.8/2` years.
+
+Additionally, there are speed-ups that you can accrue from events, from battles, and from the forge.  If you constantly forge 12-hour speedups in the forge, you get one out per 30 hours.  Assuming you do this for the entire duration of your play, you reduce the real time by `r 12/0.8*24/30/2` hours per day.  That puts us at `r sum(others$upgradeTimeInSeconds[others$identifier=="Storm"])/86400*36/365*0.8/2*(24/30)` years.  
+
+Events provide speedups as well.  The event prizes are variable over time and by player, but if we assume that an average player is at least as successful as CampusLifer in accruing speedups from events, you get another 15 hours of real reduction per day.  This factor is by far the least quantitative in this analysis.  Everything else is 100% precise.  This brings us to `r sum(others$upgradeTimeInSeconds[others$identifier=="Storm"])/86400*36/365*0.8/2*(24/45)` years.  
+
+It's fair to suppose that the true time to finish is somewhere in the range of `r sum(others$upgradeTimeInSeconds[others$identifier=="Storm"])/86400*36/365*0.8/2*(24/45)` to `r sum(others$upgradeTimeInSeconds[others$identifier=="Storm"])/86400*36/365*0.8/2*(24/30)` years, given no spending.
+
+
