@@ -2,25 +2,27 @@ library(shiny)
 load("ShinyBreeddata160.Rdata")
 shinyUI(
   fluidPage(
-    navbarPage("WarDragons Best Breeding Options",
+    navbarPage("War Dragons Best Breeding Options",
                tabPanel("Main",
                         fluidRow(column(3,wellPanel(checkboxGroupInput("fullgroups","Check your completed colors",c("Red","Purple","Blue","Orange","Green"),
                                                                        selected = c("Red","Purple","Blue")),checkboxInput('empirical','Use empirical drop rates',FALSE))),
                                  fluidRow(    column(3, wellPanel(selectInput('input_types', 'Choose Partial Colors',
                                                                               choices=c("Purple","Blue","Red","Orange","Green","Gold"), multiple=TRUE,selected = c("Orange"), selectize=TRUE))),
                                               fluidRow(column(3, wellPanel(uiOutput("ui")))))),
-                        helpText("The best pairing with the currently-selected set of dragons is the top line in the table below"),
-#                        helpText("Note that gold dragons are currently misnamed:  Bander = Bander, Zephyr=Caladbolg, Zerka = Firactus"),
+                        helpText("Choose the best pairings of dragons in the game War Dragons by Pocket Gems.  Input your dragons and see the best paths to progress below"),
+
                         fluidRow(column(12,wellPanel(dataTableOutput("resulttable")))),
 
-                        helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems"),
                         helpText("Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com"),
+                        helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems"),
+
                         tags$div(HTML("<form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\">
                                       <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">
                                       <input type=\"hidden\" name=\"hosted_button_id\" value=\"2U6KK7ZRCUZV2\">
                                       <input type=\"image\" src=\"https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif\" border=\"0\" name=\"submit\" alt=\"Donate to our development and hosting\">
                                       <img alt=\"\" border=\"0\" src=\"https://www.paypalobjects.com/en_US/i/scr/pixel.gif\" width=\"1\" height=\"1\">
-                                      </form>"))
+                                      </form>")),
+                        tags$meta(HTML("name=\"description\" content=\"War Dragons (by pocket gems) breeding. Search these tables for the best options\""))
                         ),
                 tabPanel("Beta",
 
