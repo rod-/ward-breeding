@@ -4,6 +4,7 @@
 #load code from home computer.  Need the following:  Exp, towerstats.  StorageUpgrades. Builderhut.
 
 #input:  36 towers.  Builder level.  Storage level.
+    #the ability to choose a tower TYPE for each tower is also possible but perhaps not valueable.
 
 #Various optimization strategies:
     # Reach level X the fastest.
