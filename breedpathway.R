@@ -1,14 +1,14 @@
 #iteratively breed with 'infinite' tokens:
 #need to load the "right" DragonID2:
 
-load("ShinyBreeddata2.Rdata")
+load("ShinyBreeddata160.Rdata")
 merger<-merger2
 DragonID<-DragonID2[DragonID2$displayName%in%(levels(factor(c(as.character(merger$FirstDragon),as.character(merger$SecondDragon))))),]#dont want useless junk
 DragonID<-DragonID[-c(1:5),]#the first 5 entries fuck everything up being redundant and legacy
-DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,1,1,1,1,5,1,5,5,1,1,5,5,12,8,5,5,5,8,16,5,8,16,16,5,5,8,20,48,48,1,20,12,60,48,20,20,48,20,48,60,20,40,96,72,40,40,40,96,72,72,96,96,96,96,96,96)
+DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,1,1,1,1,5,1,5,5,1,1,5,5,12,8,5,5,5,8,16,5,8,16,16,5,5,8,20,48,48,1,20,12,60,48,20,20,48,20,48,60,20,40,96,72,40,40,40,96,72,72,96,96,96,96,96,96,170,170,170)
 
 #start with some dragons:
-initialowned<-c(1,1,1,0,0,rep(0,60)) #or whatever you initially start with...
+initialowned<-c(1,1,1,0,0,rep(0,63)) #or whatever you initially start with...
 ownedlist<-initialowned
 nextd<-bestdeck(ownedlist)
 #nextd<-whattobreed(ownedlist)[1,] #that's what's next
@@ -19,12 +19,13 @@ fragsowned<-initialowned
 pretendspending<-function(deck,fragsowned,DragonID){
 #see which ones are new
 newdragons<-deck[c(3,5,7,9,11,13)][!is.na(deck[c(3,5,7,9,11,13)])][deck[c(16:21)][!is.na(deck[c(3,5,7,9,11,13)])]==1]
+if(length(newdragons)==0){return(0)}
 newodds<-deck[c(4,6,8,10,12,14)][!is.na(deck[c(3,5,7,9,11,13)])][deck[c(16:21)][!is.na(deck[c(3,5,7,9,11,13)])]==1]/deck$totalchance
 fragsneeded<-DragonID$fragments[DragonID$displayName%in%newdragons]-fragsowned[DragonID$displayName%in%newdragons]
 tokenspent<-min(fragsneeded/newodds)*20
 fragsearned<-newodds*tokenspent/20
 fragsowned[match(newdragons,DragonID[,2])]<-fragsowned[match(newdragons,DragonID[,2])]+(fragsearned/DragonID$fragments[match(newdragons,DragonID[,2])])
-#print(c(tokenspent))#,fragsearned,newdragons))
+print(c(tokenspent))#,fragsearned,newdragons))
 fragsowned<-round(fragsowned,digits=3)
 print(tokenspent)
 return(fragsowned)
@@ -33,11 +34,11 @@ return(fragsowned)
 #i want to return the following for the first:  Leviathan:  cost = 45.8.
 
 bestdeck<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE){
-    load("ShinyBreeddata2.Rdata")
+    load("ShinyBreeddata160.Rdata")
     merger<-merger2
     DragonID<-DragonID2[DragonID2$displayName%in%(levels(factor(c(as.character(merger$FirstDragon),as.character(merger$SecondDragon))))),]#dont want useless junk
     DragonID<-DragonID[-c(1:5),]#the first 5 entries fuck everything up being redundant and legacy
-    DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,1,1,1,1,5,1,5,5,1,1,5,5,12,8,5,5,5,8,16,5,8,16,16,5,5,8,20,48,48,1,20,12,60,48,20,20,48,20,48,60,20,40,96,72,40,40,40,96,72,72,96,96,96,96,96,96)
+    DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,1,1,1,1,5,1,5,5,1,1,5,5,12,8,5,5,5,8,16,5,8,16,16,5,5,8,20,48,48,1,20,12,60,48,20,20,48,20,48,60,20,40,96,72,40,40,40,96,72,72,96,96,96,96,96,96,170,170,170)
         if(length(usefullist)!=length(DragonID$identifier)){return(0)}#the number of dragons now..
     DragonID$owned<-usefullist
     if(assumebreedable==1){DragonID$owned[DragonID$owned>=1]<-1
@@ -89,12 +90,12 @@ bestdeck<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empiri
     if(max(possmerger$ChanceofNewEgg)==0){return(0)}
     return(as.data.frame(possmerger[order(possmerger$ChanceofNewEgg,decreasing=TRUE),])[1,]) #22 is if i don't include fragment data
 }
-BreedTree<-function(initialowned=c(1,1,1,0,0,rep(0,60))){
+BreedTree<-function(initialowned=c(1,1,1,0,0,rep(0,63))){
 #    initialowned<-c(1,1,1,0,0,rep(0,60)) #or whatever you initially start with...
     ownedlist<-initialowned
     nextd<-bestdeck(ownedlist)
     fragsowned<-initialowned
-    while(length(nextd)>0){
+    while(nextd!=0){
         newolist<-pretendspending(nextd,fragsowned=fragsowned,DragonID=DragonID)
         #print(c(as.vector(nextd$FirstDragon),as.vector(nextd$SecondDragon)))
         fragsowned<-newolist
