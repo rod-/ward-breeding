@@ -3,7 +3,8 @@ load("ShinyBreeddata160.Rdata")
 shinyUI(
   fluidPage(
     navbarPage("War Dragons Best Breeding Options",
-               tabPanel("Main",
+
+               tabPanel("Best Pairing",
                         fluidRow(column(3,wellPanel(checkboxGroupInput("fullgroups","Check your completed colors",c("Red","Purple","Blue","Orange","Green"),
                                                                        selected = c("Red","Purple","Blue")),checkboxInput('empirical','Use empirical drop rates',FALSE))),
                                  fluidRow(    column(3, wellPanel(selectInput('input_types', 'Choose Partial Colors',
@@ -24,7 +25,14 @@ shinyUI(
                                       </form>")),
                         tags$meta(HTML("name=\"description\" content=\"War Dragons (by pocket gems) breeding. Search these tables for the best options\""))
                         ),
-                tabPanel("Beta",
+               tabPanel("How to use",
+                        fluidRow(
+                            column(6,
+                                   includeHTML("README.html")
+                            )
+                        )
+               ),
+                tabPanel("Target a Dragon",
 
                            fluidRow(    column(3, wellPanel(selectInput('input_typesBeta', 'What color is the dragon you want?',
                                                                         choices=c("Purple","Blue","Red","Orange","Green","Gold"), multiple=TRUE,selected = c("Green"), selectize=TRUE))),
@@ -47,16 +55,11 @@ shinyUI(
                               </form>")),
                                                              helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems")
                                          ),
-               tabPanel("Introduction",
-                        fluidRow(
-                          column(6,
-                                 includeHTML("README.html")
-                          )
-                        )
-               )
+               tabPanel("Build Your Base",
+                helpText("UnderConstruction")
                )
   ))
-
+)
 ###example callback function to change text color
 #"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
 #    /* numbers less than or equal to 0 should be in red text */
