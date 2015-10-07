@@ -27,13 +27,14 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     subgoals<-c(1,1,4,4,4,7,12,12,17,17,21,21,25,28,31,31,34,37,42,46,50,56,61,64,67)#these are the levels where you change max towers
     result<-leveler(mybase,builder,storage,plevel=plevel,goal=subgoals[which(subgoals>plevel)[1]])
     newbase<-unlist(result[4])
-    newbuilder<-ispossible(plevel = subgoals[which(subgoals>plevel)[1]])[26]
-    newstore<-ispossible(plevel = subgoals[which(subgoals>plevel)[1]])[27]
-    newlevel<-subgoals[which(subgoals>newlevel)]
+    newbuilder<-ispossible(builder=builder,storage=storage,plevel = subgoals[which(subgoals>plevel)[1]])[26]
+    newstore<-ispossible(builder=builder,storage=storage,plevel = subgoals[which(subgoals>plevel)[1]])[27]
+    newlevel<-subgoals[which(subgoals>newlevel)[1]]
     totalwood<-unlist(result[3])
     totaltime<-unlist(result[2])
-    bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds))[(storage:newstore)+1]))+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds))[(builder:newbuilder)]))
+    bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds))[(storage:newstore)+1]),buildtimer=buildtimer)+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds))[(builder:newbuilder)]),buildtimer)
     #don't add in bonustime until the very last.
+    return(finalresult)
     }
 
 leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,buildtimer=0.8){
