@@ -1,22 +1,46 @@
 #script to level most efficiently (and count the time)
+#Tool to calculate the experience pathways.
 
-#starting base
 
-acebase<-c(14,14,12,16,15,14,13,13,15,13,12,16,19,14,21,20,21,21,17,14,20,20,12,12,11,10,10,11,10,10,10,10,9,8)
-mybase<-c(21,21,21,19,16,16,21,17,15,15,21,21,21,21,18,21,21,15,16,17,16,16,17,21,21,15,16,16,16,15,17)
+#load code from home computer.  Need the following:  Exp, towerstats.  StorageUpgrades. Builderhut.
 
-acebase<-c(20,18,20,18,18,18,18,18,18,18,18,19,18,19,20,25,25,21,20,20,25,20,020,19,25,18,18,19,18,19,20,18,18,20,20)
+#input:  36 towers.  Builder level.  Storage level.
+#the ability to choose a tower TYPE for each tower is also possible but perhaps not valueable.
 
-upgradepriority<-order(half$upgradeReward[1:25]/half$upgradeTimeInSeconds[1:25],decreasing = TRUE)
+#Various optimization strategies:
+# Reach level X the fastest.
+# Level my towers the highest (and reach level X)
+
+#report-out:  A "script" for which upgrades to build, in order.  A "cost" column and a "total cost" column , both as visuals (number+wood, number+speedups)
+
+#In the "level x the fastest" case, you need to do a check to see if raising your storage is worth it.
+#Run the build path algorithm with levels > your storage forbidden for a baseline.
+#Run it a second time with storage upgrades done as soon as it matters (eg: at levels 10,12,14,16,19,21,22,23)
+#also need data on the builder hut levels.  Relevant levels are 8,9,10,11,13,14,16,17 for 18:25  Include eggs in costs :/ (Search again for wood/food icons, speedups, and eggs)
+# for completeness sake:  builder=c(0,0,1,1,1,2,2,3,3,3,4,4,5,5,6,6,7,8,9,10,11,13,14,16,17) storage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23)
+
+leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84){
+    #set up the goals and initial conditions
+    totaltime<-0
+    totalexp<-exp$requiredXp[goal+2]
+    currentexp<-exp$requiredXp[plevel+2]
+
+    #starting base
+if(strategy=="fastest"){
+    upgradepriority<-order(half$upgradeReward[1:25]/half$upgradeTimeInSeconds[1:25],decreasing = TRUE)
+}
+else if(strategy=="highest"){
+    upgradepriority<-c(25:1)
+}
+ispossible<-function(builder,storage,plevel){
+    pbuilder=c(0,0,1,1,1,2,2,3,3,3,4,4,5,5,6,6,7,8,9,10,11,13,14,16,17)
+    pstorage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23)
+    possibiles<-builder>pbuilder*storage>pstorage
+    return(possibiles)
+    }
+
 expincrease<-half$upgradeReward[1:25]
 timeincrease<-half$upgradeTimeInSeconds[1:25]
-#go through using upgradepriority and upgrade anything that is priority
-totaltime<-0
-#totalexp<-546297
-totalexp<-935097
-#level 23 towers require 21 storage (61) 24 towers require 22(64) and 25 towers require 23(67) those storage upgrades require 11+12+12+13 days
-totaltime<-4285440
-#23, 25, 10,9,8,24,22,12,11,21,20,13,19,14,15,16,18,17
 
 while(totalexp<1499097){
 for(I in 1:25){
@@ -45,4 +69,4 @@ tottime<-tottime+half$upgradeTimeInSeconds[15]*sum(25-acebase>10)
 tottime<-tottime+half$upgradeTimeInSeconds[14]*sum(25-acebase>11)
 
 tottime*0.8/60/60/12
-2292/136
+}
