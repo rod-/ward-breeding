@@ -215,7 +215,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     if(newstore>storage){bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds[(storage:newstore)+1]))),buildtimer=buildtimer)}
     if(newbuilder>builder){bonustime<-bonustime+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds[(builder:newbuilder)+1]))),buildtimer)}
     #don't add in bonustime until the very last.
-    finalresult<-c(totaltime+bonustime,makedisplayable(totalwood))
+    finalresult<-c(totaltime+bonustime,makedisplayable(totalwood),newbuilder,newstore)
     return(finalresult)
 }
 makedisplayable<-function(number){
@@ -395,6 +395,8 @@ shinyServer(function(input, output) {
     output$leveler6<-renderText(leveler()[6])
     output$leveler7<-renderText(leveler()[7])
     output$leveler8<-renderText(leveler()[8])
+    output$leveler9<-renderText(leveler()[9])
+    output$leveler10<-renderText(leveler()[10])
                                })
 #output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
 
