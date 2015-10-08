@@ -58,7 +58,19 @@ shinyUI(
                tabPanel("Build Your Base",
                         fluidRow(column(3,wellPanel(numericInput("ptarget","Input your target level",value = 84,max=199),
                                 checkboxGroupInput('buildresearch',label = "",choices=c("Red","Blue","Orange","Green"),selected = "Red"))),
-                                 fluidRow(column(3, wellPanel(numericInput("bldrlevel", "Your builder level",value=14,max=19)))),
+                                 fluidRow(column(3, wellPanel(numericInput("bldrlevel", "Your builder level",value=14,max=19))),
+                                          column(3, wellPanel(numericInput("storlevel","Your storage level", value=14,max=24))),
+                                          column(3, wellPanel(sliderInput("tower1","Tower#1 level", value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower2","#2",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower3","#3",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower4","#4",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower5","#5",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower6","#6",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower7","#7",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower8","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower9","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower10","",value=16,min=1,max=25,ticks = FALSE)
+                                                              ))),
                                               fluidRow(column(3, wellPanel(uiOutput("leveler"))))),
                 helpText("UnderConstruction")
                )
