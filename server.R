@@ -215,7 +215,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     if(newstore>storage){bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds[(storage:newstore)+1]))),buildtimer=buildtimer)}
     if(newbuilder>builder){bonustime<-bonustime+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds[(builder:newbuilder)+1]))),buildtimer)}
     #don't add in bonustime until the very last.
-    finalresult<-c(totaltime+bonustime,makedisplayable(totalwood),length(totalqueue))
+    finalresult<-c(totaltime+bonustime,makedisplayable(totalwood))
     return(finalresult)
 }
 makedisplayable<-function(number){
@@ -384,9 +384,17 @@ shinyServer(function(input, output) {
                                                    dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical)},options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
     output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skiplist = input$skipgreen)},
                                   options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))
-    output$leveler<-renderText(overleveler(mybase = c(input$tower1,input$tower2,input$tower3,input$tower4,input$tower5,input$tower6,input$tower7,input$tower8,input$tower9,input$tower10,input$tower11,input$tower12,input$tower13,input$tower14,input$tower15,input$tower16,input$tower17,input$tower18,input$tower19,input$tower20,input$tower21,input$tower22,input$tower23,input$tower24,input$tower25,input$tower26,input$tower27,input$tower28,input$tower29,input$tower30,input$tower31,input$tower32,input$tower33,input$tower34,input$tower35,input$tower36),
-                                             builder=input$bldrlevel,storage=input$storlevel,strategy=input$strategy,plevel=input$plevel,goal=input$ptarget,buildtimer=calctimer(input$buildresearch)))
 
+    leveler<-reactive(overleveler(mybase = c(input$tower1,input$tower2,input$tower3,input$tower4,input$tower5,input$tower6,input$tower7,input$tower8,input$tower9,input$tower10,input$tower11,input$tower12,input$tower13,input$tower14,input$tower15,input$tower16,input$tower17,input$tower18,input$tower19,input$tower20,input$tower21,input$tower22,input$tower23,input$tower24,input$tower25,input$tower26,input$tower27,input$tower28,input$tower29,input$tower30,input$tower31,input$tower32,input$tower33,input$tower34,input$tower35,input$tower36),
+                                             builder=input$bldrlevel,storage=input$storlevel,strategy=input$strategy,plevel=input$plevel,goal=input$ptarget,buildtimer=calctimer(input$buildresearch)))
+    output$leveler1<-renderText(leveler()[1])
+    output$leveler2<-renderText(leveler()[2])
+    output$leveler3<-renderText(leveler()[3])
+    output$leveler4<-renderText(leveler()[4])
+    output$leveler5<-renderText(leveler()[5])
+    output$leveler6<-renderText(leveler()[6])
+    output$leveler7<-renderText(leveler()[7])
+    output$leveler8<-renderText(leveler()[8])
                                })
 #output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
 
