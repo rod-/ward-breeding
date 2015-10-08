@@ -65,7 +65,7 @@ shinyUI(
                                  column(2, wellPanel(numericInput("storlevel","Storage level", value=14,max=24))),
                                  column(2, wellPanel(numericInput("plevel","Current Level",value=50,max=199))),
                                  column(2, wellPanel(selectInput("strategy",label="Building Strategy",choices=c("Highest","Fastest"),selected="Highest"))),
-                        column(2, wellPanel(checkboxGroupInput('buildresearch',label = "Build Speed Bonuses",choices=c("Red","Blue","Orange","Green","Event10","Event20"),selected = c("Red","Blue","Orange"))))),
+                        column(2, wellPanel(checkboxGroupInput('buildresearch',label = "Build Speed Bonuses",choices=c("Red","Blue","Orange","Green","Event10","Event25"),selected = c("Red","Blue","Orange"))))),
                                           hr(),
                                     helpText("Input your top towers' levels"),
 
