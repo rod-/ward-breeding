@@ -59,7 +59,7 @@ shinyUI(
             fluidRow(htmlOutput("leveler1",inline=TRUE),img(src="img/12h.jpg"),htmlOutput("leveler2",inline=TRUE),img(src="img/3h.jpg"),htmlOutput("leveler3",inline=TRUE),img(src="img/1h.jpg"),htmlOutput("leveler4",inline=TRUE),img(src="img/30m.jpg"),
             htmlOutput("leveler5",inline=TRUE),img(src="img/15m.jpg"),htmlOutput("leveler6",inline=TRUE),img(src="img/3m.jpg"),htmlOutput("leveler7",inline=TRUE),img(src="img/1m.jpg"),htmlOutput("leveler8",inline=TRUE),img(src="img/wood.jpg"),htmlOutput("leveler9",inline=TRUE),img(src="img/builder.jpg"),htmlOutput("leveler10",inline=TRUE),img(src="img/storage.jpg")),
             helpText("Strategy descriptions:"),helpText("     Highest:  Always Build the highest-level towers possible, prioritizing storage/builder upgrades when it increases max tower level."),
-                     helpText("     Fastest: Build whatever tower gives the best exp/second (but don't level builder unless absolutely required)"),
+                     helpText("     Fastest: Build whatever tower gives the best exp/second (but don't level builder unless absolutely required - note that this doesn't check to see if builder NEEDS to be upgraded yet.  I recommend Highest.)"),
                         fluidRow(column(2,wellPanel(sliderInput("ptarget","Input your target level",value = 84,max=199,min=2,ticks=FALSE))),
                                  column(2, wellPanel(sliderInput("bldrlevel", "Current Builder level",value=14,max=17,min=1,ticks=FALSE))),
                                  column(2, wellPanel(sliderInput("storlevel","Current Storage level", value=14,max=23,min=1,ticks=FALSE))),

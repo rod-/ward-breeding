@@ -242,7 +242,7 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
     woodcost<-half$upgradeCost[1:25]
     #strategies
     if(strategy=="fastest"){
-        upgradepriority<-order(half$upgradeReward[1:25]/half$upgradeTimeInSeconds[1:25],decreasing = TRUE)
+        upgradepriority<-order(half$upgradeReward[1:25]/as.double(as.character(half$upgradeTimeInSeconds[1:25])),decreasing = TRUE)
     }
     else if(strategy=="highest"){
         upgradepriority<-c(25:1)
