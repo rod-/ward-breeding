@@ -57,7 +57,7 @@ shinyUI(
                tabPanel("Build Your Base",
                         fluidRow(column(3, wellPanel(uiOutput("leveler")))),
             hr(),
-            tags$img(HTML("<img src=\"/1h.jpg\" alt=\"1hour\" width=\"60\" height=\"70\" />")),
+            tags$img(HTML("<img src=\"img/1h.jpg\" alt=\"1hour\" width=\"60\" height=\"70\" />")),
             helpText("Strategy descriptions:"),helpText("     Highest:  Always Build the highest-level towers possible, prioritizing storage/builder upgrades when it increases max tower level."),
                      helpText("     Fastest: Build whatever tower gives the best exp/second (but don't level builder unless absolutely required)"),
                         fluidRow(column(2,wellPanel(numericInput("ptarget","Input your target level",value = 84,max=199))),
