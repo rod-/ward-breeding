@@ -182,6 +182,7 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
 }
 overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,buildtimer=0.8){
     #set subgoals: hit those levels.  add those towers.
+    load("levelerdata.Rdata")
     newlevel=plevel
     totaltime<-0;totalwood<-0
     subgoals<-c(1,1,4,4,4,7,12,12,17,17,21,21,25,28,31,31,34,37,42,46,50,56,61,64,67)#these are the levels where you change max towers
