@@ -64,7 +64,7 @@ shinyUI(
                                  column(2, wellPanel(sliderInput("bldrlevel", "Current Builder level",value=14,max=17,min=1,ticks=FALSE))),
                                  column(2, wellPanel(sliderInput("storlevel","Current Storage level", value=14,max=23,min=1,ticks=FALSE))),
                                  column(2, wellPanel(sliderInput("plevel","Current Level",value=50,max=199,min=1,ticks=FALSE))),
-                                 column(2, wellPanel(selectInput("strategy",label="Building Strategy",choices=c("Highest","Fastest"),selected="Highest"))),
+                                 column(2, wellPanel(selectInput("strategy",label="Building Strategy",choices=c("highest","fastest"),selected="highest"))),
                         column(2, wellPanel(checkboxGroupInput('buildresearch',label = "Build Speed Bonuses",choices=c("Red","Blue","Orange","Green","Event10","Event25"),selected = c("Red","Blue","Orange"))))),
                                           hr(),
                                     helpText("Input your top towers' levels"),
