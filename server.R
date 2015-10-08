@@ -183,10 +183,10 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
 overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,buildtimer=0.8){
     #set subgoals: hit those levels.  add those towers.
 #some error prevention/mitigation
-    if(missing(plevel)){return(0)}
-    if(missing(goal)){return(0)}
-    if(missing(builder)){return(0)}
-    if(missing(storage)){return(0)}
+    if(is.null(plevel)){return(0)}
+    if(is.null(goal)){return(0)}
+    if(is.null(builder)){return(0)}
+    if(is.null(storage)){return(0)}
     load("levelerdata.Rdata")
     newlevel=plevel
     totaltime<-0;totalwood<-0
@@ -212,8 +212,8 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     totaltime<-totaltime+newtime
     totalqueue<-c(totalqueue,unlist(result[1]))
     }
-    if(newstore>storage){bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds))[(storage:newstore)+1]),buildtimer=buildtimer)}
-    if(newbuilder>builder){bonustime<-bonustime+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds))[(builder:newbuilder)]),buildtimer)}
+    if(newstore>storage){bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds[(storage:newstore)+1]))),buildtimer=buildtimer)}
+    if(newbuilder>builder){bonustime<-bonustime+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds[(builder:newbuilder)+1]))),buildtimer)}
     #don't add in bonustime until the very last.
     finalresult<-c(totaltime+bonustime,makedisplayable(totalwood),length(totalqueue))
     return(finalresult)
@@ -249,7 +249,7 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
     maxpossible<-max(which(ispossible(builder,storage,plevel)[1:25]>0))
     cupgradepriority<-upgradepriority[upgradepriority<=maxpossible]
     outputscript<-vector()
-
+    if(is.numeric(goalexp)&is.numeric(currentexp)){
     while(currentexp<goalexp){
         for(I in 1:length(cupgradepriority)){
             numpriority<-sum(mybase==(cupgradepriority[I]-1))
@@ -262,6 +262,7 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
                 break
             }
         }
+    }
     }
     return(list(outputscript,totaltime,totalwood,mybase))
     #wish to convert the total time into speedups
