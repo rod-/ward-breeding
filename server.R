@@ -182,6 +182,11 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
 }
 overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,buildtimer=0.8){
     #set subgoals: hit those levels.  add those towers.
+#some error prevention/mitigation
+    if(missing(plevel)){return(0)}
+    if(missing(goal)){return(0)}
+    if(missing(builder)){return(0)}
+    if(missing(storage)){return(0)}
     load("levelerdata.Rdata")
     newlevel=plevel
     totaltime<-0;totalwood<-0
