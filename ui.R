@@ -56,6 +56,10 @@ shinyUI(
                                                              helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems")
                                          ),
                tabPanel("Build Your Base",
+                        fluidRow(column(3,wellPanel(numericInput("ptarget","Input your target level",value = 84,max=199),
+                                checkboxGroupInput('buildresearch',label = "",choices=c("Red","Blue","Orange","Green"),selected = "Red"))),
+                                 fluidRow(column(3, wellPanel(numericInput("bldrlevel", "Your builder level",value=14,max=19)))),
+                                              fluidRow(column(3, wellPanel(uiOutput("leveler"))))),
                 helpText("UnderConstruction")
                )
   ))
