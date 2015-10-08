@@ -202,7 +202,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     newbase<-mybase
     totalqueue<-vector()
     for(I in allsubgoals){
-    result<-leveler(newbase,newbuilder,newstore,plevel=newlevel,goal=I,buildtimer=buildtimer)
+    result<-leveler(newbase,newbuilder,newstore,plevel=newlevel,goal=I,buildtimer=buildtimer,strategy=strategy)
     newbase<-unlist(result[4])
     maxtower<-sum(towerlevels<(newlevel+1))
     newbuilder<-pbuilder[maxtower]
