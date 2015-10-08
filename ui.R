@@ -56,26 +56,54 @@ shinyUI(
                                                              helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems")
                                          ),
                tabPanel("Build Your Base",
-                        fluidRow(column(3,wellPanel(numericInput("ptarget","Input your target level",value = 84,max=199),
-                                checkboxGroupInput('buildresearch',label = "",choices=c("Red","Blue","Orange","Green"),selected = "Red"))),
-                                 fluidRow(column(3, wellPanel(numericInput("bldrlevel", "Your builder level",value=14,max=19))),
-                                          column(3, wellPanel(numericInput("storlevel","Your storage level", value=14,max=24))),
-                                          column(3, wellPanel(sliderInput("tower1","Tower#1 level", value=16,min=1,max=25,ticks = FALSE),
-                                                              sliderInput("tower2","#2",value=16,min=1,max=25,ticks = FALSE),
-                                                              sliderInput("tower3","#3",value=16,min=1,max=25,ticks = FALSE),
-                                                              sliderInput("tower4","#4",value=16,min=1,max=25,ticks = FALSE),
-                                                              sliderInput("tower5","#5",value=16,min=1,max=25,ticks = FALSE),
-                                                              sliderInput("tower6","#6",value=16,min=1,max=25,ticks = FALSE),
-                                                              sliderInput("tower7","#7",value=16,min=1,max=25,ticks = FALSE),
+                        fluidRow(column(3, wellPanel(uiOutput("leveler"))))),
+            hr(),
+
+                        fluidRow(column(2,wellPanel(numericInput("ptarget","Input your target level",value = 84,max=199))),
+                                 column(2, wellPanel(numericInput("bldrlevel", "Your builder level",value=14,max=19))),
+                                 column(2, wellPanel(numericInput("storlevel","Your storage level", value=14,max=24))),
+                                 column(2, wellPanel(numericInput("plevel","Your current level",value=50,max=199))),
+                        column(2, wellPanel(checkboxGroupInput('buildresearch',label = "Build Speed Bonuses",choices=c("Red","Blue","Orange","Green","Event10","Event20"),selected = "Red")))),
+                                          hr(),
+                                    helpText("Input your top towers' levels"),
+
+            fluidRow(column(3, wellPanel(sliderInput("tower1","Tower#1 level", value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower4","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower7","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower10","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower13","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower16","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower19","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower22","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower25","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower28","",value=16,min=1,max=25,ticks = FALSE))),
+                                          column(3,wellPanel(
+                                                              sliderInput("tower2","Tower#2 level",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower5","",value=16,min=1,max=25,ticks = FALSE),
                                                               sliderInput("tower8","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower11","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower14","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower17","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower20","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower23","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower26","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower29","",value=16,min=1,max=25,ticks = FALSE))),
+                                          column(3, wellPanel(sliderInput("tower3","Tower#3 level", value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower6","",value=16,min=1,max=25,ticks = FALSE),
                                                               sliderInput("tower9","",value=16,min=1,max=25,ticks = FALSE),
-                                                              sliderInput("tower10","",value=16,min=1,max=25,ticks = FALSE)
-                                                              ))),
-                                              fluidRow(column(3, wellPanel(uiOutput("leveler"))))),
-                helpText("UnderConstruction")
+                                                              sliderInput("tower12","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower15","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower18","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower21","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower24","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower27","",value=16,min=1,max=25,ticks = FALSE),
+                                                              sliderInput("tower30","",value=16,min=1,max=25,ticks = FALSE)))
+                                          ))
+
+
                )
-  ))
-)
+  )
+
 ###example callback function to change text color
 #"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
 #    /* numbers less than or equal to 0 should be in red text */
