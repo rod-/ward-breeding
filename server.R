@@ -251,14 +251,14 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
     if(sum(mybase<maxpossible)==0){return(list(0,c(0,0,0,0,0,0,0),0,rep(0,36)))}
     cupgradepriority<-upgradepriority[upgradepriority<=maxpossible]
     outputscript<-vector()
-    maxposexp<-function(mybase,level){
+    maxposexp<-function(mybase,maxpossible){
     totalexp<-0
                 for(Q in mybase){
-            totalexp<-sum(expincrease[(Q+1):25])+totalexp
+            totalexp<-sum(expincrease[(Q+1):maxpossible])+totalexp
         }
     return(totalexp)}
     if(is.numeric(goalexp)&is.numeric(currentexp)){
-        if((maxposexp(mybase)+currentexp)<goalexp){return(list(0,c(0,0,0,0,0,0,0),0,rep(0,36)))}
+        if((maxposexp(mybase,maxpossible)+currentexp)<goalexp){return(list(0,c(0,0,0,0,0,0,0),0,rep(0,36)))}
     while(currentexp<goalexp){
         for(I in 1:length(cupgradepriority)){
             numpriority<-sum(mybase==(cupgradepriority[I]-1))
@@ -270,7 +270,8 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
                 outputscript<-c(outputscript,cupgradepriority[I]-1)
                 break
                 }
-            }
+        }
+
         }
 
     }
