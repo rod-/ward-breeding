@@ -192,8 +192,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     totaltime<-0;totalwood<-0
     subgoals<-c(1,4,7,12,17,21,25,28,31,34,37,42,46,50,56,61,64,67)#these are the levels where you change max towers
     towerlevels<-c(1,1,4,4,4,7,12,12,17,17,21,21,25,28,31,31,34,37,42,46,50,56,61,64,67)#these are the levels where you change max towers
-
-        pbuilder=c(0,0,1,1,1,2,2,3,3,3,4,4,5,5,6,6,7,8,9,10,11,13,14,16,17)
+    pbuilder=c(0,0,1,1,1,2,2,3,3,3,4,4,5,5,6,6,7,8,9,10,11,13,14,16,17)
     pstorage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23)
     #loop over subgoals
     allsubgoals<-c(subgoals[which(subgoals>plevel&subgoals<goal)],goal)
@@ -214,8 +213,8 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     totaltime<-totaltime+newtime
     totalqueue<-c(totalqueue,unlist(result[1]))
     }
-    if(newstore>storage){bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds[(storage:newstore)+1]))),buildtimer=buildtimer)}
-    if(newbuilder>builder){bonustime<-bonustime+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds[(builder:newbuilder)+1]))),buildtimer)}
+    if(newstore>storage){bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds[((storage+1):newstore)+1]))),buildtimer=buildtimer)}
+    if(newbuilder>builder){bonustime<-bonustime+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds[((builder+1):newbuilder)+1]))),buildtimer)}
     #don't add in bonustime until the very last.
     finalresult<-c(totaltime+bonustime,makedisplayable(totalwood),newbuilder,newstore,mybase)
     return(finalresult)
