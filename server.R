@@ -213,6 +213,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     totaltime<-totaltime+newtime
     totalqueue<-c(totalqueue,unlist(result[1]))
     }
+    bonustime<-0
     if(newstore>storage){bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds[((storage+1):newstore)+1]))),buildtimer=buildtimer)}
     if(newbuilder>builder){bonustime<-bonustime+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds[((builder+1):newbuilder)+1]))),buildtimer)}
     #don't add in bonustime until the very last.
