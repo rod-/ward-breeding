@@ -248,6 +248,7 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
     }
     #converts time (in seconds) into the optimal number of speedups required (preference to high-hour ones!)
     maxpossible<-max(which(ispossible(builder,storage,plevel)[1:25]>0))
+    if(sum(mybase<maxpossible)==0){return(list(0,c(0,0,0,0,0,0,0),0,rep(0,36)))}
     cupgradepriority<-upgradepriority[upgradepriority<=maxpossible]
     outputscript<-vector()
     maxposexp<-function(mybase,level){
