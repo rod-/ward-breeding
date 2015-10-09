@@ -250,7 +250,14 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
     maxpossible<-max(which(ispossible(builder,storage,plevel)[1:25]>0))
     cupgradepriority<-upgradepriority[upgradepriority<=maxpossible]
     outputscript<-vector()
+    maxposexp<-function(mybase,level){
+    totalexp<-0
+                for(Q in mybase){
+            totalexp<-sum(expincrease[(Q+1):25])+totalexp
+        }
+    return(totalexp)}
     if(is.numeric(goalexp)&is.numeric(currentexp)){
+        if((maxposexp(mybase)+currentexp)<goalexp){return(list(0,c(0,0,0,0,0,0,0),0,rep(0,36)))}
     while(currentexp<goalexp){
         for(I in 1:length(cupgradepriority)){
             numpriority<-sum(mybase==(cupgradepriority[I]-1))
@@ -261,9 +268,10 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
                 mybase[which(mybase==(cupgradepriority[I]-1))[1]]<-(cupgradepriority[I])
                 outputscript<-c(outputscript,cupgradepriority[I]-1)
                 break
+                }
             }
         }
-    }
+
     }
     return(list(outputscript,totaltime,totalwood,mybase))
     #wish to convert the total time into speedups
