@@ -205,8 +205,12 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     newlevel<-I
     newbase<-unlist(result[4])
     maxtower<-sum(towerlevels<(newlevel+1))
-    newbuilder<-pbuilder[maxtower]
-    newstore<-pstorage[maxtower]
+    if(builder<17){
+    newbuilder<-pbuilder[maxtower]}
+    else{(newbuilder=17)}
+    if(storage<21){
+    newstore<-pstorage[maxtower]}
+    else{(newstore=storage)}
     newwood<-unlist(result[3])
     newtime<-unlist(result[2])
     totalwood<-totalwood+newwood
@@ -237,7 +241,7 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
     totalwood<-0
     goalexp<-as.integer(as.character(exp$requiredXp[goal+2]))
     currentexp<-as.integer(as.character(exp$requiredXp[plevel+2]))
-    expincrease<-half$upgradeReward[1:25]
+    expincrease<-c(half$upgradeReward[1:25],0)
     timeincrease<-as.double(as.character(half$upgradeTimeInSeconds))[1:25]
     woodcost<-half$upgradeCost[1:25]
     #strategies
@@ -254,8 +258,8 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
     outputscript<-vector()
     maxposexp<-function(mybase,maxpossible){
     totalexp<-0
-                for(Q in mybase){
-            totalexp<-sum(expincrease[(Q+1):maxpossible])+totalexp
+                for(Z in mybase){
+            totalexp<-sum(expincrease[(Z+1):maxpossible])+totalexp
         }
     return(totalexp)}
     if(is.numeric(goalexp)&is.numeric(currentexp)){
