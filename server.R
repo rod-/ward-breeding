@@ -203,11 +203,11 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     totalqueue<-vector()
     for(I in allsubgoals){
     result<-leveler(newbase,newbuilder,newstore,plevel=newlevel,goal=I,buildtimer=buildtimer,strategy=strategy)
+    newlevel<-I
     newbase<-unlist(result[4])
     maxtower<-sum(towerlevels<(newlevel+1))
     newbuilder<-pbuilder[maxtower]
     newstore<-pstorage[maxtower]
-    newlevel<-I
     newwood<-unlist(result[3])
     newtime<-unlist(result[2])
     totalwood<-totalwood+newwood
@@ -217,7 +217,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     if(newstore>storage){bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds[(storage:newstore)+1]))),buildtimer=buildtimer)}
     if(newbuilder>builder){bonustime<-bonustime+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds[(builder:newbuilder)+1]))),buildtimer)}
     #don't add in bonustime until the very last.
-    finalresult<-c(totaltime+bonustime,makedisplayable(totalwood),newbuilder,newstore)
+    finalresult<-c(totaltime+bonustime,makedisplayable(totalwood),newbuilder,newstore,mybase)
     return(finalresult)
 }
 makedisplayable<-function(number){
