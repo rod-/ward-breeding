@@ -180,7 +180,143 @@ whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   #return pair and odds
   return(wlist[order(wlist$DesiredOdds,decreasing=TRUE),c(1,2,3,5,7,9,11,13,16)])
 }
+overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,buildtimer=0.8){
+    #set subgoals: hit those levels.  add those towers.
+#some error prevention/mitigation
+    if(is.null(plevel)){return(0)}
+    if(is.null(goal)){return(0)}
+    if(is.null(builder)){return(0)}
+    if(is.null(storage)){return(0)}
+    load("levelerdata.Rdata")
+    newlevel=plevel
+    totaltime<-0;totalwood<-0
+    subgoals<-c(1,4,7,12,17,21,25,28,31,34,37,42,46,50,56,61,64,67)#these are the levels where you change max towers
+    towerlevels<-c(1,1,4,4,4,7,12,12,17,17,21,21,25,28,31,31,34,37,42,46,50,56,61,64,67)#these are the levels where you change max towers
+    pbuilder=c(0,0,1,1,1,2,2,3,3,3,4,4,5,5,6,6,7,8,9,10,11,13,14,16,17)
+    pstorage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23)
+    #loop over subgoals
+    allsubgoals<-c(subgoals[which(subgoals>plevel&subgoals<goal)],goal)
+    newbuilder<-builder
+    newstore<-storage
+    newbase<-mybase
+    totalqueue<-vector()
+    for(I in allsubgoals){
+    result<-leveler(newbase,newbuilder,newstore,plevel=newlevel,goal=I,buildtimer=buildtimer,strategy=strategy)
+    newlevel<-I
+    newbase<-unlist(result[4])
+    maxtower<-sum(towerlevels<(newlevel+1))
+    if(builder<17){
+    newbuilder<-pbuilder[maxtower]}
+    else{(newbuilder=17)}
+    if(storage<21){
+    newstore<-pstorage[maxtower]}
+    else{(newstore=storage)}
+    newwood<-unlist(result[3])
+    newtime<-unlist(result[2])
+    totalwood<-totalwood+newwood
+    totaltime<-totaltime+newtime
+    totalqueue<-c(totalqueue,unlist(result[1]))
+    }
+    bonustime<-0
+    if(newstore>storage){bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds[((storage+1):newstore)+1]))),buildtimer=buildtimer)}
+    if(newbuilder>builder){bonustime<-bonustime+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds[((builder+1):newbuilder)+1]))),buildtimer)}
+    #don't add in bonustime until the very last.
+    finalresult<-c(totaltime+bonustime,makedisplayable(totalwood),newbuilder,newstore,newbase)
+    return(finalresult)
+}
+makedisplayable<-function(number){
+    if(number/1e6>1){return(paste0(signif(number,digits=3)/1e6,"M"))}
+    if(number/1e6<1){return(paste0(signif(number,digits=3)/1e3, "K"))}
 
+}
+leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,buildtimer=0.8){
+    #load in the initial dataframes
+    load("TowerStats.rData")
+    load("levelerdata.Rdata")
+    #and probably need to fix the towerstats to make them numeric vectors
+    half$upgradeCost<-as.double(gsub(pattern = "piercing:",replacement = "",x=half$upgradeCost))
+    half$upgradeReward<-as.double(gsub(pattern="experience:",replacement="",x=half$upgradeReward))
+    #set up the goals and initial conditions
+    totaltime<-c(0,0,0,0,0,0,0)#as speedups:  1 min, 3 min, 15 min, 30 min, 1hr, 3hr, 12hr
+    totalwood<-0
+    goalexp<-as.integer(as.character(exp$requiredXp[goal+2]))
+    currentexp<-as.integer(as.character(exp$requiredXp[plevel+2]))
+    expincrease<-c(half$upgradeReward[1:25],0)
+    timeincrease<-as.double(as.character(half$upgradeTimeInSeconds))[1:25]
+    woodcost<-half$upgradeCost[1:25]
+    #strategies
+    if(strategy=="fastest"){
+        upgradepriority<-order(half$upgradeReward[1:25]/as.double(as.character(half$upgradeTimeInSeconds[1:25])),decreasing = TRUE)
+    }
+    else if(strategy=="highest"){
+        upgradepriority<-c(25:1)
+    }
+    #converts time (in seconds) into the optimal number of speedups required (preference to high-hour ones!)
+    maxpossible<-max(which(ispossible(builder,storage,plevel)[1:25]>0))
+    if(sum(mybase<maxpossible)==0){return(list(0,c(0,0,0,0,0,0,0),0,rep(0,36)))}
+    cupgradepriority<-upgradepriority[upgradepriority<=maxpossible]
+    outputscript<-vector()
+    maxposexp<-function(mybase,maxpossible){
+    totalexp<-0
+                for(Z in mybase){
+            totalexp<-sum(expincrease[(Z+1):maxpossible])+totalexp
+        }
+    return(totalexp)}
+    if(is.numeric(goalexp)&is.numeric(currentexp)){
+        if((maxposexp(mybase,maxpossible)+currentexp)<goalexp){return(list(0,c(0,0,0,0,0,0,0),0,rep(0,36)))}
+    while(currentexp<goalexp){
+        for(I in 1:length(cupgradepriority)){
+            numpriority<-sum(mybase==(cupgradepriority[I]-1))
+            if(numpriority>0){
+                currentexp<-currentexp+expincrease[cupgradepriority[I]]
+                totaltime<-totaltime+speedupconvert(timeincrease[cupgradepriority[I]],buildtimer)
+                totalwood<-totalwood+woodcost[cupgradepriority[I]]
+                mybase[which(mybase==(cupgradepriority[I]-1))[1]]<-(cupgradepriority[I])
+                outputscript<-c(outputscript,cupgradepriority[I]-1)
+                break
+                }
+        }
+
+        }
+
+    }
+    return(list(outputscript,totaltime,totalwood,mybase))
+    #wish to convert the total time into speedups
+
+
+}
+ispossible<-function(builder,storage,plevel){
+    pbuilder=c(0,0,1,1,1,2,2,3,3,3,4,4,5,5,6,6,7,8,9,10,11,13,14,16,17)
+    pstorage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23)
+    possibiles<-(builder>=pbuilder)*(storage>=pstorage)
+    storagelevels=c(0,7,12,17,21,25,28,31,34,37,40,42,44,46,48,50,52,54,56,58,61,64,67,70,73)
+    builderlevels=c(4,4,7,12,18,23,28,33,38,41,45,48,51,53,56,58,61,63,66,68,71)
+    maxpossible<-c(sum(builderlevels<plevel+1),sum(storagelevels<plevel+1))
+    return(c(possibiles,maxpossible))
+}
+speedupconvert<-function(time,buildtimer){
+    time<-time*buildtimer
+    twelve<-as.integer(time/43200)
+    remainder<-time-(twelve*43200)
+    three<-as.integer(remainder/10800)
+    remainder<-remainder-(three*10800)
+    one<-as.integer(remainder/3600)
+    remainder<-remainder-(one*3600)
+    half<-as.integer(remainder/1800)
+    remainder<-remainder-(half*1800)
+    quarter<-as.integer(remainder/900)
+    remainder<-remainder-(quarter*900)
+    threem<-as.integer(remainder/180)
+    remainder<-remainder-(threem*180)
+    last<-as.integer(remainder/60)
+    return(c(twelve,three,one,half,quarter,threem,last))
+}
+calctimer<-function(reslist){
+#    column(2, wellPanel(checkboxGroupInput('buildresearch',label = "Build Speed Bonuses",choices=c("Red","Blue","Orange","Green","Event10","Event25"),selected = c("Red","Blue","Orange"))))),
+base<-.05*sum(c("Red","Blue","Orange","Green")%in%reslist)
+bonus<-max(0.25*"Event25"%in%reslist,0.1*"Event10"%in%reslist)
+return(1-(base+bonus))
+}
 load("ShinyBreeddata160.Rdata")
 #DragonStatDF<-DragonID
 concatlists<-function(files){
@@ -264,7 +400,21 @@ shinyServer(function(input, output) {
                                                    dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical)},options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
     output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skiplist = input$skipgreen)},
                                   options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))
-})
+
+    leveler<-reactive(overleveler(mybase = c(input$tower1,input$tower2,input$tower3,input$tower4,input$tower5,input$tower6,input$tower7,input$tower8,input$tower9,input$tower10,input$tower11,input$tower12,input$tower13,input$tower14,input$tower15,input$tower16,input$tower17,input$tower18,input$tower19,input$tower20,input$tower21,input$tower22,input$tower23,input$tower24,input$tower25,input$tower26,input$tower27,input$tower28,input$tower29,input$tower30,input$tower31,input$tower32,input$tower33,input$tower34,input$tower35,input$tower36),
+                                             builder=input$bldrlevel,storage=input$storlevel,strategy=input$strategy,plevel=input$plevel,goal=input$ptarget,buildtimer=calctimer(input$buildresearch)))
+    output$leveler1<-renderText(leveler()[1])
+    output$leveler2<-renderText(leveler()[2])
+    output$leveler3<-renderText(leveler()[3])
+    output$leveler4<-renderText(leveler()[4])
+    output$leveler5<-renderText(leveler()[5])
+    output$leveler6<-renderText(leveler()[6])
+    output$leveler7<-renderText(leveler()[7])
+    output$leveler8<-renderText(leveler()[8])
+    output$leveler9<-renderText(leveler()[9])
+    output$leveler10<-renderText(leveler()[10])
+    output$leveler11<-renderText(leveler()[11:46])
+                               })
 #output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
 
 # output$testimage<-renderImage({
