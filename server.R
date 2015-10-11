@@ -395,6 +395,7 @@ shinyServer(function(input, output) {
     selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
 
   })
+  load("TowerStats.rData")
   output$towerdata<-renderDataTable({data.frame(level=c(1:25),exp=gsub(x=half$upgradeReward[1:25],pattern="experience:",replacement=""),wood=gsub(x=half$upgradeCost[1:25],pattern="piercing:",replacement=""))},options=list(searching=FALSE,lengthChange=FALSE,paging=FALSE,info=FALSE))
   output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)),
                                                    dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical)},options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE)) #makes a table output.
