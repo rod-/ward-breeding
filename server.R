@@ -395,11 +395,12 @@ shinyServer(function(input, output) {
     selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
 
   })
-
+  load("TowerStats.rData")
+  output$towerdata<-renderDataTable({data.frame(level=c(1:25),exp=gsub(x=half$upgradeReward[1:25],pattern="experience:",replacement=""),wood=gsub(x=half$upgradeCost[1:25],pattern="piercing:",replacement=""))},options=list(searching=FALSE,lengthChange=FALSE,paging=FALSE,info=FALSE))
   output$resulttable<-renderDataTable({whattobreed(usefullist=as.integer(concatlists(input)),
-                                                   dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical)},options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')))) #makes a table output.
+                                                   dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical)},options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE)) #makes a table output.
     output$resbeta<-renderDataTable({whobreedsx(ownedlist = c(input$fullgroups,input$incomplete,input$incompleteB),dragonx = input$chosendragon,skiplist = input$skipgreen)},
-                                  options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all'))))
+                                  options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))
 
     leveler<-reactive(overleveler(mybase = c(input$tower1,input$tower2,input$tower3,input$tower4,input$tower5,input$tower6,input$tower7,input$tower8,input$tower9,input$tower10,input$tower11,input$tower12,input$tower13,input$tower14,input$tower15,input$tower16,input$tower17,input$tower18,input$tower19,input$tower20,input$tower21,input$tower22,input$tower23,input$tower24,input$tower25,input$tower26,input$tower27,input$tower28,input$tower29,input$tower30,input$tower31,input$tower32,input$tower33,input$tower34,input$tower35,input$tower36),
                                              builder=input$bldrlevel,storage=input$storlevel,strategy=input$strategy,plevel=input$plevel,goal=input$ptarget,buildtimer=calctimer(input$buildresearch)))
