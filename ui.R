@@ -14,7 +14,10 @@ shinyUI(
 
                         fluidRow(column(12,wellPanel(dataTableOutput("resulttable")))),
 
-                        helpText("Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com"),
+                        HTML("<a href='http://www.amoebastudios.com/dragon/'> Confused?  Try out Amoeba's breeding site.</a>"),
+                        helpText(""),
+                        HTML("<a href='http://wardragons.pocketgems.com'> Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com</a>"),
+
                         helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems"),
 
                         tags$div(HTML("<form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\">
@@ -44,7 +47,10 @@ shinyUI(
                                                                                                                                 selectize =TRUE,multiple=TRUE,selected=c("Caladbolg","Firactus","Bander","Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin"))))),
                            fluidRow(column(12,wellPanel(dataTableOutput("resbeta")))),
             #                                                                                                    )),
-                                           helpText("Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com"),
+            HTML("<a href='http://www.amoebastudios.com/dragon/'> Confused?  Try out Amoeba's breeding site.</a>"),
+            helpText(""),
+            HTML("<a href='http://wardragons.pocketgems.com'> Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com</a>"),
+
 
                                            tags$div(HTML("<form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\">
                               <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">
