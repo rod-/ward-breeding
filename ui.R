@@ -10,14 +10,14 @@ shinyUI(
                                                                        selected = c("Red","Purple","Blue")),checkboxInput('empirical','Use empirical drop rates',FALSE))),
                                  fluidRow(    column(3, wellPanel(selectInput('input_types', 'Choose Partial Colors',
                                                                               choices=c("Purple","Blue","Red","Orange","Green","Gold"), multiple=TRUE,selected = c("Orange"), selectize=TRUE))),
-                                              fluidRow(column(3, wellPanel(uiOutput("ui")))))),
+                                              fluidRow(column(3, wellPanel(uiOutput("ui"))),column(3,wellPanel(selectInput('researchinterests','Choose interested research colors',choices=c("Purple","Blue","Red","Orange","Green","Gold"),multiple=TRUE,selected=c(""),selectize=TRUE)))))),
                         helpText("Choose the best pairings of dragons in the game War Dragons by Pocket Gems.  Input your dragons and see the best paths to progress below"),
 
                         fluidRow(column(12,wellPanel(DT::dataTableOutput("resulttable")))),
 
                         HTML("<a href='http://www.amoebastudios.com/dragon/'> Confused?  Try out Amoeba's breeding site.</a>"),
                         helpText(""),
-                        HTML("<a href='http://wardragons.pocketgems.com'> Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com</a>"),
+                        HTML("<a href='http://wardragons.pocketgems.com/member/25-rod'> Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com</a>"),
 
                         helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems"),
 
@@ -44,7 +44,7 @@ shinyUI(
                         #                                                                                                    )),
                         HTML("<a href='http://www.amoebastudios.com/dragon/'> Confused?  Try out Amoeba's breeding site.</a>"),
                         helpText(""),
-                        HTML("<a href='http://wardragons.pocketgems.com'> Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com</a>"),
+                        HTML("<a href='http://wardragons.pocketgems.com/member/25-rod'> Feedback+suggestions welcome.  Mail to rod- in game or on wardragons.pocketgems.com</a>"),
 
 
                         tags$div(HTML("<form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\">

@@ -6,7 +6,7 @@
 # Slider for value of a duplicate
 # Fragment Data for num of fragments to make dupeutility practical/useful.
 # Color information (light cell background corresponding to the dragon color?)
-whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE){
+whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE,outcolumns=c(1,2,3,5,7,9,11,13,22)){
   load("ShinyBreeddata160.Rdata")
   merger<-merger2
     colnames(merger)[1:2]<-c("DragonA","DragonB")
@@ -14,7 +14,8 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
   DragonID<-DragonID[-c(1:5),]#the first 5 entries fuck everything up being redundant and legacy
     if(length(usefullist)!=length(DragonID$identifier)){return(0)}#the number of dragons now..
   DragonID$owned<-usefullist
-  if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
+  DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,1,1,1,1,5,1,5,5,1,1,5,5,12,8,5,5,5,8,16,5,8,16,16,5,5,8,20,48,48,1,20,12,60,48,20,20,48,20,48,60,20,40,96,72,40,40,40,96,72,72,72,96,96,96,96,96,170,170,170)
+    if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
   possmerger<-merger[DragonID$owned[match(merger$DragonA,DragonID$displayName)]==1,]#do i own the first dragon
   possmerger<-possmerger[DragonID$owned[match(possmerger$DragonB,DragonID$displayName)]==1,] #do i own the second
   if(length(possmerger$DragonA)<=1){return(data.frame(NULL))}
@@ -52,99 +53,80 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
     possmerger$FifthChance[isnerfedhard(possmerger$Fifth)]<-possmerger$FifthChance[isnerfedhard(possmerger$Fifth)]*3/4
     possmerger$SixthChance[isnerfedhard(possmerger$Sixth)]<-possmerger$SixthChance[isnerfedhard(possmerger$Sixth)]*3/4
     #recalculate totalchance
-    possmerger$totalchance<-rowSums(cbind(possmerger$FirstChance,possmerger$SecondChance,possmerger$ThirdChance,possmerger$FourthChance,possmerger$FifthChance,possmerger$SixthChance),na.rm=TRUE)}
+        possmerger$totalchance<-rowSums(cbind(possmerger$FirstChance,possmerger$SecondChance,possmerger$ThirdChance,possmerger$FourthChance,possmerger$FifthChance,possmerger$SixthChance),na.rm=TRUE)}
+
   possmerger$NewEggRate<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
                                            possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful)+0,
                                            possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful)+0,
                                            possmerger$FourthChance/possmerger$totalchance*(possmerger$FourthUseful)+0,
                                            possmerger$FifthChance/possmerger$totalchance*(possmerger$FifthUseful)+0,
                                            possmerger$SixthChance/possmerger$totalchance*(possmerger$SixthUseful)+0),na.rm=TRUE)
-    returnval<-as.data.frame(possmerger[order(possmerger$NewEggRate,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])
+  {
+  isgold<-function(list){
+      goldlist<-c("Caladbolg","Firactus","Bander")
+      return(list%in%goldlist)
+  }
+  isgreen<-function(list){
+      greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Carsis","Hugin","Munin")
+      return(list%in%greenlist)
+  }
+  isblue<-function(list){
+      bluelist<-c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus","Numen")
+      return(list%in%bluelist)
+  }
+  isorange<-function(list){
+      orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo","Darja")
+      return(list%in%orangelist)
+  }
+  ispurp<-function(list){
+      purplelist<-c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius","Dominus")
+      return(list%in%purplelist)
+  }
+  isred<-function(list){
+      redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")
+      return(list%in%redlist)
+  }
+  possmerger$RedEggRate<-suppressWarnings(rowSums(cbind(1/(DragonID$fragments[match((possmerger$First),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FirstChance/possmerger$totalchance)*isred(possmerger$First)*(possmerger$FirstUseful==0),
+                                 1/(DragonID$fragments[match((possmerger$Second),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SecondChance/possmerger$totalchance)*isred(possmerger$Second)*(possmerger$FirstUseful==0),
+                                 1/(DragonID$fragments[match((possmerger$Third),DragonID$displayName,nomatch="Leviathan")])*(possmerger$ThirdChance/possmerger$totalchance)*isred(possmerger$Third)*(possmerger$FirstUseful==0),
+                                 1/(DragonID$fragments[match((possmerger$Fourth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FourthChance/possmerger$totalchance)*isred(possmerger$Fourth)*(possmerger$FirstUseful==0),
+                                 1/(DragonID$fragments[match((possmerger$Fifth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FifthChance/possmerger$totalchance)*isred(possmerger$Fifth)*(possmerger$FirstUseful==0),
+                                 1/(DragonID$fragments[match((possmerger$Sixth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SixthChance/possmerger$totalchance)*isred(possmerger$Sixth)*(possmerger$FirstUseful==0)),na.rm=TRUE))
+  possmerger$BlueEggRate<-suppressWarnings(rowSums(cbind(1/(DragonID$fragments[match((possmerger$First),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FirstChance/possmerger$totalchance)*isblue(possmerger$First)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Second),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SecondChance/possmerger$totalchance)*isblue(possmerger$Second)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Third),DragonID$displayName,nomatch="Leviathan")])*(possmerger$ThirdChance/possmerger$totalchance)*isblue(possmerger$Third)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Fourth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FourthChance/possmerger$totalchance)*isblue(possmerger$Fourth)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Fifth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FifthChance/possmerger$totalchance)*isblue(possmerger$Fifth)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Sixth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SixthChance/possmerger$totalchance)*isblue(possmerger$Sixth)*(possmerger$FirstUseful==0)),na.rm=TRUE))
+  possmerger$PurpleEggRate<-suppressWarnings(rowSums(cbind(1/(DragonID$fragments[match((possmerger$First),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FirstChance/possmerger$totalchance)*ispurp(possmerger$First)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Second),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SecondChance/possmerger$totalchance)*ispurp(possmerger$Second)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Third),DragonID$displayName,nomatch="Leviathan")])*(possmerger$ThirdChance/possmerger$totalchance)*ispurp(possmerger$Third)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Fourth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FourthChance/possmerger$totalchance)*ispurp(possmerger$Fourth)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Fifth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FifthChance/possmerger$totalchance)*ispurp(possmerger$Fifth)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Sixth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SixthChance/possmerger$totalchance)*ispurp(possmerger$Sixth)*(possmerger$FirstUseful==0)),na.rm=TRUE))
+  possmerger$OrangeEggRate<-suppressWarnings(rowSums(cbind(1/(DragonID$fragments[match((possmerger$First),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FirstChance/possmerger$totalchance)*isorange(possmerger$First)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Second),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SecondChance/possmerger$totalchance)*isorange(possmerger$Second)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Third),DragonID$displayName,nomatch="Leviathan")])*(possmerger$ThirdChance/possmerger$totalchance)*isorange(possmerger$Third)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Fourth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FourthChance/possmerger$totalchance)*isorange(possmerger$Fourth)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Fifth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FifthChance/possmerger$totalchance)*isorange(possmerger$Fifth)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Sixth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SixthChance/possmerger$totalchance)*isorange(possmerger$Sixth)*(possmerger$FirstUseful==0)),na.rm=TRUE))
+  possmerger$GreenEggRate<-suppressWarnings(rowSums(cbind(1/(DragonID$fragments[match((possmerger$First),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FirstChance/possmerger$totalchance)*isgreen(possmerger$First)*(possmerger$FirstUseful==0),
+                                                         1/(DragonID$fragments[match((possmerger$Second),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SecondChance/possmerger$totalchance)*isgreen(possmerger$Second)*(possmerger$FirstUseful==0),
+                                                         1/(DragonID$fragments[match((possmerger$Third),DragonID$displayName,nomatch="Leviathan")])*(possmerger$ThirdChance/possmerger$totalchance)*isgreen(possmerger$Third)*(possmerger$FirstUseful==0),
+                                                         1/(DragonID$fragments[match((possmerger$Fourth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FourthChance/possmerger$totalchance)*isgreen(possmerger$Fourth)*(possmerger$FirstUseful==0),
+                                                         1/(DragonID$fragments[match((possmerger$Fifth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FifthChance/possmerger$totalchance)*isgreen(possmerger$Fifth)*(possmerger$FirstUseful==0),
+                                                         1/(DragonID$fragments[match((possmerger$Sixth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SixthChance/possmerger$totalchance)*isgreen(possmerger$Sixth)*(possmerger$FirstUseful==0)),na.rm=TRUE))
+    possmerger$GoldEggRate<-suppressWarnings(rowSums(cbind(1/(DragonID$fragments[match((possmerger$First),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FirstChance/possmerger$totalchance)*isgold(possmerger$First)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Second),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SecondChance/possmerger$totalchance)*isgold(possmerger$Second)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Third),DragonID$displayName,nomatch="Leviathan")])*(possmerger$ThirdChance/possmerger$totalchance)*isgold(possmerger$Third)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Fourth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FourthChance/possmerger$totalchance)*isgold(possmerger$Fourth)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Fifth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FifthChance/possmerger$totalchance)*isgold(possmerger$Fifth)*(possmerger$FirstUseful==0),
+                                                        1/(DragonID$fragments[match((possmerger$Sixth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SixthChance/possmerger$totalchance)*isgold(possmerger$Sixth)*(possmerger$FirstUseful==0)),na.rm=TRUE))
+}#calculate the research egg values for each guy.
+  #      possmerger$GreenEggRate<-rowSums(cbind())
+      returnval<-as.data.frame(possmerger[order(possmerger$NewEggRate,decreasing=TRUE),outcolumns])
     rownames(returnval)<-NULL
   return(returnval) #22 is if i don't include fragment data
-}
-whattobreedbeta<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1){
-  load("ShinyBreeddata160.Rdata")
-  DragonID<-DragonID2
-  merger<-merger2
-  if(length(usefullist)!=length(DragonID$identifier)){return(0)}
-  DragonID$owned<-usefullist
-  if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
-  possmerger<-merger2[DragonID$owned[match(merger2$DragonA,DragonID$displayName)]==1,]#do i own the first dragon
-  possmerger<-possmerger[DragonID$owned[match(possmerger$DragonB,DragonID$displayName)]==1,] #do i own the second
-  if(length(possmerger$DragonA)<=1){return(data.frame(NULL))}
-  possmerger$FirstUseful<-1 #do i want the outputs? (assume yes)
-  possmerger$FirstUseful[DragonID$owned[match(possmerger$First,DragonID$displayName)]>=1]<-0 #if i already own it, i don't!
-  possmerger$SecondUseful<-1 #repeat
-  possmerger$SecondUseful[DragonID$owned[match(possmerger$Second,DragonID$displayName)]>=1]<-0
-  possmerger$ThirdUseful<-1
-  possmerger$ThirdUseful[DragonID$owned[match(possmerger$Third,DragonID$displayName)]>=1]<-0
-  possmerger$FourthUseful<-1
-  possmerger$FourthUseful[DragonID$owned[match(possmerger$Fourth,DragonID$displayName)]>=1]<-0
-  possmerger$FifthUseful<-1
-  possmerger$FifthUseful[DragonID$owned[match(possmerger$Fifth,DragonID$displayName)]>=1]<-0
-  possmerger$SixthUseful<-1
-  possmerger$SixthUseful[DragonID$owned[match(possmerger$Sixth,DragonID$displayName)]>=1]<-0
-  possmerger$NewEggRate<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
-                                           possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful)+0,
-                                           possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful)+0,
-                                           possmerger$FourthChance/possmerger$totalchance*(possmerger$FourthUseful)+0,
-                                           possmerger$FifthChance/possmerger$totalchance*(possmerger$FifthUseful)+0,
-                                           possmerger$SixthChance/possmerger$totalchance*(possmerger$SixthUseful)+0),na.rm=TRUE)
-  DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,0,1,1,1,1,5,1,5,5,1,1,5,5,12,0,8,5,5,5,8,16,5,8,16,16,5,5,8,0,20,48,48,1,20,12,60,48,20,20,NA,NA,48,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA)
-  DragonID$fragments[is.na(DragonID$fragments)]<-0 #dont want NA math going weird, but i do prefer NAs to 0s for unknown values.
-  ####The above data regarding fragments is very incomplete and in need of assistance before i allow the dupeutility measurements to go online###
-  #second have to give a value for a 'dupe' egg for research purposes vs a new egg for breeding purposes
-  possmerger$FirstFrags<-DragonID$fragments[match(possmerger$First,DragonID$displayName)]
-  possmerger$SecondFrags<-DragonID$fragments[match(possmerger$Second,DragonID$displayName)]
-  possmerger$ThirdFrags<-DragonID$fragments[match(possmerger$Third,DragonID$displayName)]
-  possmerger$FourthFrags<-DragonID$fragments[match(possmerger$Fourth,DragonID$displayName)]
-  possmerger$FifthFrags<-DragonID$fragments[match(possmerger$Fifth,DragonID$displayName)]
-  possmerger$SixthFrags<-DragonID$fragments[match(possmerger$Sixth,DragonID$displayName)]
-
-  rvaluetoadd<-0
-  rvaluetoadd<-rvaluetoadd+(possmerger$FirstChance*(!possmerger$FirstUseful)*isred(possmerger$First)*dupeutility[1])/(possmerger$totalchance*possmerger$FirstFrags)
-  rvaluetoadd<-rvaluetoadd+(possmerger$SecondChance*(!possmerger$SecondUseful)*isred(possmerger$Second)*dupeutility[1])/(possmerger$totalchance*possmerger$SecondFrags)
-  rvaluetoadd<-rvaluetoadd+(possmerger$ThirdChance*(!possmerger$ThirdUseful)*isred(possmerger$Third)*dupeutility[1])/(possmerger$totalchance*possmerger$ThirdFrags)
-  rvaluetoadd<-rvaluetoadd+(possmerger$FourthChance*(!possmerger$FourthUseful)*isred(possmerger$Fourth)*dupeutility[1])/(possmerger$totalchance*possmerger$FourthFrags)
-  rvaluetoadd<-rvaluetoadd+(possmerger$FifthChance*(!possmerger$FifthUseful)*isred(possmerger$Fifth)*dupeutility[1])/(possmerger$totalchance*possmerger$FifthFrags)
-  rvaluetoadd<-rvaluetoadd+(possmerger$SixthChance*(!possmerger$SixthUseful)*isred(possmerger$Sixth)*dupeutility[1])/(possmerger$totalchance*possmerger$SixthFrags) #collect the chance that your 20 token roll will get you a 'complete' duplicate egg.
-
-  pvaluetoadd<-0
-  pvaluetoadd<-pvaluetoadd+(possmerger$FirstChance*(!possmerger$FirstUseful)*ispurp(possmerger$First)*dupeutility[2])/(possmerger$totalchance*possmerger$FirstFrags)
-  pvaluetoadd<-pvaluetoadd+(possmerger$SecondChance*(!possmerger$SecondUseful)*ispurp(possmerger$Second)*dupeutility[2])/(possmerger$totalchance*possmerger$SecondFrags)
-  pvaluetoadd<-pvaluetoadd+(possmerger$ThirdChance*(!possmerger$ThirdUseful)*ispurp(possmerger$Third)*dupeutility[2])/(possmerger$totalchance*possmerger$ThirdFrags)
-  pvaluetoadd<-pvaluetoadd+(possmerger$FourthChance*(!possmerger$FourthUseful)*ispurp(possmerger$Fourth)*dupeutility[2])/(possmerger$totalchance*possmerger$FourthFrags)
-  pvaluetoadd<-pvaluetoadd+(possmerger$FifthChance*(!possmerger$FifthUseful)*ispurp(possmerger$Fifth)*dupeutility[2])/(possmerger$totalchance*possmerger$FifthFrags)
-  pvaluetoadd<-pvaluetoadd+(possmerger$SixthChance*(!possmerger$SixthUseful)*ispurp(possmerger$Sixth)*dupeutility[2])/(possmerger$totalchance*possmerger$SixthFrags) #collect the chance that your 20 token roll will get you a 'complete' duplicate egg.
-
-  bvaluetoadd<-0
-  bvaluetoadd<-bvaluetoadd+(possmerger$FirstChance*(!possmerger$FirstUseful)*isblue(possmerger$First)*dupeutility[3])/(possmerger$totalchance*possmerger$FirstFrags)
-  bvaluetoadd<-bvaluetoadd+(possmerger$SecondChance*(!possmerger$SecondUseful)*isblue(possmerger$Second)*dupeutility[3])/(possmerger$totalchance*possmerger$SecondFrags)
-  bvaluetoadd<-bvaluetoadd+(possmerger$ThirdChance*(!possmerger$ThirdUseful)*isblue(possmerger$Third)*dupeutility[3])/(possmerger$totalchance*possmerger$ThirdFrags)
-  bvaluetoadd<-bvaluetoadd+(possmerger$FourthChance*(!possmerger$FourthUseful)*isblue(possmerger$Fourth)*dupeutility[3])/(possmerger$totalchance*possmerger$FourthFrags)
-  bvaluetoadd<-bvaluetoadd+(possmerger$FifthChance*(!possmerger$FifthUseful)*isblue(possmerger$Fifth)*dupeutility[3])/(possmerger$totalchance*possmerger$FifthFrags)
-  bvaluetoadd<-bvaluetoadd+(possmerger$SixthChance*(!possmerger$SixthUseful)*isblue(possmerger$Sixth)*dupeutility[3])/(possmerger$totalchance*possmerger$SixthFrags) #collect the chance that your 20 token roll will get you a 'complete' duplicate egg.
-
-  ovaluetoadd<-0
-  ovaluetoadd<-ovaluetoadd+(possmerger$FirstChance*(!possmerger$FirstUseful)*isorange(possmerger$First)*dupeutility[4])/(possmerger$totalchance*possmerger$FirstFrags)
-  ovaluetoadd<-ovaluetoadd+(possmerger$SecondChance*(!possmerger$SecondUseful)*isorange(possmerger$Second)*dupeutility[4])/(possmerger$totalchance*possmerger$SecondFrags)
-  ovaluetoadd<-ovaluetoadd+(possmerger$ThirdChance*(!possmerger$ThirdUseful)*isorange(possmerger$Third)*dupeutility[4])/(possmerger$totalchance*possmerger$ThirdFrags)
-  ovaluetoadd<-ovaluetoadd+(possmerger$FourthChance*(!possmerger$FourthUseful)*isorange(possmerger$Fourth)*dupeutility[4])/(possmerger$totalchance*possmerger$FourthFrags)
-  ovaluetoadd<-ovaluetoadd+(possmerger$FifthChance*(!possmerger$FifthUseful)*isorange(possmerger$Fifth)*dupeutility[4])/(possmerger$totalchance*possmerger$FifthFrags)
-  ovaluetoadd<-ovaluetoadd+(possmerger$SixthChance*(!possmerger$SixthUseful)*isorange(possmerger$Sixth)*dupeutility[4])/(possmerger$totalchance*possmerger$SixthFrags) #collect the chance that your 20 token roll will get you a 'complete' duplicate egg.
-
-  gvaluetoadd<-0
-  gvaluetoadd<-gvaluetoadd+(possmerger$FirstChance*(!possmerger$FirstUseful)*isgreen(possmerger$First)*dupeutility[5])/(possmerger$totalchance*possmerger$FirstFrags)
-  gvaluetoadd<-gvaluetoadd+(possmerger$SecondChance*(!possmerger$SecondUseful)*isgreen(possmerger$Second)*dupeutility[5])/(possmerger$totalchance*possmerger$SecondFrags)
-  gvaluetoadd<-gvaluetoadd+(possmerger$ThirdChance*(!possmerger$ThirdUseful)*isgreen(possmerger$Third)*dupeutility[5])/(possmerger$totalchance*possmerger$ThirdFrags)
-  gvaluetoadd<-gvaluetoadd+(possmerger$FourthChance*(!possmerger$FourthUseful)*isgreen(possmerger$Fourth)*dupeutility[5])/(possmerger$totalchance*possmerger$FourthFrags)
-  gvaluetoadd<-gvaluetoadd+(possmerger$FifthChance*(!possmerger$FifthUseful)*isgreen(possmerger$Fifth)*dupeutility[5])/(possmerger$totalchance*possmerger$FifthFrags)
-  gvaluetoadd<-gvaluetoadd+(possmerger$SixthChance*(!possmerger$SixthUseful)*isgreen(possmerger$Sixth)*dupeutility[5])/(possmerger$totalchance*possmerger$SixthFrags) #collect the chance that your 20 token roll will get you a 'complete' duplicate egg.
-  valuetoadd<-gvaluetoadd+ovaluetoadd+bvaluetoadd+pvaluetoadd+rvaluetoadd
-  possmerger$ResearchValue<-valuetoadd #add the odds of new egg to the odds of a 'research-worthy' egg.
-  #  return(as.data.frame(possmerger[order(possmerger$NewEggRate,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22,29)])) #29 is if i do include fragment data.
-    return(as.data.frame(possmerger[order(possmerger$NewEggRate,decreasing=TRUE),c(1,2,3,5,7,9,11,13,22)])) #22 is if i don't include fragment data
 }
 whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
   if(is.null(dragonx)){return(0)}
@@ -367,6 +349,14 @@ isred<-function(list){
   redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")
   return(list%in%redlist)
 }
+convertinterests<-function(list){
+    default<-c(1,2,3,5,7,9,11,13,22)
+added<-c("Red","Blue","Purple","Orange","Green","Gold")%in%list*c(23:28)
+added<-added[added!=0]
+if(length(added)>0){
+return(c(default,added))
+}
+else(return(default))}
 library(shiny)
 library(DT)
 shinyServer(function(input, output) {
@@ -391,7 +381,7 @@ shinyServer(function(input, output) {
         selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)})
 
     output$uibeta<-renderUI({
-    if(is.null(input$input_typesBeta))  {return()}
+    if(is.null(input$input_typesBeta))  {return(0)}
     incompletelist<-NULL
     if("Red"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")}
     if("Purple"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius")}
@@ -406,7 +396,7 @@ shinyServer(function(input, output) {
   load("TowerStats.rData")
   output$towerdata<-DT::renderDataTable({data.frame(level=c(1:25),exp=gsub(x=half$upgradeReward[1:25],pattern="experience:",replacement=""),wood=gsub(x=half$upgradeCost[1:25],pattern="piercing:",replacement=""))},options=list(searching=FALSE,lengthChange=FALSE,paging=FALSE,info=FALSE))
   output$resulttable<-DT::renderDataTable({datatable(whattobreed(usefullist=as.integer(concatlists(input)),
-                                                                 dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical),
+                                                                 dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical,outcolumns = convertinterests(input$researchinterests)),
                                                      options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
                                                     backgroundColor=styleEqual(listofeverything,values = c(rep('lightpink',9),rep('#D358F7',13),rep('lightslateblue',13),rep('lightsalmon',15),rep('green',15),rep('goldenrod',3))))})
   output$resbeta<-DT::renderDataTable({datatable(whobreedsx(ownedlist = c(rep(1,68)),dragonx = input$chosendragon,skiplist = input$skipgreen),
