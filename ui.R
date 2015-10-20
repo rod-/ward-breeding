@@ -58,8 +58,8 @@ shinyUI(
                tabPanel("Build Your Base",
                         helpText("Below are the expected number of speedups required to build your base to the target level selected at the bottom of the page"),
 
-                        fluidRow(h5(htmlOutput("leveler1",inline=TRUE),img(src="img/12h.jpg",width="5%"),htmlOutput("leveler2",inline=TRUE),img(src="img/3h.jpg",width="5%"),htmlOutput("leveler3",inline=TRUE),img(src="img/1h.jpg",width="5%"),htmlOutput("leveler4",inline=TRUE),img(src="img/30m.jpg",width="5%"),
-                                 htmlOutput("leveler5",inline=TRUE),img(src="img/15m.jpg",width="5%"),htmlOutput("leveler6",inline=TRUE),img(src="img/3m.jpg",width="5%"),htmlOutput("leveler7",inline=TRUE),img(src="img/1m.jpg",width="5%"),htmlOutput("leveler8",inline=TRUE),img(src="img/wood.jpg",width="5%"),htmlOutput("leveler9",inline=TRUE),img(src="img/builder.jpg",width="5%"),htmlOutput("leveler10",inline=TRUE),img(src="img/storage.jpg",width="5%"))),
+                        fluidRow(h5(htmlOutput("leveler1",inline=TRUE),img(src="img/12h.jpg",width="3%"),htmlOutput("leveler2",inline=TRUE),img(src="img/3h.jpg",width="3%"),htmlOutput("leveler3",inline=TRUE),img(src="img/1h.jpg",width="3%"),htmlOutput("leveler4",inline=TRUE),img(src="img/30m.jpg",width="3%"),
+                                 htmlOutput("leveler5",inline=TRUE),img(src="img/15m.jpg",width="3%"),htmlOutput("leveler6",inline=TRUE),img(src="img/3m.jpg",width="3%"),htmlOutput("leveler7",inline=TRUE),img(src="img/1m.jpg",width="3%"),htmlOutput("leveler8",inline=TRUE),img(src="img/wood.jpg",width="3%"),htmlOutput("leveler9",inline=TRUE),img(src="img/builder.jpg",width="3%"),htmlOutput("leveler10",inline=TRUE),img(src="img/storage.jpg",width="3%"))),
                         h5(helpText("Your base at the target level should have towers at the following levels:"),htmlOutput("leveler11",inline=TRUE)),
                         helpText("Note:  VERY EARLY VERSION:  Don't trust these results too much!"),
                         helpText("Strategy descriptions:"),
