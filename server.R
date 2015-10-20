@@ -398,10 +398,10 @@ shinyServer(function(input, output) {
   output$resulttable<-DT::renderDataTable({datatable(whattobreed(usefullist=as.integer(concatlists(input)),
                                                                  dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical,outcolumns = convertinterests(input$researchinterests)),
                                                      options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
-                                                    backgroundColor=styleEqual(listofeverything,values = c(rep('lightpink',9),rep('#D358F7',13),rep('lightslateblue',13),rep('lightsalmon',15),rep('green',15),rep('goldenrod',3))))})
+                                                    Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',3))))})
   output$resbeta<-DT::renderDataTable({datatable(whobreedsx(ownedlist = c(rep(1,68)),dragonx = input$chosendragon,skiplist = input$skipgreen),
                                   options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
-                     backgroundColor=styleEqual(listofeverything,values = c(rep('lightpink',9),rep('#D358F7',13),rep('lightslateblue',13),rep('lightsalmon',15),rep('green',15),rep('goldenrod',3))))
+                     Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',3))))
        })
 
   leveler<-reactive(overleveler(mybase = c(input$tower1,input$tower2,input$tower3,input$tower4,input$tower5,input$tower6,input$tower7,input$tower8,input$tower9,input$tower10,input$tower11,input$tower12,input$tower13,input$tower14,input$tower15,input$tower16,input$tower17,input$tower18,input$tower19,input$tower20,input$tower21,input$tower22,input$tower23,input$tower24,input$tower25,input$tower26,input$tower27,input$tower28,input$tower29,input$tower30,input$tower31,input$tower32,input$tower33,input$tower34,input$tower35,input$tower36),
