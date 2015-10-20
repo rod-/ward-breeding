@@ -394,7 +394,7 @@ shinyServer(function(input, output) {
 
   })
   load("TowerStats.rData")
-  output$towerdata<-DT::renderDataTable({data.frame(level=c(1:25),exp=gsub(x=half$upgradeReward[1:25],pattern="experience:",replacement=""),wood=gsub(x=half$upgradeCost[1:25],pattern="piercing:",replacement=""))},options=list(searching=FALSE,lengthChange=FALSE,paging=FALSE,info=FALSE))
+  output$towerdata<-DT::renderDataTable({data.frame(minLevel=c(1,1,4,4,4,7,12,12,17,17,21,21,25,28,31,31,34,37,42,46,50,56,61,64,67),exp=gsub(x=half$upgradeReward[1:25],pattern="experience:",replacement=""),wood=gsub(x=half$upgradeCost[1:25],pattern="piercing:",replacement=""))},options=list(searching=FALSE,lengthChange=FALSE,paging=FALSE,info=FALSE))
   output$resulttable<-DT::renderDataTable({datatable(whattobreed(usefullist=as.integer(concatlists(input)),
                                                                  dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical,outcolumns = convertinterests(input$researchinterests)),
                                                      options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
