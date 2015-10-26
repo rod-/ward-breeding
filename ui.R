@@ -21,6 +21,7 @@ shinyUI(
 
                         helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems"),
 
+                        helpText("Help fund my War Dragons Base or keep this site hosted.  Donate below"),
                         tags$div(HTML("<form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\">
                                       <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">
                                       <input type=\"hidden\" name=\"hosted_button_id\" value=\"2U6KK7ZRCUZV2\">
