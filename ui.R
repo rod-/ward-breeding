@@ -1,11 +1,11 @@
 library(shiny)
 library(DT)
-load("ShinyBreeddata160.Rdata")
+load("ShinyBreeddata170.Rdata")
 shinyUI(
   fluidPage(
     navbarPage("War Dragons Best Breeding Options",
 
-               tabPanel("Best Pairing",
+           tabPanel("Best Pairing",
                         fluidRow(column(3,wellPanel(checkboxGroupInput("fullgroups","Check your completed colors",c("Red","Purple","Blue","Orange","Green"),
                                                                        selected = c("Red","Purple","Blue")),checkboxInput('empirical','Use empirical drop rates',FALSE))),
                                  fluidRow(    column(3, wellPanel(selectInput('input_types', 'Choose Partial Colors',
@@ -36,11 +36,12 @@ shinyUI(
                                                                      choices=c("Purple","Blue","Red","Orange","Green","Gold"), multiple=TRUE,selected = c("Orange"), selectize=TRUE))),
 
                                      fluidRow(column(3, wellPanel(uiOutput("uibeta"))))),
-                        fluidRow(column(3,wellPanel(selectInput('skipgreen','Which dragons do you want to ignore?',choices=c("Caladbolg","Firactus","Bander","Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin",
+                        fluidRow(column(3,wellPanel(selectInput('skipgreen','Which dragons do you want to ignore?',choices=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin",
                                                                                                                              "Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo",
                                                                                                                              "Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus",
-                                                                                                                             "Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius"),
-                                                                selectize =TRUE,multiple=TRUE,selected=c("Caladbolg","Firactus","Bander","Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin"))))),
+                                                                                                                             "Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius",
+                                                                                                                             "Caladbolg","Firactus","Bander","Basileus","Chthoteuthis","Consurgens","Ferrox","Khrysos","Lumen","Sekoronos","Whalegnawer","Yersinu"),
+                                                                selectize =TRUE,multiple=TRUE,selected=c("Karna","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin","Caladbolg","Firactus","Bander","Basileus","Chthoteuthis","Consurgens","Ferrox","Khrysos","Lumen","Sekoronos","Whalegnawer","Yersinu"))))),
                         fluidRow(column(12,wellPanel(DT::dataTableOutput("resbeta")))),
                         #                                                                                                    )),
                         HTML("<a href='http://www.amoebastudios.com/dragon/'> Confused?  Try out Amoeba's breeding site.</a>"),

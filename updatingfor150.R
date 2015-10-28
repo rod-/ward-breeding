@@ -1,5 +1,5 @@
 #Update the merger2 database and stuff
-load("Shiny")
+library("shiny")
 Dragon2<-read.csv("Dragon.csv")
 Deck<-read.csv("Deck.csv")
 egg2<-read.csv("DragonEgg.csv")
@@ -28,4 +28,4 @@ merger2$FourthChance<-as.double(merger2$FourthChance)
 merger2$FifthChance<-as.double(merger2$FifthChance)
 merger2$SixthChance<-as.double(merger2$SixthChance)
 merger2$totalchance<-rowSums(merger2[,c(4,6,8,10,12,14)],na.rm=TRUE)
-save(list=c("merger2","DragonID2"),file="ShinyBreeddata160.Rdata")
+save(list=c("merger2","DragonID2"),file="ShinyBreeddata170.Rdata")
