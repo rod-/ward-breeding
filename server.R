@@ -132,7 +132,7 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
     rownames(returnval)<-NULL
   return(returnval) #22 is if i don't include fragment data
 }
-whobreedsx<-function(ownedlist,dragonx,owned=FALSE,skiplist=NULL){
+whobreedsx<-function(ownedlist,dragonx="Amarok",owned=FALSE,skiplist=NULL){
   if(is.null(dragonx)){return(0)}
   if(is.null(ownedlist)){return(0)}
   load("ShinyBreeddata170.Rdata")
@@ -374,7 +374,7 @@ shinyServer(function(input, output) {
 
   output$ui<-renderUI({
     if(is.null(input$input_types))
-    {return()}
+    {return(0)}
     incompletelist<-NULL
     if("Red"%in%input$input_types){incompletelist<-c(incompletelist,"Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")}
     if("Purple"%in%input$input_types){incompletelist<-c(incompletelist,"Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius")}
@@ -394,8 +394,6 @@ shinyServer(function(input, output) {
     if("Orange"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
     if("Gold"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")}
-
-        #     selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)
     selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE,selected = "Amarok")
 
   })
