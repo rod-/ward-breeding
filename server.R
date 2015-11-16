@@ -15,9 +15,9 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
   DragonID<-DragonID[-c(1:4),]#the first 5 entries fuck everything up being redundant and legacy
     if(length(usefullist)!=length(DragonID$identifier)){return(0)}#the number of dragons now..
   DragonID$owned<-usefullist
-  
+
   DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,1,1,1,1,5,1,5,5,1,1,5,5,12,8,5,5,5,8,16,5,8,16,16,5,5,8,20,48,48,1,20,12,60,48,20,20,48,20,48,60,20,40,96,72,40,40,40,96,72,72,72,96,96,96,96,96,170,170,170,96,96,96,96,250,250,250,250,250)
-  
+
       if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
   possmerger<-merger[DragonID$owned[match(merger$DragonA,DragonID$displayName)]==1,]#do i own the first dragon
   possmerger<-possmerger[DragonID$owned[match(possmerger$DragonB,DragonID$displayName)]==1,] #do i own the second
@@ -178,6 +178,8 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     if(is.null(goal)){return(0)}
     if(is.null(builder)){return(0)}
     if(is.null(storage)){return(0)}
+    if(any(is.na(mybase))){return(0)}
+    if(max(mybase)>25){return(0)}
     load("levelerdata.Rdata")
     newlevel=plevel
     totaltime<-0;totalwood<-0
@@ -248,15 +250,18 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
     cupgradepriority<-upgradepriority[upgradepriority<=maxpossible]
     outputscript<-vector()
     maxposexp<-function(mybase,maxpossible){
-    totalexp<-0
+        if(max(mybase)>30){warning("Check your input:Levels above Maximum!")}
+        totalexp<-0
                 for(Z in mybase){
             totalexp<-sum(expincrease[(Z+1):maxpossible])+totalexp
         }
     return(totalexp)}
     if(is.numeric(goalexp)&is.numeric(currentexp)){
         if((maxposexp(mybase,maxpossible)+currentexp)<goalexp){return(list(0,c(0,0,0,0,0,0,0),0,rep(0,36)))}
-    while(currentexp<goalexp){
-        for(I in 1:length(cupgradepriority)){
+        loopcounter<-0
+        while(currentexp<goalexp){
+        loopcounter<-loopcounter+1
+                for(I in 1:length(cupgradepriority)){
             numpriority<-sum(mybase==(cupgradepriority[I]-1))
             if(numpriority>0){
                 currentexp<-currentexp+expincrease[cupgradepriority[I]]
@@ -267,7 +272,7 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
                 break
                 }
         }
-
+    if(loopcounter>10000){break}
         }
 
     }
