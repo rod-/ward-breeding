@@ -181,12 +181,20 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     if(any(is.na(mybase))){return(0)}
     if(max(mybase)>25){return(0)}
     load("levelerdata.Rdata")
+    #clean the weird format a bit
+    half$upgradeCost<-as.numeric(gsub(pattern = "piercing:",replacement = "",x = half$upgradeCost))
+    StorageUpgrades$maxStorageData<-as.numeric(gsub(pattern="food:[0-9]+\\|piercing:",replacement="",x=StorageUpgrades$maxStorageData))
+    pbuilder=as.numeric(as.character(half$requiredBuilderLevel))
+    StorageUpgrades$levelRequired<-as.numeric(as.character(StorageUpgrades$levelRequired))
+
+    subgoals<-c(1,4,7,12,17,21,25,28,31,40,42,46,50,56,61,64,67,73,79,85,91,94)#these are the levels where you change max towers
+    towerlevels<-c(1,1,4,4,4,4,7,7,12,17,17,17,21,25,28,31,40,42,42,46,50,56,61,64,67,73,79,85,91,94)#these are the levels where you change max towers
+    pstorage=NULL#required storage levels for various towers
+    II<-0
+    for(I in half$upgradeCost){II<-II+1;pstorage[II]<-(min(which(StorageUpgrades$maxStorageData[2:34]>I)))}
     newlevel=plevel
     totaltime<-0;totalwood<-0
-    subgoals<-c(1,4,7,12,17,21,25,28,31,34,37,42,46,50,56,61,64,67)#these are the levels where you change max towers
-    towerlevels<-c(1,1,4,4,4,7,12,12,17,17,21,21,25,28,31,31,34,37,42,46,50,56,61,64,67)#these are the levels where you change max towers
-    pbuilder=half$requiredBuilderLevel
-    pstorage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23)
+
     #loop over subgoals
     allsubgoals<-c(subgoals[which(subgoals>plevel&subgoals<goal)],goal)
     newbuilder<-builder
@@ -234,12 +242,12 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
     totalwood<-0
     goalexp<-as.integer(as.character(exp$requiredXp[goal+2]))
     currentexp<-as.integer(as.character(exp$requiredXp[plevel+2]))
-    expincrease<-c(half$upgradeReward[1:25],0)
-    timeincrease<-as.double(as.character(half$upgradeTimeInSeconds))[1:25]
-    woodcost<-half$upgradeCost[1:25]
+    expincrease<-c(half$upgradeReward[1:30],0)
+    timeincrease<-as.double(as.character(half$upgradeTimeInSeconds))[1:30]
+    woodcost<-half$upgradeCost[1:30]
     #strategies
     if(strategy=="fastest"){
-        upgradepriority<-order(half$upgradeReward[1:25]/as.double(as.character(half$upgradeTimeInSeconds[1:25])),decreasing = TRUE)
+        upgradepriority<-order(half$upgradeReward[1:30]/as.double(as.character(half$upgradeTimeInSeconds[1:30])),decreasing = TRUE)
     }
     else if(strategy=="highest"){
         upgradepriority<-c(30:1)
@@ -282,10 +290,10 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
 
 }
 ispossible<-function(builder,storage,plevel){
-    pbuilder=c(0,0,1,1,1,2,2,3,3,3,4,4,5,5,6,6,7,8,9,10,11,13,14,16,17,,,,,)
-    pstorage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23,,,,,)
+    pbuilder=c(0,0,1,1,1,2,2,3,3,3,4,4,5,5,6,6,7,8,9,10,11,13,14,16,17,19,20,20,20,20)
+    pstorage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23,25,27,29,31,32)
     possibiles<-(builder>=pbuilder)*(storage>=pstorage)
-    storagelevels=c(0,7,12,17,21,25,28,31,34,37,40,42,44,46,48,50,52,54,56,58,61,64,67,70,73,73,79,85,91,94)
+    storagelevels=c(0,7,12,17,21,25,28,31,34,37,40,42,44,46,48,50,52,54,56,58,61,64,67,70,73,76,79,82,85,88,91,94,97)
     builderlevels=c(4,4,7,12,18,23,28,33,38,41,45,48,51,53,56,58,61,63,66,68,71)
     maxpossible<-c(sum(builderlevels<plevel+1),sum(storagelevels<plevel+1))
     return(c(possibiles,maxpossible))
@@ -402,8 +410,8 @@ shinyServer(function(input, output) {
     selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE,selected = "Amarok")
 
   })
-  load("TowerStats.rData")
-  output$towerdata<-DT::renderDataTable({data.frame(minLevel=c(1,1,4,4,4,7,12,12,17,17,21,21,25,28,31,31,34,37,42,46,50,56,61,64,67),exp=gsub(x=half$upgradeReward[1:30],pattern="experience:",replacement=""),wood=gsub(x=half$upgradeCost[1:25],pattern="piercing:",replacement=""))},options=list(searching=FALSE,lengthChange=FALSE,paging=FALSE,info=FALSE))
+    load("levelerdata.Rdata")
+  output$towerdata<-DT::renderDataTable({data.frame(minLevel=c(1,1,4,4,4,7,12,12,17,17,21,21,25,28,31,31,34,37,42,46,50,56,61,64,67,73,79,85,91,94),exp=gsub(x=half$upgradeReward[1:30],pattern="experience:",replacement=""),wood=gsub(x=half$upgradeCost[1:30],pattern="piercing:",replacement=""))},options=list(searching=FALSE,lengthChange=FALSE,paging=FALSE,info=FALSE))
   output$resulttable<-DT::renderDataTable({datatable(whattobreed(usefullist=as.integer(concatlists(input)),
                                                                  dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical,outcolumns = convertinterests(input$researchinterests)),
                                                      options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
