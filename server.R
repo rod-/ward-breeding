@@ -185,7 +185,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     half$upgradeCost<-as.numeric(gsub(pattern = "piercing:",replacement = "",x = half$upgradeCost))
     StorageUpgrades$maxStorageData<-as.numeric(gsub(pattern="food:[0-9]+\\|piercing:",replacement="",x=StorageUpgrades$maxStorageData))
     pbuilder=as.numeric(as.character(half$requiredBuilderLevel))
-    StorageUpgrades$levelRequired<-as.numeric(as.character(StorageUpgrades$levelRequired))
+    StorageUpgrades$levelRequired<-suppressWarnings(as.numeric(as.character(StorageUpgrades$levelRequired)))
 
     subgoals<-c(1,4,7,12,17,21,25,28,31,40,42,46,50,56,61,64,67,73,79,85,91,94)#these are the levels where you change max towers
     towerlevels<-c(1,1,4,4,4,4,7,7,12,17,17,17,21,25,28,31,40,42,42,46,50,56,61,64,67,73,79,85,91,94)#these are the levels where you change max towers
