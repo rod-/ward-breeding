@@ -201,17 +201,21 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     newstore<-storage
     newbase<-mybase
     totalqueue<-vector()
+    II<-0
     for(I in allsubgoals){
-    result<-leveler(newbase,newbuilder,newstore,plevel=newlevel,goal=I,buildtimer=buildtimer,strategy=strategy)
+    II<-II+1
+      result<-leveler(newbase,newbuilder,newstore,plevel=newlevel,goal=I,buildtimer=buildtimer,strategy=strategy)
     newlevel<-I
     newbase<-unlist(result[4])
     maxtower<-sum(towerlevels<(newlevel+1))
-    if(builder<17){
+    #don't want to execute this last block on the last runthrough
+    if(II<length(allsubgoals)){
+    if(builder<20){
     newbuilder<-pbuilder[maxtower]}
-    else{(newbuilder=17)}
-    if(storage<21){
+    else{(newbuilder=20)}
+    if(storage<32){
     newstore<-pstorage[maxtower]}
-    else{(newstore=storage)}
+    else{(newstore=storage)}}
     newwood<-unlist(result[3])
     newtime<-unlist(result[2])
     totalwood<-totalwood+newwood
@@ -222,7 +226,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     if(newstore>storage){bonustime<-speedupconvert(sum(as.double(as.character(StorageUpgrades$upgradeTimeInSeconds[((storage+1):newstore)+1]))),buildtimer=buildtimer)}
     if(newbuilder>builder){bonustime<-bonustime+speedupconvert(sum(as.double(as.character(BuilderUpgrades$upgradeTimeInSeconds[((builder+1):newbuilder)+1]))),buildtimer)}
     #don't add in bonustime until the very last.
-    finalresult<-c(totaltime+bonustime,makedisplayable(totalwood),newbuilder,newstore,newbase)
+    finalresult<-c(totaltime,bonustime,makedisplayable(totalwood),newbuilder,newstore,newbase)
     return(finalresult)
 }
 makedisplayable<-function(number){
