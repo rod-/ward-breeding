@@ -179,7 +179,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     if(is.null(builder)){return(0)}
     if(is.null(storage)){return(0)}
     if(any(is.na(mybase))){return(0)}
-    if(max(mybase)>25){return(0)}
+    if(max(mybase)>30){return(0)}
     load("levelerdata.Rdata")
     #clean the weird format a bit
     half$upgradeCost<-as.numeric(gsub(pattern = "piercing:",replacement = "",x = half$upgradeCost))
