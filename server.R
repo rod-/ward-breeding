@@ -178,7 +178,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     if(is.null(builder)){return(0)}
     if(is.null(storage)){return(0)}
     if(any(is.na(mybase))){return(0)}
-    if(max(mybase)>25){return(0)}
+    if(max(mybase)>30){return(0)}
     load("levelerdata.Rdata")
     #clean the weird format a bit
     half$upgradeCost<-as.numeric(gsub(pattern = "piercing:",replacement = "",x = half$upgradeCost))
@@ -380,6 +380,46 @@ return(c(default,added))
 else(return(default))}
 library(shiny)
 library(DT)
+generateplot<-function(list){
+  library(ggplot2)
+  #load the dataframe of tower hp
+  load("levelerdata.Rdata")
+  hplist<-as.integer(as.character(half$HP))
+  #load the dataframe of dragon atk
+  load("hunterdf.rData")
+  #subset to desired color
+  dragcolor<-which(c("Red","Purple","Blue","Orange","Green","Gold")%in%list[[1]])
+  dragrarity<-list[[5]]
+  oresearch<-1+(.04*length(list[[2]]))
+  dresearch<-as.numeric(list[[3]])
+  dlevel<-as.numeric(list[[4]])
+#  if(length(hplist)<(30*length(dresearch))){}
+    thisdf<-subset(hunterdf,rarity%in%dragrarity&level%in%c(dlevel[1]:dlevel[2])&tier%in%dragcolor)
+    countdf<-data.frame(hp=hplist,lv=c(1:30))
+    countdf<-merge(countdf,thisdf)
+    finaldf<-countdf
+    finaldf$dbonus<-dresearch[1]
+  if(length(dresearch)>1){
+        for(I in 2:length(dresearch)){
+      #multiply dhp by dresearch
+      ncountdf<-countdf
+      ncountdf$hp<-ncountdf$hp*dresearch[I]
+      ncountdf$dbonus<-dresearch[I]
+  finaldf<-rbind(finaldf,ncountdf)
+          }}
+    #multiply atk by oresearch
+    finaldf$attack<-countdf$attack*oresearch
+    finaldf$countval<-ceiling(finaldf$hp/finaldf$attack)
+    if(max(finaldf$level)!=min(finaldf$level)){
+    finaldf$countval<-finaldf$countval-(0.5*((finaldf$level-min(finaldf$level))/(max(finaldf$level)-min(finaldf$level))))}
+  theme_set(theme_bw(base_size=21))
+  #divide dhp by atk, use ceiling to round.
+#jitter by (range of level / .1) so max is 0 and min is 0.9
+    p<-ggplot(data=finaldf)+geom_point(aes(x=lv,y=countval,col=as.factor(level),pch=rarity),size=5)+facet_grid(~dbonus)+xlab("tower level")+ylab("ShotCount")+theme(legend.title=element_blank())
+    #make a plot object
+  #write it to temp ?
+    return(p)
+}
 shinyServer(function(input, output) {
     {redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")
     purplelist<-c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius")
@@ -423,6 +463,10 @@ shinyServer(function(input, output) {
                                   options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
                      Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12))))
        })#result of the 'target' breed calculation(pg2)
+
+
+  
+  output$resultplot<-renderPlot(  generateplot(list=list(input$dragcolor,input$oresearch,input$dresearch,input$dlevel,input$dragrarity)))
 
   leveler<-reactive(overleveler(mybase = c(input$tower1,input$tower2,input$tower3,input$tower4,input$tower5,input$tower6,input$tower7,input$tower8,input$tower9,input$tower10,input$tower11,input$tower12,input$tower13,input$tower14,input$tower15,input$tower16,input$tower17,input$tower18,input$tower19,input$tower20,input$tower21,input$tower22,input$tower23,input$tower24,input$tower25,input$tower26,input$tower27,input$tower28,input$tower29,input$tower30,input$tower31,input$tower32,input$tower33,input$tower34,input$tower35,input$tower36),
                                 builder=input$bldrlevel,storage=input$storlevel,strategy=input$strategy,plevel=input$plevel,goal=input$ptarget,buildtimer=calctimer(input$buildresearch)))
