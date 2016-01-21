@@ -415,7 +415,8 @@ generateplot<-function(list){
   theme_set(theme_bw(base_size=21))
   #divide dhp by atk, use ceiling to round.
 #jitter by (range of level / .1) so max is 0 and min is 0.9
-    p<-ggplot(data=finaldf)+geom_point(aes(x=lv,y=countval,col=as.factor(level),pch=rarity),size=5)+facet_grid(~dbonus)+xlab("tower level")+ylab("ShotCount")+theme(legend.title=element_blank())
+    p<-ggplot(data=finaldf)+geom_point(aes(x=lv,y=countval,col=as.factor(level),pch=rarity),size=5)+facet_grid(~dbonus)+xlab("tower level")+ylab("ShotCount")+theme(legend.title=element_blank())+theme(panel.grid.major = element_line(colour = "#808080"))+theme(panel.grid.minor.x=element_line(colour="#b3b3b3"))+
+    scale_x_continuous(breaks = seq(0,30,by=5))
     #make a plot object
   #write it to temp ?
     return(p)
@@ -465,7 +466,7 @@ shinyServer(function(input, output) {
        })#result of the 'target' breed calculation(pg2)
 
 
-  
+
   output$resultplot<-renderPlot(  generateplot(list=list(input$dragcolor,input$oresearch,input$dresearch,input$dlevel,input$dragrarity)))
 
   leveler<-reactive(overleveler(mybase = c(input$tower1,input$tower2,input$tower3,input$tower4,input$tower5,input$tower6,input$tower7,input$tower8,input$tower9,input$tower10,input$tower11,input$tower12,input$tower13,input$tower14,input$tower15,input$tower16,input$tower17,input$tower18,input$tower19,input$tower20,input$tower21,input$tower22,input$tower23,input$tower24,input$tower25,input$tower26,input$tower27,input$tower28,input$tower29,input$tower30,input$tower31,input$tower32,input$tower33,input$tower34,input$tower35,input$tower36),
