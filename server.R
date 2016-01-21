@@ -384,7 +384,7 @@ library(DT)
 generateplot<-function(list){
   library(ggplot2)
   #load the dataframe of tower hp
-  load("levelerdata.rData")
+  load("levelerdata.Rdata")
   hplist<-as.integer(as.character(half$HP))
   #load the dataframe of dragon atk
   load("hunterdf.rData")
