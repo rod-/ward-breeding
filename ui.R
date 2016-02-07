@@ -69,10 +69,10 @@ shinyUI(
                     (column(3,wellPanel(checkboxGroupInput('oresearch', 'Offensiveresearches',c("Red4%","Red4%","Blue4%","Orange4%","Green4%","Green4%"),selected=c("Red4%","Red4%","Blue4%","Orange4%","Green4%"))))),
                     (column(3,wellPanel(checkboxGroupInput('dresearch','defensiveresearches',c(1.0,1.04,1.08,1.12,1.16,1.20,1.24,1.30,1.60),selected=c(1.20,1.30))))),
             fluidRow(column(12,wellPanel(sliderInput('dlevel','dragon levels',min=1,max=30,value=c(30,30))))),
-                                                          
+
            (plotOutput("resultplot"))
-             )), 
-           
+             )),
+
                tabPanel("Build Your Base",
                         helpText("Below are the expected number of speedups required to build your base to the target level selected at the bottom of the page"),
 

@@ -1,4 +1,3 @@
-#helpText("Note that gold dragons are currently misnamed:  Bander = Bander, Zephyr=Caladbolg, Zerka = Firactus"),
 #Currently missing:
 # Add more UI elements - threshold for utility,
 # Replace text with pictures
@@ -216,7 +215,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     if(storage<32){
     newstore<-pstorage[maxtower]}
     else{(newstore=storage)}}
-    
+
     newwood<-unlist(result[3])
     newtime<-unlist(result[2])
     totalwood<-totalwood+newwood
@@ -347,7 +346,7 @@ concatlists<-function(files){
 
   return(listofeverything%in%currentlist) #reduces list down to a binary vector
 }
-isgold<-function(list){
+{isgold<-function(list){
   goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")
   return(list%in%goldlist)
 }
@@ -370,7 +369,7 @@ ispurp<-function(list){
 isred<-function(list){
   redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")
   return(list%in%redlist)
-}
+}}#define functions to check color of dragons
 convertinterests<-function(list){
     default<-c(1,2,3,5,7,9,11,13,22)
 added<-c("Red","Blue","Purple","Orange","Green","Gold")%in%list*c(23:28)
@@ -416,7 +415,8 @@ generateplot<-function(list){
   theme_set(theme_bw(base_size=21))
   #divide dhp by atk, use ceiling to round.
 #jitter by (range of level / .1) so max is 0 and min is 0.9
-    p<-ggplot(data=finaldf)+geom_point(aes(x=lv,y=countval,col=as.factor(level),pch=rarity),size=5)+facet_grid(~dbonus)+xlab("tower level")+ylab("ShotCount")+theme(legend.title=element_blank())
+    p<-ggplot(data=finaldf)+geom_point(aes(x=lv,y=countval,col=as.factor(level),pch=rarity),size=5)+facet_grid(~dbonus)+xlab("tower level")+ylab("ShotCount")+theme(legend.title=element_blank())+theme(panel.grid.major = element_line(colour = "#808080"))+theme(panel.grid.minor.x=element_line(colour="#b3b3b3"))+
+    scale_x_continuous(breaks = seq(0,30,by=5))
     #make a plot object
   #write it to temp ?
     return(p)
@@ -438,27 +438,26 @@ eventspending<-function(list){
   }
 
 shinyServer(function(input, output) {
-    redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")
+    {redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")
     purplelist<-c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius")
     bluelist<-c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")
     orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")
     greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")
     goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")
     listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist,goldlist)
-
+}#make lists of alldrags
   output$ui<-renderUI({
     if(is.null(input$input_types))
     {return(0)}
-    incompletelist<-NULL
+    {incompletelist<-NULL
     if("Red"%in%input$input_types){incompletelist<-c(incompletelist,"Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")}
     if("Purple"%in%input$input_types){incompletelist<-c(incompletelist,"Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius")}
     if("Blue"%in%input$input_types){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")}
     if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
     if("Gold"%in%input$input_types){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")}
-
-        selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)})
-
+    selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)}
+})#create ui element for the selected 'partial' colors
     output$uibeta<-renderUI({
     if(is.null(input$input_typesBeta))  {return(0)}
     incompletelist<-NULL
@@ -470,17 +469,18 @@ shinyServer(function(input, output) {
     if("Gold"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")}
     selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE,selected = "Amarok")
 
-  })
+  })#create ui element for the (beta tab) selected color
     load("levelerdata.Rdata")
   output$towerdata<-DT::renderDataTable({data.frame(minLevel=c(1,1,4,4,4,7,12,12,17,17,21,21,25,28,31,31,34,37,42,46,50,56,61,64,67,73,79,85,91,94),exp=gsub(x=half$upgradeReward[1:30],pattern="experience:",replacement=""),wood=gsub(x=half$upgradeCost[1:30],pattern="piercing:",replacement=""))},options=list(searching=FALSE,lengthChange=FALSE,paging=FALSE,info=FALSE))
   output$resulttable<-DT::renderDataTable({datatable(whattobreed(usefullist=as.integer(concatlists(input)),
                                                                  dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical,outcolumns = convertinterests(input$researchinterests)),
                                                      options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
-                                                    Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12))))})
+                                                    Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12))))})#result of the 'whattobreed' calculation (tab1)
   output$resbeta<-DT::renderDataTable({datatable(whobreedsx(ownedlist = c(rep(1,68)),dragonx = input$chosendragon,skiplist = input$skipgreen),
                                   options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
                      Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12))))
-       })
+       })#result of the 'target' breed calculation(pg2)
+
 
 
   output$eventoutput<-DT::renderDataTable({datatable(eventspending(list=list(input$eventlevel,input$clockvalue,input$tokenvalue,input$currentpoints)))})
@@ -502,24 +502,3 @@ shinyServer(function(input, output) {
 
 
                                })
-#output$dragstat<-renderDataTable({DragonStatDF},options=list(pageLength=1,lengthMenu=list(c(1,-1),c('1','all'))))
-
-# output$testimage<-renderImage({
-#     # When input$n is 3, filename is ./images/image3.jpeg
-#     filename <- normalizePath(file.path('./imagetest',
-#                                         paste('testimage', input$n, '.jpeg', sep='')))
-#
-#     # Return a list containing the filename and alt text
-#     list(src = filename,
-#          alt = paste("Image number", input$n))
-#
-# }, deleteFile = FALSE)
-#some example code to use when i want to include pre-rendered images in the output.
-# remember that i really only want to use 2 images in the final output, so it's not important to do arbitrary numbers of images (or perhaps something like 2*numoutput)
-#}
-# )
-
-
-#would like to do cooler things with this:
-#Take the first guy, take the second guy, just their images, then between them put the 6 possible outcomes' pictures, transparancy equal to their utility (0/1) and size equal to likelihood.
-#Set a slider that allows you to skip a few outcomes if you aren't interested in the first one.
