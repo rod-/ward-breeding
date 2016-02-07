@@ -433,11 +433,14 @@ eventspending<-function(list){
   exchange<-read.csv("Swappable.csv")
   exchange<-exchange[grep("piercing_",exchange$identifier),]
   exchangerate<-as.numeric(as.character(exchange$conversionRatio[list[[1]]]))
-  outdf<-data.frame(RoundReturn=ptreq*10/exchangerate-value,RewardTier=c(1:length(earned)),PointsRequired=ptreq)
-  outdf$TotalReturn=cumsum(outdf$RoundReturn)
-  outdf$ThisRdSpending=ptreq*10/exchangerate
-  outdf$TotalSpending=cumsum(outdf$ThisRdSpending)
+  outdf<-data.frame(RewardTier=c(1:length(earned)),PointsRequired=ptreq)
+  outdf$TotalSpending=ptreq*10/exchangerate
+  outdf$ThisRdSpending=c(0,diff(outdf$TotalSpending))
+  outdf$ThisRdSpending[1]<-outdf$TotalSpending[1]
   outdf$RewardValue=value
+  outdf$ThisRdReturn=outdf$RewardValue-outdf$ThisRdSpending
+  outdf$TotalReturn=cumsum(outdf$ThisRdReturn)
+  outdf[,1:7]<-round(outdf[,1:7],digits=0)
     return(outdf)
   }
 
