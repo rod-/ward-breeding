@@ -4,8 +4,7 @@ load("ShinyBreeddata170.Rdata")
 shinyUI(
   fluidPage(
     navbarPage("War Dragons Best Breeding Options",
-
-           tabPanel("Best Pairing",
+            tabPanel("Best Pairing",
                         fluidRow(column(3,wellPanel(checkboxGroupInput("fullgroups","Check your completed colors",c("Red","Purple","Blue","Orange","Green"),
                                                                        selected = c("Red","Purple","Blue")),checkboxInput('empirical','Use empirical drop rates',FALSE))),
                                  fluidRow(    column(3, wellPanel(selectInput('input_types', 'Choose Partial Colors',
@@ -58,7 +57,12 @@ shinyUI(
                         helpText("Disclaimer:  Not associated with Pocket Gems. Images are property of Pocket Gems")
                         ),
                 
-           
+            tabPanel("EventSpending",fluidRow(column(3,wellPanel(numericInput('eventlevel',label = "your level",value = 84,min = 1,max=245)))),
+                     fluidRow(column(3,wellPanel(numericInput('clockvalue',label="Value of 1 hour speedup in rubies",value=14.58,min=0,max=14.58)))),
+                     fluidRow(column(3,wellPanel(numericInput('tokenvalue',label="Value of 1 breeding token",value=0.8,min=0,max=10)))),
+                     fluidRow(column(3,wellPanel(numericInput('currentpoints',label="Points you already have",value=0,min=0,max=199999)))),
+                     wellPanel(DT::dataTableOutput("eventoutput"))),
+            
             tabPanel("Hunter ShotCounts",
             fluidRow(column(3,wellPanel(checkboxGroupInput("dragcolor","Which Colors are the dragons of interest",c("Red","Purple","Blue","Orange","Green","Gold"),selected = c("Gold")))),
                     (column(3,wellPanel(checkboxGroupInput("dragrarity","Rarity within Tier (1=lowest)",c(1,2,3),selected=c(3))))),
