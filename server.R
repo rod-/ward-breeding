@@ -433,8 +433,12 @@ eventspending<-function(list){
   exchange<-read.csv("Swappable.csv")
   exchange<-exchange[grep("piercing_",exchange$identifier),]
   exchangerate<-as.numeric(as.character(exchange$conversionRatio[list[[1]]]))
-  outdf<-data.frame(netCost=(ptreq-list[[4]])*10/exchangerate-value,RewardTier=c(1:length(earned)),PointsRequired=ptreq)
-  return(outdf)
+  outdf<-data.frame(RoundReturn=ptreq*10/exchangerate-value,RewardTier=c(1:length(earned)),PointsRequired=ptreq)
+  outdf$TotalReturn=cumsum(outdf$RoundReturn)
+  outdf$ThisRdSpending=ptreq*10/exchangerate
+  outdf$TotalSpending=cumsum(outdf$ThisRdSpending)
+  outdf$RewardValue=value
+    return(outdf)
   }
 
 shinyServer(function(input, output) {
@@ -483,7 +487,7 @@ shinyServer(function(input, output) {
 
 
 
-  output$eventoutput<-DT::renderDataTable({datatable(eventspending(list=list(input$eventlevel,input$clockvalue,input$tokenvalue,input$currentpoints)))})
+  output$eventoutput<-DT::renderDataTable({datatable(eventspending(list=list(input$eventlevel,input$clockvalue,input$tokenvalue)))})
   output$resultplot<-renderPlot(  generateplot(list=list(input$dragcolor,input$oresearch,input$dresearch,input$dlevel,input$dragrarity)))
 
   leveler<-reactive(overleveler(mybase = c(input$tower1,input$tower2,input$tower3,input$tower4,input$tower5,input$tower6,input$tower7,input$tower8,input$tower9,input$tower10,input$tower11,input$tower12,input$tower13,input$tower14,input$tower15,input$tower16,input$tower17,input$tower18,input$tower19,input$tower20,input$tower21,input$tower22,input$tower23,input$tower24,input$tower25,input$tower26,input$tower27,input$tower28,input$tower29,input$tower30,input$tower31,input$tower32,input$tower33,input$tower34,input$tower35,input$tower36),
