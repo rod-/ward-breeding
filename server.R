@@ -6,17 +6,15 @@
 # Fragment Data for num of fragments to make dupeutility practical/useful.
 # Color information (light cell background corresponding to the dragon color?)
 whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE,outcolumns=c(1,2,3,5,7,9,11,13,22)){
-  load("ShinyBreeddata170.Rdata")
+    load("ShinyBreeddata220.Rdata")
   merger<-merger2
-
   colnames(merger)[1:2]<-c("DragonA","DragonB")
-  DragonID<-DragonID2[DragonID2$displayName%in%(levels(factor(c(as.character(merger$DragonA),as.character(merger$DragonB))))),]#dont want useless junk
+#  DragonID<-DragonID2[DragonID2$displayName%in%(levels(factor(c(as.character(merger$DragonA),as.character(merger$DragonB))))),]#dont want useless junk
+ DragonID<-DragonID2[DragonID2$displayName%in%concatlists(type=2),]
   DragonID<-DragonID[-c(1:4),]#the first 5 entries fuck everything up being redundant and legacy
-    if(length(usefullist)!=length(DragonID$identifier)){return(0)}#the number of dragons now..
+    if(length(usefullist)!=length(DragonID$displayName)){return(0)}#the number of dragons now..
   DragonID$owned<-usefullist
-
-  DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,1,1,1,1,5,1,5,5,1,1,5,5,12,8,5,5,5,8,16,5,8,16,16,5,5,8,20,48,48,1,20,12,60,48,20,20,48,20,48,60,20,40,96,72,40,40,40,96,72,72,72,96,96,96,96,96,170,170,170,96,96,96,96,250,250,250,250,250)
-
+    DragonID$fragments<-c(1,1,1,1,1,1,1,1,8,1,1,1,1,5,1,5,5,1,1,5,5,12,8,5,5,5,8,16,5,8,16,16,5,5,8,20,48,48,1,20,12,60,48,20,20,48,20,48,60,20,40,96,72,40,40,40,96,72,72,72,96,96,96,96,96,170,170,170,96,96,96,96,250,250,250,250,250,120,120,120,200,200,200,200,400,400,400,400,400)
       if(assumebreedable==1){DragonID$owned[DragonID$owned==2]<-1}
   possmerger<-merger[DragonID$owned[match(merger$DragonA,DragonID$displayName)]==1,]#do i own the first dragon
   possmerger<-possmerger[DragonID$owned[match(possmerger$DragonB,DragonID$displayName)]==1,] #do i own the second
@@ -33,30 +31,6 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
   possmerger$FifthUseful[DragonID$owned[match(possmerger$Fifth,DragonID$displayName)]>=1]<-0
   possmerger$SixthUseful<-1
   possmerger$SixthUseful[DragonID$owned[match(possmerger$Sixth,DragonID$displayName)]>=1]<-0
-  if(empirical==TRUE){
-    isnerfed<-function(list){
-      orangelist<-c("Noss","Hydron","Amarok","Luminark","Septys","Enki","Durga")
-      return(list%in%orangelist)
-    }
-    possmerger$FirstChance[isnerfed(possmerger$First)]<-possmerger$FirstChance[isnerfed(possmerger$First)]*2/3
-    possmerger$SecondChance[isnerfed(possmerger$Second)]<-possmerger$SecondChance[isnerfed(possmerger$Second)]*2/3
-    possmerger$ThirdChance[isnerfed(possmerger$Third)]<-possmerger$ThirdChance[isnerfed(possmerger$Third)]*2/3
-    possmerger$FourthChance[isnerfed(possmerger$Fourth)]<-possmerger$FourthChance[isnerfed(possmerger$Fourth)]*2/3
-    possmerger$FifthChance[isnerfed(possmerger$Fifth)]<-possmerger$FifthChance[isnerfed(possmerger$Fifth)]*2/3
-    possmerger$SixthChance[isnerfed(possmerger$Sixth)]<-possmerger$SixthChance[isnerfed(possmerger$Sixth)]*2/3
-    isnerfedhard<-function(list){
-      orangelist<-c("Amarok","Durga")
-      return(list%in%orangelist)
-    }
-    possmerger$FirstChance[isnerfedhard(possmerger$First)]<-possmerger$FirstChance[isnerfedhard(possmerger$First)]*3/4
-    possmerger$SecondChance[isnerfedhard(possmerger$Second)]<-possmerger$SecondChance[isnerfedhard(possmerger$Second)]*3/4
-    possmerger$ThirdChance[isnerfedhard(possmerger$Third)]<-possmerger$ThirdChance[isnerfedhard(possmerger$Third)]*3/4
-    possmerger$FourthChance[isnerfedhard(possmerger$Fourth)]<-possmerger$FourthChance[isnerfedhard(possmerger$Fourth)]*3/4
-    possmerger$FifthChance[isnerfedhard(possmerger$Fifth)]<-possmerger$FifthChance[isnerfedhard(possmerger$Fifth)]*3/4
-    possmerger$SixthChance[isnerfedhard(possmerger$Sixth)]<-possmerger$SixthChance[isnerfedhard(possmerger$Sixth)]*3/4
-    #recalculate totalchance
-        possmerger$totalchance<-rowSums(cbind(possmerger$FirstChance,possmerger$SecondChance,possmerger$ThirdChance,possmerger$FourthChance,possmerger$FifthChance,possmerger$SixthChance),na.rm=TRUE)}
-
   possmerger$NewEggRate<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
                                            possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful)+0,
                                            possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful)+0,
@@ -88,6 +62,11 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
       redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara","Fenrir")
       return(list%in%redlist)
   }
+  isplat<-function(list){
+      platlist<-c("Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
+      return(list%in%platlist)
+  }
+  
   possmerger$RedPer1000<-suppressWarnings(rowSums(cbind(1/(DragonID$fragments[match((possmerger$First),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FirstChance/possmerger$totalchance)*isred(possmerger$First)*(possmerger$FirstUseful==0),
                                  1/(DragonID$fragments[match((possmerger$Second),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SecondChance/possmerger$totalchance)*isred(possmerger$Second)*(possmerger$FirstUseful==0),
                                  1/(DragonID$fragments[match((possmerger$Third),DragonID$displayName,nomatch="Leviathan")])*(possmerger$ThirdChance/possmerger$totalchance)*isred(possmerger$Third)*(possmerger$FirstUseful==0),
@@ -134,7 +113,7 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
 whobreedsx<-function(ownedlist,dragonx="Amarok",owned=FALSE,skiplist=NULL){
   if(is.null(dragonx)){return(0)}
   if(is.null(ownedlist)){return(0)}
-  load("ShinyBreeddata170.Rdata")
+  load("ShinyBreeddata220.Rdata")
   merger<-merger2
   wlist<-merger
   colnames(wlist)[1:2]<-c("DragonA","DragonB")
@@ -178,8 +157,8 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     if(is.null(builder)){return(0)}
     if(is.null(storage)){return(0)}
     if(any(is.na(mybase))){return(0)}
-    if(max(mybase)>30){return(0)}
-    load("levelerdata.Rdata")
+    if(max(mybase)>35){return(0)}
+    load("levelerdata220.Rdata")
     #clean the weird format a bit
     half$upgradeCost<-as.numeric(gsub(pattern = "piercing:",replacement = "",x = half$upgradeCost))
     StorageUpgrades$maxStorageData<-as.numeric(gsub(pattern="food:[0-9]+\\|piercing:",replacement="",x=StorageUpgrades$maxStorageData))
@@ -187,10 +166,10 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     StorageUpgrades$levelRequired<-suppressWarnings(as.numeric(as.character(StorageUpgrades$levelRequired)))
 
     subgoals<-c(1,4,7,12,17,21,25,28,31,40,42,46,50,56,61,64,67,73,79,85,91,94)#these are the levels where you change max towers
-    towerlevels<-c(1,1,4,4,4,4,7,7,12,17,17,17,21,25,28,31,40,42,42,46,50,56,61,64,67,73,79,85,91,94)#these are the levels where you change max towers
+    towerlevels<-c(1,1,4,4,4,4,7,7,12,17,17,17,21,25,28,31,40,42,42,46,50,56,61,64,67,73,79,85,91,94,100,106,112,118,124)#these are the levels where you change max towers
     pstorage=NULL#required storage levels for various towers
     II<-0
-    for(I in half$upgradeCost){II<-II+1;pstorage[II]<-(min(which(StorageUpgrades$maxStorageData[2:34]>I)))}
+    for(I in half$upgradeCost){II<-II+1;pstorage[II]<-(min(which(StorageUpgrades$maxStorageData[2:44]>I)))}
     newlevel=plevel
     totaltime<-0;totalwood<-0
 
@@ -209,10 +188,10 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     maxtower<-sum(towerlevels<(newlevel+1))
     #don't want to execute this last block on the last runthrough
     if(II<length(allsubgoals)){
-    if(builder<20){
+    if(builder<22){
     newbuilder<-pbuilder[maxtower]}
-    else{(newbuilder=20)}
-    if(storage<32){
+    else{(newbuilder=22)}
+    if(storage<42){
     newstore<-pstorage[maxtower]}
     else{(newstore=storage)}}
 
@@ -237,7 +216,7 @@ makedisplayable<-function(number){
 leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,buildtimer=0.8){
     #load in the initial dataframes
 #    load("TowerStats.rData")
-    load("levelerdata.Rdata")
+    load("levelerdata220.Rdata")
     #and probably need to fix the towerstats to make them numeric vectors
     half$upgradeCost<-as.double(gsub(pattern = "piercing:",replacement = "",x=half$upgradeCost))
     half$upgradeReward<-as.double(gsub(pattern="experience:",replacement="",x=half$upgradeReward))
@@ -246,23 +225,23 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
     totalwood<-0
     goalexp<-as.integer(as.character(exp$requiredXp[goal+2]))
     currentexp<-as.integer(as.character(exp$requiredXp[plevel+2]))
-    expincrease<-c(half$upgradeReward[1:30],0)
-    timeincrease<-as.double(as.character(half$upgradeTimeInSeconds))[1:30]
-    woodcost<-half$upgradeCost[1:30]
+    expincrease<-c(half$upgradeReward[1:35],0)
+    timeincrease<-as.double(as.character(half$upgradeTimeInSeconds))[1:35]
+    woodcost<-half$upgradeCost[1:35]
     #strategies
     if(strategy=="fastest"){
-        upgradepriority<-order(half$upgradeReward[1:30]/as.double(as.character(half$upgradeTimeInSeconds[1:30])),decreasing = TRUE)
+        upgradepriority<-order(half$upgradeReward[1:35]/as.double(as.character(half$upgradeTimeInSeconds[1:35])),decreasing = TRUE)
     }
     else if(strategy=="highest"){
-        upgradepriority<-c(30:1)
+        upgradepriority<-c(35:1)
     }
     #converts time (in seconds) into the optimal number of speedups required (preference to high-hour ones!)
-    maxpossible<-max(which(ispossible(builder,storage,plevel)[1:30]>0))
+    maxpossible<-max(which(ispossible(builder,storage,plevel)[1:35]>0))
     if(sum(mybase<maxpossible)==0){return(list(0,c(0,0,0,0,0,0,0),0,rep(0,36)))}
     cupgradepriority<-upgradepriority[upgradepriority<=maxpossible]
     outputscript<-vector()
     maxposexp<-function(mybase,maxpossible){
-        if(max(mybase)>30){warning("Check your input:Levels above Maximum!")}
+        if(max(mybase)>35){warning("Check your input:Levels above Maximum!")}
         totalexp<-0
                 for(Z in mybase){
             totalexp<-sum(expincrease[(Z+1):maxpossible])+totalexp
@@ -295,10 +274,10 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
 }
 ispossible<-function(builder,storage,plevel){
     pbuilder=c(0,0,1,1,1,2,2,3,3,3,4,4,5,5,6,6,7,8,9,10,11,13,14,16,17,19,20,20,20,20)
-    pstorage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23,25,27,29,31,32)
+    pstorage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23,25,27,29,31,33,35,37,39,41)
     possibiles<-(builder>=pbuilder)*(storage>=pstorage)
-    storagelevels=c(0,7,12,17,21,25,28,31,34,37,40,42,44,46,48,50,52,54,56,58,61,64,67,70,73,76,79,82,85,88,91,94,97)
-    builderlevels=c(4,4,7,12,18,23,28,33,38,41,45,48,51,53,56,58,61,63,66,68,71)
+    storagelevels=c(0,7,12,17,21,25,28,31,34,37,40,42,44,46,48,50,52,54,56,58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,106,112,118,124)
+    builderlevels=c(4,4,7,12,18,23,28,33,38,41,45,48,51,53,56,58,61,63,66,68,71,73,74)
     maxpossible<-c(sum(builderlevels<plevel+1),sum(storagelevels<plevel+1))
     return(c(possibiles,maxpossible))
 }
@@ -325,16 +304,18 @@ base<-.05*sum(c("Red","Blue","Orange","Green")%in%reslist)
 bonus<-max(0.25*"Event25"%in%reslist,0.1*"Event10"%in%reslist)
 return(1-(base+bonus))
 }
-load("ShinyBreeddata170.Rdata")
+load("ShinyBreeddata220.Rdata")
 #DragonStatDF<-DragonID
-concatlists<-function(files){
+concatlists<-function(files,type=1){
   redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")
   purplelist<-c("Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius")
   bluelist<-c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")
   orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")
   greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")
   goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")
-  listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist,goldlist)
+  platlist<-c("Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
+  listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist,goldlist,platlist)
+  if(type==2){return(listofeverything)}
   currentlist<-c(files$incomplete,files$incompleteB)
 
   if("Red"%in%files$fullgroups){currentlist<-c(redlist,currentlist)}
@@ -343,7 +324,7 @@ concatlists<-function(files){
   if("Orange"%in%files$fullgroups){currentlist<-c(orangelist,currentlist)}
   if("Green"%in%files$fullgroups){currentlist<-c(greenlist,currentlist)}
   if("Gold"%in%files$fullgroups){currentlist<-c(goldlist,currentlist)}
-
+  if("Platinum"%in%files$fullgroups){currentlist<-c(platlist,currentlist)}
   return(listofeverything%in%currentlist) #reduces list down to a binary vector
 }
 {isgold<-function(list){
@@ -372,7 +353,7 @@ isred<-function(list){
 }}#define functions to check color of dragons
 convertinterests<-function(list){
     default<-c(1,2,3,5,7,9,11,13,22)
-added<-c("Red","Blue","Purple","Orange","Green","Gold")%in%list*c(23:28)
+added<-c("Red","Blue","Purple","Orange","Green","Gold","Platinum")%in%list*c(23:29)
 added<-added[added!=0]
 if(length(added)>0){
 return(c(default,added))
@@ -383,19 +364,19 @@ library(DT)
 generateplot<-function(list){
   library(ggplot2)
   #load the dataframe of tower hp
-  load("levelerdata.Rdata")
+  load("levelerdata220.Rdata")
   hplist<-as.integer(as.character(half$HP))
   #load the dataframe of dragon atk
   load("hunterdf.rData")
   #subset to desired color
-  dragcolor<-which(c("Red","Purple","Blue","Orange","Green","Gold")%in%list[[1]])
+  dragcolor<-which(c("Red","Purple","Blue","Orange","Green","Gold","Platinum")%in%list[[1]])
   dragrarity<-list[[5]]
   oresearch<-1+(.04*length(list[[2]]))
   dresearch<-as.numeric(list[[3]])
   dlevel<-as.numeric(list[[4]])
 #  if(length(hplist)<(30*length(dresearch))){}
     thisdf<-subset(hunterdf,rarity%in%dragrarity&level%in%c(dlevel[1]:dlevel[2])&tier%in%dragcolor)
-    countdf<-data.frame(hp=hplist,lv=c(1:30))
+    countdf<-data.frame(hp=hplist,lv=c(1:35))
     countdf<-merge(countdf,thisdf)
     finaldf<-countdf
     finaldf$dbonus<-dresearch[1]
@@ -421,28 +402,6 @@ generateplot<-function(list){
   #write it to temp ?
     return(p)
 }
-eventspending<-function(list){
-  #list:  1 = player level 2= value of 1 hour speedup in rubies 3= value of token in rubies 4= current points
-  #event reward information
-  
-  earned<-c(20,90,145,180,215,225,230,235,245,255,300,315,350,405,495,585)
-  earnedt<-c(20,50,145,180,215,225,230,235,245,255,300,315,350,405,495,585)
-  earnedclock<-c(1,9,9,24,24,24,24,24,24,24,36,36,36,36,48,48)
-  ptreq<-c(100,540,2300,3200,4850,8750,15480,27110,47200,56740,68190,81930,98410,118190,150000,200000)
-  value<-earnedclock*list[[2]]+earnedt*list[[3]]+earned
-  exchange<-read.csv("Swappable.csv")
-  exchange<-exchange[grep("piercing_",exchange$identifier),]
-  exchangerate<-as.numeric(as.character(exchange$conversionRatio[list[[1]]]))
-  outdf<-data.frame(RewardTier=c(1:length(earned)),PointsRequired=ptreq)
-  outdf$TotalSpending=ptreq*10/exchangerate
-  outdf$ThisRdSpending=c(0,diff(outdf$TotalSpending))
-  outdf$ThisRdSpending[1]<-outdf$TotalSpending[1]
-  outdf$RewardValue=value
-  outdf$ThisRdReturn=outdf$RewardValue-outdf$ThisRdSpending
-  outdf$TotalReturn=cumsum(outdf$ThisRdReturn)
-  outdf[,1:7]<-round(outdf[,1:7],digits=0)
-    return(outdf)
-  }
 
 shinyServer(function(input, output) {
     {redlist<-c("Draco","Leviathan","Frigg","Zin","Hext","Aetrix","Hantu","Kastor","Kinnara")
@@ -451,8 +410,9 @@ shinyServer(function(input, output) {
     orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")
     greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")
     goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")
-    listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist,goldlist)
-}#make lists of alldrags
+    platlist<-c("Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
+        listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist,goldlist,platlist)}
+#make lists of alldrags
   output$ui<-renderUI({
     if(is.null(input$input_types))
     {return(0)}
@@ -463,7 +423,8 @@ shinyServer(function(input, output) {
     if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
     if("Gold"%in%input$input_types){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")}
-    selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)}
+    if("Platinum"%in%input$input_types){incompletelist<-c(incompletelist,"Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")}
+        selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)}
 })#create ui element for the selected 'partial' colors
     output$uibeta<-renderUI({
     if(is.null(input$input_typesBeta))  {return(0)}
@@ -474,18 +435,20 @@ shinyServer(function(input, output) {
     if("Orange"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
     if("Gold"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")}
-    selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE,selected = "Amarok")
+    if("Platinum"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")}
+        selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE,selected = "Amarok")
 
   })#create ui element for the (beta tab) selected color
-    load("levelerdata.Rdata")
-  output$towerdata<-DT::renderDataTable({data.frame(minLevel=c(1,1,4,4,4,7,12,12,17,17,21,21,25,28,31,31,34,37,42,46,50,56,61,64,67,73,79,85,91,94),exp=gsub(x=half$upgradeReward[1:30],pattern="experience:",replacement=""),wood=gsub(x=half$upgradeCost[1:30],pattern="piercing:",replacement=""))},options=list(searching=FALSE,lengthChange=FALSE,paging=FALSE,info=FALSE))
-  output$resulttable<-DT::renderDataTable({datatable(whattobreed(usefullist=as.integer(concatlists(input)),
-                                                                 dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval),empirical=input$empirical,outcolumns = convertinterests(input$researchinterests)),
+    load("levelerdata220.Rdata")
+  output$towerdata<-DT::renderDataTable({data.frame(minLevel=c(1,1,4,4,4,7,12,12,17,17,21,21,25,28,31,31,34,37,42,46,50,56,61,64,67,73,79,85,91,94,97,100,106,112,118),exp=gsub(x=half$upgradeReward[1:35],pattern="experience:",replacement=""),wood=gsub(x=half$upgradeCost[1:35],pattern="piercing:",replacement=""))},options=list(searching=FALSE,lengthChange=FALSE,paging=FALSE,info=FALSE))
+    output$resulttable<-DT::renderDataTable({datatable(whattobreed(usefullist=as.integer(concatlists(input)),
+                                                                 dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval,input$ptval),
+                                                                 empirical=input$empirical,outcolumns = convertinterests(input$researchinterests)),
                                                      options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
-                                                    Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12))))})#result of the 'whattobreed' calculation (tab1)
-  output$resbeta<-DT::renderDataTable({datatable(whobreedsx(ownedlist = c(rep(1,68)),dragonx = input$chosendragon,skiplist = input$skipgreen),
+                                                    Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12),rep('#E5E4E2',12))))})#result of the 'whattobreed' calculation (tab1)
+  output$resbeta<-DT::renderDataTable({datatable(whobreedsx(ownedlist = c(rep(1,90)),dragonx = input$chosendragon,skiplist = input$skipgreen),
                                   options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
-                     Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12))))
+                     Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12),rep('#E5E4E2',12))))
        })#result of the 'target' breed calculation(pg2)
 
 

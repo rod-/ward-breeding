@@ -4,9 +4,8 @@ Dragon2<-read.csv("Dragon.csv")
 Deck<-read.csv("Deck.csv")
 egg2<-read.csv("DragonEgg.csv")
 #test<-read.csv("Deck.csv",header=FALSE,skip=2,sep =",")
-
 #manually replace the Deck.csv file's :s and |s with ,s because i dont know how to make read.table be less bitchy.
-test<-read.table("Deck.csv",sep=",",fill=NA,skip=1)
+test<-read.table("Deck.csv",sep=",",fill=NA)
 
 DragonID2<-Dragon2[,c(1,3)]
 merger2<-cbind(egg2[,c(2,3)],test[match(substr(egg2$possibleRawEggDistribution,1,8),test$V1),c(2:13)])
@@ -28,4 +27,12 @@ merger2$FourthChance<-as.double(merger2$FourthChance)
 merger2$FifthChance<-as.double(merger2$FifthChance)
 merger2$SixthChance<-as.double(merger2$SixthChance)
 merger2$totalchance<-rowSums(merger2[,c(4,6,8,10,12,14)],na.rm=TRUE)
-save(list=c("merger2","DragonID2"),file="ShinyBreeddata170.Rdata")
+save(list=c("merger2","DragonID2"),file="ShinyBreeddata220.Rdata")
+#need to update the levelerdata as well
+
+BuilderUpgrades<-read.csv("BuilderUpgrades.csv")
+exp<-read.csv("Level.csv")
+StorageUpgrades<-read.csv("StorageUpgrades.csv")
+half<-read.csv("ArcherTowerUpgrades.csv")
+half<-half[2:36,]
+save(list=c("exp","StorageUpgrades","half","BuilderUpgrades"),file="levelerdata220.rData")
