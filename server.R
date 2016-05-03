@@ -164,8 +164,8 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     StorageUpgrades$maxStorageData<-as.numeric(gsub(pattern="food:[0-9]+\\|piercing:",replacement="",x=StorageUpgrades$maxStorageData))
     pbuilder=as.numeric(as.character(half$requiredBuilderLevel))
     StorageUpgrades$levelRequired<-suppressWarnings(as.numeric(as.character(StorageUpgrades$levelRequired)))
-
-    subgoals<-c(1,4,7,12,17,21,25,28,31,40,42,46,50,56,61,64,67,73,79,85,91,94)#these are the levels where you change max towers
+browser()
+    subgoals<-c(1,4,7,12,17,21,25,28,31,40,42,46,50,56,61,64,67,73,79,85,91,94,100,106,112,118,124)#these are the levels where you change max towers
     towerlevels<-c(1,1,4,4,4,4,7,7,12,17,17,17,21,25,28,31,40,42,42,46,50,56,61,64,67,73,79,85,91,94,100,106,112,118,124)#these are the levels where you change max towers
     pstorage=NULL#required storage levels for various towers
     II<-0
@@ -273,8 +273,8 @@ leveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84,bui
 
 }
 ispossible<-function(builder,storage,plevel){
-    pbuilder=c(0,0,1,1,1,2,2,3,3,3,4,4,5,5,6,6,7,8,9,10,11,13,14,16,17,19,20,20,20,20)
-    pstorage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23,25,27,29,31,33,35,37,39,41)
+    pbuilder=c(0,0,1,1,1,2,2,3,3,3,4,4,5,5,6,6,7,8,9,10,11,13,14,16,17,19,20,20,20,20,20,20,20,20,20)
+    pstorage=c(1,1,1,1,1,2,3,3,4,4,5,5,6,7,8,8,9,10,12,14,16,19,21,22,23,25,27,29,31,32,34,36,38,40,42)
     possibiles<-(builder>=pbuilder)*(storage>=pstorage)
     storagelevels=c(0,7,12,17,21,25,28,31,34,37,40,42,44,46,48,50,52,54,56,58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,106,112,118,124)
     builderlevels=c(4,4,7,12,18,23,28,33,38,41,45,48,51,53,56,58,61,63,66,68,71,73,74)
