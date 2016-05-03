@@ -5,7 +5,7 @@
 # Slider for value of a duplicate
 # Fragment Data for num of fragments to make dupeutility practical/useful.
 # Color information (light cell background corresponding to the dragon color?)
-whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE,outcolumns=c(1,2,3,5,7,9,11,13,22)){
+whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE,outcolumns=c(1,2,3,5,7,9,11,13,22,35)){
     load("ShinyBreeddata220.Rdata")
   merger<-merger2
   colnames(merger)[1:2]<-c("DragonA","DragonB")
@@ -21,23 +21,29 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
   if(length(possmerger$DragonA)<=1){return(data.frame(NULL))}
   possmerger$FirstUseful<-1 #do i want the outputs? (assume yes)
   possmerger$FirstUseful[DragonID$owned[match(possmerger$First,DragonID$displayName)]>=1]<-0 #if i already own it, i don't!
-  possmerger$SecondUseful<-1 #repeat
+  possmerger$FirstUseful[is.na(possmerger$First)]<-0
+possmerger$SecondUseful<-1 #repeat
   possmerger$SecondUseful[DragonID$owned[match(possmerger$Second,DragonID$displayName)]>=1]<-0
-  possmerger$ThirdUseful<-1
+possmerger$SecondUseful[is.na(possmerger$Second)]<-0
+possmerger$ThirdUseful<-1
   possmerger$ThirdUseful[DragonID$owned[match(possmerger$Third,DragonID$displayName)]>=1]<-0
-  possmerger$FourthUseful<-1
+possmerger$ThirdUseful[is.na(possmerger$Third)]<-0
+possmerger$FourthUseful<-1
   possmerger$FourthUseful[DragonID$owned[match(possmerger$Fourth,DragonID$displayName)]>=1]<-0
-  possmerger$FifthUseful<-1
+possmerger$FourthUseful[is.na(possmerger$Fourth)]<-0
+possmerger$FifthUseful<-1
   possmerger$FifthUseful[DragonID$owned[match(possmerger$Fifth,DragonID$displayName)]>=1]<-0
-  possmerger$SixthUseful<-1
+possmerger$FifthUseful[is.na(possmerger$Fifth)]<-0
+possmerger$SixthUseful<-1
   possmerger$SixthUseful[DragonID$owned[match(possmerger$Sixth,DragonID$displayName)]>=1]<-0
-  possmerger$NewEggRate<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
+possmerger$SixthUseful[is.na(possmerger$Sixth)]<-0
+possmerger$NewEggRate<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
                                            possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful)+0,
                                            possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful)+0,
                                            possmerger$FourthChance/possmerger$totalchance*(possmerger$FourthUseful)+0,
                                            possmerger$FifthChance/possmerger$totalchance*(possmerger$FifthUseful)+0,
                                            possmerger$SixthChance/possmerger$totalchance*(possmerger$SixthUseful)+0),na.rm=TRUE)
-  {
+{
   isgold<-function(list){
     goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Khrysos","Sekoronos","Chthoteuthis")
     return(list%in%goldlist)
@@ -103,10 +109,23 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
                                                         1/(DragonID$fragments[match((possmerger$Fourth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FourthChance/possmerger$totalchance)*isgold(possmerger$Fourth)*(possmerger$FirstUseful==0),
                                                         1/(DragonID$fragments[match((possmerger$Fifth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FifthChance/possmerger$totalchance)*isgold(possmerger$Fifth)*(possmerger$FirstUseful==0),
                                                         1/(DragonID$fragments[match((possmerger$Sixth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SixthChance/possmerger$totalchance)*isgold(possmerger$Sixth)*(possmerger$FirstUseful==0)),na.rm=TRUE))
-}#calculate the research egg values for each guy.
-  #      possmerger$GreenEggRate<-rowSums(cbind())
   possmerger[,c(23:28)]<-possmerger[,c(23:28)]*50
-      returnval<-as.data.frame(possmerger[order(possmerger$NewEggRate,decreasing=TRUE),outcolumns])
+  }#calculate the research egg values for each guy.
+possmerger$TokensToFirst<-(possmerger$FirstUseful/(possmerger$FirstChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$First,DragonID$displayName)])
+possmerger$TokensToFirst[possmerger$TokensToFirst==0]<-Inf
+possmerger$TokensToSecond<-(possmerger$SecondUseful/(possmerger$SecondChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$Second,DragonID$displayName)])
+possmerger$TokensToSecond[possmerger$TokensToSecond==0]<-Inf
+possmerger$TokensToThird<-(possmerger$ThirdUseful/(possmerger$ThirdChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$Third,DragonID$displayName)])
+possmerger$TokensToThird[possmerger$TokensToThird==0]<-Inf
+possmerger$TokensToFourth<-(possmerger$FourthUseful/(possmerger$FourthChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$Fourth,DragonID$displayName)])
+possmerger$TokensToFourth[possmerger$TokensToFourth==0]<-Inf
+possmerger$TokensToFifth<-(possmerger$FifthUseful/(possmerger$FifthChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$Fifth,DragonID$displayName)])
+possmerger$TokensToFifth[possmerger$TokensToFifth==0]<-Inf
+possmerger$TokensToSixth<-(possmerger$SixthUseful/(possmerger$SixthChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$Sixth,DragonID$displayName)])
+possmerger$TokensToSixth[possmerger$TokensToSixth==0]<-Inf
+possmerger$TokensNext<-pmin(possmerger$TokensToFirst,possmerger$TokensToSecond,possmerger$TokensToThird,possmerger$TokensToFourth,possmerger$TokensToFifth,possmerger$TokensToSixth,na.rm=TRUE)
+
+returnval<-as.data.frame(possmerger[order(possmerger$NewEggRate,decreasing=TRUE),outcolumns])
     rownames(returnval)<-NULL
   return(returnval) #22 is if i don't include fragment data
 }
@@ -352,7 +371,7 @@ isred<-function(list){
   return(list%in%redlist)
 }}#define functions to check color of dragons
 convertinterests<-function(list){
-    default<-c(1,2,3,5,7,9,11,13,22)
+    default<-c(1,2,3,5,7,9,11,13,22,35)
 added<-c("Red","Blue","Purple","Orange","Green","Gold","Platinum")%in%list*c(23:29)
 added<-added[added!=0]
 if(length(added)>0){
