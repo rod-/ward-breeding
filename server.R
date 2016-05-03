@@ -445,10 +445,10 @@ shinyServer(function(input, output) {
                                                                  dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval,input$ptval),
                                                                  empirical=input$empirical,outcolumns = convertinterests(input$researchinterests)),
                                                      options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
-                                                    Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12),rep('#E5E4E2',12))))})#result of the 'whattobreed' calculation (tab1)
+                                                    Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12),rep('#2F4F4F',12))))})#result of the 'whattobreed' calculation (tab1)
   output$resbeta<-DT::renderDataTable({datatable(whobreedsx(ownedlist = c(rep(1,90)),dragonx = input$chosendragon,skiplist = input$skipgreen),
                                   options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
-                     Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12),rep('#E5E4E2',12))))
+                     Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12),rep('#2F4F4F',12))))
        })#result of the 'target' breed calculation(pg2)
 
 
