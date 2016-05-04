@@ -1,5 +1,6 @@
 #Update the merger2 database and stuff
 library("shiny")
+setwd("C:/Users/rod/Documents/ward220/")
 Dragon2<-read.csv("Dragon.csv")
 Deck<-read.csv("Deck.csv")
 egg2<-read.csv("DragonEgg.csv")
@@ -20,13 +21,14 @@ merger2$V10<-DragonID2$displayName[match(merger2$V10,DragonID2$identifier)]
 merger2$V12<-DragonID2$displayName[match(merger2$V12,DragonID2$identifier)]
 colnames(merger2)<-c("FirstDragon","SecondDragon","First","FirstChance","Second","SecondChance","Third","ThirdChance","Fourth","FourthChance","Fifth","FifthChance","Sixth","SixthChance")
 merger2$FirstDragon<-DragonID2$displayName[match(merger2$FirstDragon,DragonID2$identifier)]
-merger2$FirstChance<-as.double(merger2$FirstChance)
-merger2$SecondChance<-as.double(merger2$SecondChance)
-merger2$ThirdChance<-as.double(merger2$ThirdChance)
-merger2$FourthChance<-as.double(merger2$FourthChance)
-merger2$FifthChance<-as.double(merger2$FifthChance)
-merger2$SixthChance<-as.double(merger2$SixthChance)
+merger2$FirstChance<-as.double(as.character(merger2$FirstChance))
+merger2$SecondChance<-as.double(as.character(merger2$SecondChance))
+merger2$ThirdChance<-as.double(as.character(merger2$ThirdChance))
+merger2$FourthChance<-as.double(as.character(merger2$FourthChance))
+merger2$FifthChance<-as.double(as.character(merger2$FifthChance))
+merger2$SixthChance<-as.double(as.character(merger2$SixthChance))
 merger2$totalchance<-rowSums(merger2[,c(4,6,8,10,12,14)],na.rm=TRUE)
+setwd("/Users/rod/Documents/ward/shinybreed/ward-breeding/")
 save(list=c("merger2","DragonID2"),file="ShinyBreeddata220.Rdata")
 #need to update the levelerdata as well
 
