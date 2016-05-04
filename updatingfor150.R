@@ -1,6 +1,6 @@
 #Update the merger2 database and stuff
 library("shiny")
-setwd("C:/Users/rod/Documents/ward220/")
+setwd("C:/Users/rod/Documents/ward224/")
 Dragon2<-read.csv("Dragon.csv")
 Deck<-read.csv("Deck.csv")
 egg2<-read.csv("DragonEgg.csv")
@@ -28,7 +28,11 @@ merger2$FourthChance<-as.double(as.character(merger2$FourthChance))
 merger2$FifthChance<-as.double(as.character(merger2$FifthChance))
 merger2$SixthChance<-as.double(as.character(merger2$SixthChance))
 merger2$totalchance<-rowSums(merger2[,c(4,6,8,10,12,14)],na.rm=TRUE)
+#clear NAs
+merger2<-merger2[-grep("NA",rownames(merger2)),]
 setwd("/Users/rod/Documents/ward/shinybreed/ward-breeding/")
+#for 220 only
+
 save(list=c("merger2","DragonID2"),file="ShinyBreeddata220.Rdata")
 #need to update the levelerdata as well
 

@@ -69,7 +69,7 @@ possmerger$NewEggRate<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchan
       return(list%in%redlist)
   }
   isplat<-function(list){
-      platlist<-c("Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
+      platlist<-c("Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
       return(list%in%platlist)
   }
   
@@ -332,7 +332,7 @@ concatlists<-function(files,type=1){
   orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")
   greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")
   goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Khrysos","Sekoronos","Chthoteuthis")
-  platlist<-c("Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
+  platlist<-c("Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
   listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist,goldlist,platlist)
   if(type==2){return(listofeverything)}
   currentlist<-c(files$incomplete,files$incompleteB)
@@ -429,7 +429,7 @@ shinyServer(function(input, output) {
     orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")
     greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")
     goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Khrysos","Sekoronos","Chthoteuthis")
-    platlist<-c("Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
+    platlist<-c("Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
         listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist,goldlist,platlist)}
 #make lists of alldrags
   output$ui<-renderUI({
@@ -442,7 +442,7 @@ shinyServer(function(input, output) {
     if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
     if("Gold"%in%input$input_types){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Khrysos","Sekoronos","Chthoteuthis")}
-    if("Platinum"%in%input$input_types){incompletelist<-c(incompletelist,"Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")}
+    if("Platinum"%in%input$input_types){incompletelist<-c(incompletelist,"Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")}
         selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)}
 })#create ui element for the selected 'partial' colors
     output$uibeta<-renderUI({
@@ -454,7 +454,7 @@ shinyServer(function(input, output) {
     if("Orange"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
     if("Gold"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Khrysos","Sekoronos","Chthoteuthis")}
-    if("Platinum"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")}
+    if("Platinum"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")}
         selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE,selected = "Amarok")
 
   })#create ui element for the (beta tab) selected color
