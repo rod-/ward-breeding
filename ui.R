@@ -32,15 +32,15 @@ shinyUI(
                tabPanel("Target a Dragon",
 
                         fluidRow(    column(3, wellPanel(selectInput('input_typesBeta', 'What color is the dragon you want?',
-                                                                     choices=c("Purple","Blue","Red","Orange","Green","Gold","Platinum"), multiple=TRUE,selected = c("Green"), selectize=TRUE))),
+                                                                     choices=c("Purple","Blue","Red","Orange","Green","Gold","Platinum"), multiple=TRUE,selected = c("Platinum"), selectize=TRUE))),
 
                                      fluidRow(column(3, wellPanel(uiOutput("uibeta"))))),
                         fluidRow(column(3,wellPanel(selectInput('skipgreen','Which dragons do you want to ignore?',choices=c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin",
                                                                                                                              "Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo",
                                                                                                                              "Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus",
                                                                                                                              "Trollis","Laekrian","Merk","Dactyl","Gog","Huli","Borg","Vladimir","Alikorn","Daemun","Garuda","Klax","Arborius",
-                                                                                                                             "Caladbolg","Firactus","Bander","Basileus","Chthoteuthis","Consurgens","Ferrox","Khrysos","Lumen","Sekoronos","Whalegnawer","Yersinu","Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar"),
-                                                                selectize =TRUE,multiple=TRUE,selected=c("Caladbolg","Firactus","Bander","Basileus","Chthoteuthis","Consurgens","Ferrox","Khrysos","Lumen","Sekoronos","Whalegnawer","Yersinu","Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar"))))),
+                                                                                                                             "Caladbolg","Firactus","Bander","Basileus","Chthoteuthis","Consurgens","Ferrox","Khrysos","Lumen","Sekoronos","Whalegnawer","Yersinu","Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar"),
+                                                                selectize =TRUE,multiple=TRUE,selected=c("Chthoteuthis","Consurgens","Ferrox","Khrysos","Sekoronos","Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar"))))),
                         fluidRow(column(12,wellPanel(DT::dataTableOutput("resbeta")))),
                         #                                                                                                    )),
                         HTML("<a href='http://www.amoebastudios.com/dragon/'> Confused?  Try out Amoeba's breeding site.</a>"),

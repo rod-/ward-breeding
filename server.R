@@ -5,7 +5,7 @@
 # Slider for value of a duplicate
 # Fragment Data for num of fragments to make dupeutility practical/useful.
 # Color information (light cell background corresponding to the dragon color?)
-whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE,outcolumns=c(1,2,3,5,7,9,11,13,22)){
+whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,empirical=FALSE,outcolumns=c(1,2,3,5,7,9,11,13,22,35)){
     load("ShinyBreeddata220.Rdata")
   merger<-merger2
   colnames(merger)[1:2]<-c("DragonA","DragonB")
@@ -21,25 +21,31 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
   if(length(possmerger$DragonA)<=1){return(data.frame(NULL))}
   possmerger$FirstUseful<-1 #do i want the outputs? (assume yes)
   possmerger$FirstUseful[DragonID$owned[match(possmerger$First,DragonID$displayName)]>=1]<-0 #if i already own it, i don't!
-  possmerger$SecondUseful<-1 #repeat
+  possmerger$FirstUseful[is.na(possmerger$First)]<-0
+possmerger$SecondUseful<-1 #repeat
   possmerger$SecondUseful[DragonID$owned[match(possmerger$Second,DragonID$displayName)]>=1]<-0
-  possmerger$ThirdUseful<-1
+possmerger$SecondUseful[is.na(possmerger$Second)]<-0
+possmerger$ThirdUseful<-1
   possmerger$ThirdUseful[DragonID$owned[match(possmerger$Third,DragonID$displayName)]>=1]<-0
-  possmerger$FourthUseful<-1
+possmerger$ThirdUseful[is.na(possmerger$Third)]<-0
+possmerger$FourthUseful<-1
   possmerger$FourthUseful[DragonID$owned[match(possmerger$Fourth,DragonID$displayName)]>=1]<-0
-  possmerger$FifthUseful<-1
+possmerger$FourthUseful[is.na(possmerger$Fourth)]<-0
+possmerger$FifthUseful<-1
   possmerger$FifthUseful[DragonID$owned[match(possmerger$Fifth,DragonID$displayName)]>=1]<-0
-  possmerger$SixthUseful<-1
+possmerger$FifthUseful[is.na(possmerger$Fifth)]<-0
+possmerger$SixthUseful<-1
   possmerger$SixthUseful[DragonID$owned[match(possmerger$Sixth,DragonID$displayName)]>=1]<-0
-  possmerger$NewEggRate<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
+possmerger$SixthUseful[is.na(possmerger$Sixth)]<-0
+possmerger$NewEggRate<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchance*(possmerger$FirstUseful)+0,
                                            possmerger$SecondChance/possmerger$totalchance*(possmerger$SecondUseful)+0,
                                            possmerger$ThirdChance/possmerger$totalchance*(possmerger$ThirdUseful)+0,
                                            possmerger$FourthChance/possmerger$totalchance*(possmerger$FourthUseful)+0,
                                            possmerger$FifthChance/possmerger$totalchance*(possmerger$FifthUseful)+0,
                                            possmerger$SixthChance/possmerger$totalchance*(possmerger$SixthUseful)+0),na.rm=TRUE)
-  {
+{
   isgold<-function(list){
-    goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")
+    goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Khrysos","Sekoronos","Chthoteuthis")
     return(list%in%goldlist)
   }
   isgreen<-function(list){
@@ -63,7 +69,7 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
       return(list%in%redlist)
   }
   isplat<-function(list){
-      platlist<-c("Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
+      platlist<-c("Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
       return(list%in%platlist)
   }
   
@@ -103,10 +109,23 @@ whattobreed<-function(usefullist,dupeutility=c(rep(0.1,5)),assumebreedable=1,emp
                                                         1/(DragonID$fragments[match((possmerger$Fourth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FourthChance/possmerger$totalchance)*isgold(possmerger$Fourth)*(possmerger$FirstUseful==0),
                                                         1/(DragonID$fragments[match((possmerger$Fifth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FifthChance/possmerger$totalchance)*isgold(possmerger$Fifth)*(possmerger$FirstUseful==0),
                                                         1/(DragonID$fragments[match((possmerger$Sixth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SixthChance/possmerger$totalchance)*isgold(possmerger$Sixth)*(possmerger$FirstUseful==0)),na.rm=TRUE))
-}#calculate the research egg values for each guy.
-  #      possmerger$GreenEggRate<-rowSums(cbind())
   possmerger[,c(23:28)]<-possmerger[,c(23:28)]*50
-      returnval<-as.data.frame(possmerger[order(possmerger$NewEggRate,decreasing=TRUE),outcolumns])
+  }#calculate the research egg values for each guy.
+possmerger$TokensToFirst<-(possmerger$FirstUseful/(possmerger$FirstChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$First,DragonID$displayName)])
+possmerger$TokensToFirst[possmerger$TokensToFirst==0]<-Inf
+possmerger$TokensToSecond<-(possmerger$SecondUseful/(possmerger$SecondChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$Second,DragonID$displayName)])
+possmerger$TokensToSecond[possmerger$TokensToSecond==0]<-Inf
+possmerger$TokensToThird<-(possmerger$ThirdUseful/(possmerger$ThirdChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$Third,DragonID$displayName)])
+possmerger$TokensToThird[possmerger$TokensToThird==0]<-Inf
+possmerger$TokensToFourth<-(possmerger$FourthUseful/(possmerger$FourthChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$Fourth,DragonID$displayName)])
+possmerger$TokensToFourth[possmerger$TokensToFourth==0]<-Inf
+possmerger$TokensToFifth<-(possmerger$FifthUseful/(possmerger$FifthChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$Fifth,DragonID$displayName)])
+possmerger$TokensToFifth[possmerger$TokensToFifth==0]<-Inf
+possmerger$TokensToSixth<-(possmerger$SixthUseful/(possmerger$SixthChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$Sixth,DragonID$displayName)])
+possmerger$TokensToSixth[possmerger$TokensToSixth==0]<-Inf
+possmerger$TokensNext<-pmin(possmerger$TokensToFirst,possmerger$TokensToSecond,possmerger$TokensToThird,possmerger$TokensToFourth,possmerger$TokensToFifth,possmerger$TokensToSixth,na.rm=TRUE)
+
+returnval<-as.data.frame(possmerger[order(possmerger$NewEggRate,decreasing=TRUE),outcolumns])
     rownames(returnval)<-NULL
   return(returnval) #22 is if i don't include fragment data
 }
@@ -312,8 +331,8 @@ concatlists<-function(files,type=1){
   bluelist<-c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")
   orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")
   greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")
-  goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")
-  platlist<-c("Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
+  goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Khrysos","Sekoronos","Chthoteuthis")
+  platlist<-c("Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
   listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist,goldlist,platlist)
   if(type==2){return(listofeverything)}
   currentlist<-c(files$incomplete,files$incompleteB)
@@ -328,7 +347,7 @@ concatlists<-function(files,type=1){
   return(listofeverything%in%currentlist) #reduces list down to a binary vector
 }
 {isgold<-function(list){
-  goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")
+  goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Khrysos","Sekoronos","Chthoteuthis")
   return(list%in%goldlist)
 }
 isgreen<-function(list){
@@ -352,7 +371,7 @@ isred<-function(list){
   return(list%in%redlist)
 }}#define functions to check color of dragons
 convertinterests<-function(list){
-    default<-c(1,2,3,5,7,9,11,13,22)
+    default<-c(1,2,3,5,7,9,11,13,22,35)
 added<-c("Red","Blue","Purple","Orange","Green","Gold","Platinum")%in%list*c(23:29)
 added<-added[added!=0]
 if(length(added)>0){
@@ -409,8 +428,8 @@ shinyServer(function(input, output) {
     bluelist<-c("Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")
     orangelist<-c("Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")
     greenlist<-c("Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")
-    goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")
-    platlist<-c("Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
+    goldlist<-c("Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Khrysos","Sekoronos","Chthoteuthis")
+    platlist<-c("Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")
         listofeverything<-c(redlist,purplelist,bluelist,orangelist,greenlist,goldlist,platlist)}
 #make lists of alldrags
   output$ui<-renderUI({
@@ -422,8 +441,8 @@ shinyServer(function(input, output) {
     if("Blue"%in%input$input_types){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")}
     if("Orange"%in%input$input_types){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_types){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
-    if("Gold"%in%input$input_types){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")}
-    if("Platinum"%in%input$input_types){incompletelist<-c(incompletelist,"Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")}
+    if("Gold"%in%input$input_types){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Khrysos","Sekoronos","Chthoteuthis")}
+    if("Platinum"%in%input$input_types){incompletelist<-c(incompletelist,"Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")}
         selectInput('incomplete', 'Dragons in Partial colors', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE)}
 })#create ui element for the selected 'partial' colors
     output$uibeta<-renderUI({
@@ -434,8 +453,8 @@ shinyServer(function(input, output) {
     if("Blue"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Grypp","Jura","Kromon","Yanari","Vazir","Drude","Sahran","Bolt","Kelsis","Etzel","Kobahl","Baldr","Viscus")}
     if("Orange"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Ankor","Noss","Hydron","Slynx","Habrok","Volos","Amarok","Luminark","Lucius","Bronze","Septys","Ruma","Enki","Durga","Kolo")}
     if("Green"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Gaspar","Karna","Naga","Nassus","Garzev","Serabis","Urd","Ith","Elixis","Pandi","Danzig","Nix","Ettin","Hugin","Munin")}
-    if("Gold"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Sekoronos","Khrysos","Chthoteuthis")}
-    if("Platinum"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Mune","Cerbero","Nosfer","Shivano","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")}
+    if("Gold"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Caladbolg","Firactus","Bander","Ferrox","Lumen","Basileus","Yersinu","Whalegnawer","Consurgens","Khrysos","Sekoronos","Chthoteuthis")}
+    if("Platinum"%in%input$input_typesBeta){incompletelist<-c(incompletelist,"Mune","Cerbero","Nosfer","Kulan","Cryzan","Necura","Jagra","Quetz","Vulcan","Kelvin","Kaiju","Rizar")}
         selectInput('chosendragon', 'Dragon you want to breed', choices=c(Choose='',incompletelist), multiple=TRUE, selectize=TRUE,selected = "Amarok")
 
   })#create ui element for the (beta tab) selected color
@@ -445,10 +464,10 @@ shinyServer(function(input, output) {
                                                                  dupeutility = c(input$rval,input$pval,input$bval,input$oval,input$gval,input$ptval),
                                                                  empirical=input$empirical,outcolumns = convertinterests(input$researchinterests)),
                                                      options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
-                                                    Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12),rep('#E5E4E2',12))))})#result of the 'whattobreed' calculation (tab1)
+                                                    Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12),rep('#2F4F4F',12))))})#result of the 'whattobreed' calculation (tab1)
   output$resbeta<-DT::renderDataTable({datatable(whobreedsx(ownedlist = c(rep(1,90)),dragonx = input$chosendragon,skiplist = input$skipgreen),
                                   options=list(pageLength=5,lengthMenu=list(c(1,5,10,-1),c('1','5','10','all')),info=FALSE))%>%formatStyle(c(1:8),
-                     Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12),rep('#E5E4E2',12))))
+                     Color=styleEqual(listofeverything,values = c(rep('#FE2E2E',9),rep('#8000FF',13),rep('#0040FF',13),rep('#FF8000',15),rep('green',15),rep('goldenrod',12),rep('#2F4F4F',12))))
        })#result of the 'target' breed calculation(pg2)
 
 
