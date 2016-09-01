@@ -109,6 +109,13 @@ possmerger$NewEggRate<-rowSums(cbind(possmerger$FirstChance/possmerger$totalchan
                                                         1/(DragonID$fragments[match((possmerger$Fourth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FourthChance/possmerger$totalchance)*isgold(possmerger$Fourth)*(possmerger$FirstUseful==0),
                                                         1/(DragonID$fragments[match((possmerger$Fifth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FifthChance/possmerger$totalchance)*isgold(possmerger$Fifth)*(possmerger$FirstUseful==0),
                                                         1/(DragonID$fragments[match((possmerger$Sixth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SixthChance/possmerger$totalchance)*isgold(possmerger$Sixth)*(possmerger$FirstUseful==0)),na.rm=TRUE))
+    possmerger$PlatPer1000<-suppressWarnings(rowSums(cbind(1/(DragonID$fragments[match((possmerger$First),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FirstChance/possmerger$totalchance)*isplat(possmerger$First)*(possmerger$FirstUseful==0),
+                                                           1/(DragonID$fragments[match((possmerger$Second),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SecondChance/possmerger$totalchance)*isplat(possmerger$Second)*(possmerger$FirstUseful==0),
+                                                           1/(DragonID$fragments[match((possmerger$Third),DragonID$displayName,nomatch="Leviathan")])*(possmerger$ThirdChance/possmerger$totalchance)*isplat(possmerger$Third)*(possmerger$FirstUseful==0),
+                                                           1/(DragonID$fragments[match((possmerger$Fourth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FourthChance/possmerger$totalchance)*isplat(possmerger$Fourth)*(possmerger$FirstUseful==0),
+                                                           1/(DragonID$fragments[match((possmerger$Fifth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$FifthChance/possmerger$totalchance)*isplat(possmerger$Fifth)*(possmerger$FirstUseful==0),
+                                                           1/(DragonID$fragments[match((possmerger$Sixth),DragonID$displayName,nomatch="Leviathan")])*(possmerger$SixthChance/possmerger$totalchance)*isplat(possmerger$Sixth)*(possmerger$FirstUseful==0)),na.rm=TRUE))
+    
   possmerger[,c(23:28)]<-possmerger[,c(23:28)]*50
   }#calculate the research egg values for each guy.
 possmerger$TokensToFirst<-(possmerger$FirstUseful/(possmerger$FirstChance/possmerger$totalchance)*20*DragonID$fragments[match(possmerger$First,DragonID$displayName)])
@@ -183,7 +190,7 @@ overleveler<-function(mybase,builder,storage,strategy="highest",plevel=1,goal=84
     StorageUpgrades$maxStorageData<-as.numeric(gsub(pattern="food:[0-9]+\\|piercing:",replacement="",x=StorageUpgrades$maxStorageData))
     pbuilder=as.numeric(as.character(half$requiredBuilderLevel))
     StorageUpgrades$levelRequired<-suppressWarnings(as.numeric(as.character(StorageUpgrades$levelRequired)))
-browser()
+
     subgoals<-c(1,4,7,12,17,21,25,28,31,40,42,46,50,56,61,64,67,73,79,85,91,94,100,106,112,118,124)#these are the levels where you change max towers
     towerlevels<-c(1,1,4,4,4,4,7,7,12,17,17,17,21,25,28,31,40,42,42,46,50,56,61,64,67,73,79,85,91,94,100,106,112,118,124)#these are the levels where you change max towers
     pstorage=NULL#required storage levels for various towers
